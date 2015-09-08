@@ -1,0 +1,58 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/loadScreenMainLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context="com.newtonapps.hangtight.LoadSavedWorkouts"
+    android:background="@color/DarkSlateGray">
+
+    <TextView
+        android:id="@+id/loadScreenTitle"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="Saved Workouts"
+        android:textColor="@color/NavajoWhite"
+        android:textSize="30sp"
+        android:gravity="center"
+        android:textStyle="italic"/>
+
+    <TextView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="Tap to start, press and hold to edit"
+        android:textStyle="italic"
+        android:textSize="18sp"
+        android:textColor="@color/NavajoWhite"
+        android:gravity="center"/>
+
+    <TextView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="hang-rest-reps-sets-recovery"
+        android:textStyle="italic"
+        android:textSize="10sp"
+        android:textColor="@color/NavajoWhite"
+        android:gravity="center"/>
+
+    <View
+        android:layout_width="fill_parent"
+        android:layout_height="1dp"
+        android:background="@color/LightSlateGray"
+        android:layout_marginTop="3dp"
+        android:layout_marginBottom="3dp"/>
+
+    <ListView
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:id="@+id/loadScreenListView">
+
+
+    </ListView>
+
+
+</LinearLayout>

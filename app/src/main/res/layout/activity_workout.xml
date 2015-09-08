@@ -1,0 +1,213 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/DarkSlateGray"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context="com.newtonapps.hangtight.Workout">
+
+
+    <LinearLayout
+        android:id="@+id/linearLayout"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="5dp"
+        android:orientation="horizontal">
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:textAllCaps="true"
+            android:textSize="15sp"
+            android:text="SET: "
+            android:gravity="center"
+            android:layout_marginLeft="15dp"
+            android:textColor="@color/CornflowerBlue"/>
+
+        <TextView
+            android:id="@+id/setCounterTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="left|center"
+            android:gravity="center"
+            android:text="1/6"
+            android:textColor="@color/CornflowerBlue"
+            android:textSize="25sp" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:textAllCaps="true"
+            android:textSize="15sp"
+            android:text="REP: "
+            android:gravity="center"
+            android:textColor="@color/CornflowerBlue"/>
+
+        <TextView
+            android:id="@+id/repsCounterTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right|center"
+            android:gravity="center"
+            android:text="1/6"
+            android:layout_marginRight="15dp"
+            android:textColor="@color/CornflowerBlue"
+            android:textSize="25sp" />
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="fill_parent"
+        android:layout_height="2dp"
+        android:layout_below="@id/linearLayout"
+        android:background="@color/LightSlateGray" />
+
+    <TextView
+        android:id="@+id/titleTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/timerTextView"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="58dp"
+        android:text="HANG"
+        android:textAllCaps="true"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:textSize="40sp" />
+
+    <TextView
+        android:id="@+id/timerTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:text="0"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:textColor="@color/WhiteSmoke"
+        android:textSize="25sp" />
+
+    <ProgressBar
+        android:id="@+id/progressbar"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_centerInParent="true"
+        android:indeterminate="false"
+        android:max="48"
+        android:progress="45"
+        android:progressDrawable="@drawable/circular_progress_bar" />
+
+    <LinearLayout
+        android:id="@+id/linearLayout3"
+        android:layout_width="fill_parent"
+        android:layout_height="70dp"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:layout_above="@+id/lineView3"
+        android:layout_centerHorizontal="true">
+
+        <ImageButton
+            android:id="@+id/muteButton"
+            style="@style/SettingButtons"
+            android:onClick="setMute"
+            android:src="@drawable/unmuted" />
+
+        <ImageButton
+            android:id="@+id/pauseButton"
+            style="@style/SettingButtons"
+            android:onClick="setPause"
+            android:src="@drawable/pause" />
+
+        <ImageButton
+            android:id="@+id/skipButton"
+            style="@style/SettingButtons"
+            android:onClick="skip"
+            android:src="@drawable/skip" />
+
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:background="@color/LightSlateGray"
+        android:layout_above="@id/linearLayout3"
+        android:layout_margin="5dp"
+        android:id="@+id/lineView2"
+        />
+
+    <LinearLayout
+        android:id="@+id/linearLayout2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:orientation="horizontal"
+        android:layout_marginTop="5dp">
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:textAllCaps="true"
+            android:textSize="15sp"
+            android:text="REMAINING: "
+            android:gravity="center"
+            android:layout_marginLeft="15dp"
+            android:textColor="@color/CornflowerBlue"/>
+
+        <TextView
+            android:id="@+id/remainingTimeTV"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:text="00:00"
+            android:textColor="@color/CornflowerBlue"
+            android:textSize="25sp"/>
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"/>
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:textSize="15sp"
+            android:gravity="center"
+            android:text="TOTAL: "
+            android:textColor="@color/CornflowerBlue"
+            />
+
+        <TextView
+            android:id="@+id/totalTimeTV"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:textSize="25sp"
+            android:layout_marginRight="15dp"
+            android:textColor="@color/CornflowerBlue"
+            android:text="00:00"/>
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:layout_margin="5dp"
+        android:background="@color/LightSlateGray"
+        android:layout_above="@id/linearLayout2"
+        android:id="@+id/lineView3" />
+
+</RelativeLayout>
