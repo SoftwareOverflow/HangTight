@@ -101,9 +101,8 @@ public class Workout extends AppCompatActivity {
                 progress = dataArray[0];
                 progressBar.setProgress(progress);
 
-                timeLeft = Math.round(timeLeft/1000);
-                remainingTimeTV.setText(String.format("%02d:%02d", timeLeft/60, timeLeft%60));
-                timeLeft*= 1000;
+                timeLeft = Math.round(timeLeft/1000f)*1000; // round to nearest second
+                remainingTimeTV.setText(String.format("%02d:%02d", Math.round((float)timeLeft/1000)/60, Math.round((float)timeLeft/1000)%60));
 
                 currentRep +=1;
 
@@ -149,9 +148,8 @@ public class Workout extends AppCompatActivity {
             public void onFinish() {
                 if (! mute) {beep.start();}
 
-                timeLeft = Math.round(timeLeft/1000);
-                remainingTimeTV.setText(String.format("%02d:%02d", timeLeft/60, timeLeft%60));
-                timeLeft*=1000;
+                timeLeft = Math.round(timeLeft/1000f) * 1000; //round to nearest second
+                remainingTimeTV.setText(String.format("%02d:%02d", Math.round((float)timeLeft/1000)/60, Math.round((float)timeLeft/1000)%60));
 
                 title.setTextColor(getResources().getColor(R.color.Green));
                 title.setText("Hang");
@@ -175,9 +173,8 @@ public class Workout extends AppCompatActivity {
             public void onFinish() {
                 if (!mute) {beep.start();}
 
-                timeLeft = Math.round(timeLeft/1000);
-                remainingTimeTV.setText(String.format("%02d:%02d", timeLeft/60, timeLeft%60));
-                timeLeft*=1000;
+                timeLeft = Math.round(timeLeft/1000f)*1000;
+                remainingTimeTV.setText(String.format("%02d:%02d", Math.round((float)timeLeft/1000)/60, Math.round((float)timeLeft/1000)%60));
 
                 timeTextView.setText("0");
                 title.setText("Hang");
@@ -246,9 +243,8 @@ public class Workout extends AppCompatActivity {
             @Override
             public void onFinish() {
                 whichTimer().onFinish();
-                timeLeft = Math.round(timeLeft/1000); //round to nearest second
-                remainingTimeTV.setText(String.format("%02d:%02d", timeLeft/60, timeLeft%60));
-                timeLeft*=1000; //convert back to millis
+                timeLeft = Math.round(timeLeft/1000f) * 1000; //round to nearest second
+                remainingTimeTV.setText(String.format("%02d:%02d", Math.round((float)timeLeft/1000)/60, Math.round((float)timeLeft/1000)%60));
             }
         };
 
@@ -272,7 +268,8 @@ public class Workout extends AppCompatActivity {
 
         if (!whichTimer.matches("ready")) {
             int timeToFinish = Integer.parseInt(timeTextView.getText().toString());
-            timeLeft = Math.round(timeLeft / 1000) - timeToFinish;
+            timeLeft = Math.round(timeLeft/1000f) - timeToFinish;
+            timeLeft*=1000;
         }
 
         whichTimer().cancel();
@@ -291,11 +288,9 @@ public class Workout extends AppCompatActivity {
         progressBar.setProgress(progress);
 
         timeLeft -= 100;
-        timeLeft = Math.round(timeLeft/1000); //convert to seconds
-        remainingTimeTV.setText(String.format("%02d:%02d", timeLeft/60,timeLeft%60));
-        timeTextView.setText(Integer.toString(safeLongToInt(millisUntilFinished + 1000) / 1000));
-
-        timeLeft*=1000;//convert back to millis
+        remainingTimeTV.setText(String.format("%02d:%02d", Math.round((float)timeLeft/1000)/60, Math.round((float)timeLeft/1000)%60));
+        Log.d("time", "-100ms: " + timeLeft % 60);
+        timeTextView.setText(Integer.toString(Math.round(safeLongToInt(millisUntilFinished+1000) / 1000)));
     }
 
     public CountDownTimer whichTimer() {
