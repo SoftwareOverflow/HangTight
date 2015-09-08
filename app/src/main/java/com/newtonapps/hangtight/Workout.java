@@ -289,8 +289,7 @@ public class Workout extends AppCompatActivity {
 
         timeLeft -= 100;
         remainingTimeTV.setText(String.format("%02d:%02d", Math.round((float)timeLeft/1000)/60, Math.round((float)timeLeft/1000)%60));
-        Log.d("time", "-100ms: " + timeLeft % 60);
-        timeTextView.setText(Integer.toString(Math.round(safeLongToInt(millisUntilFinished+1000) / 1000)));
+        timeTextView.setText(Integer.toString(Math.round(safeLongToInt(millisUntilFinished+500) / 1000)));
     }
 
     public CountDownTimer whichTimer() {
