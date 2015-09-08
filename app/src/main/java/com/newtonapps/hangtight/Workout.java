@@ -65,7 +65,6 @@ public class Workout extends AppCompatActivity {
             Log.d("convert2milli", "Error converting to millis");
         }
 
-
         progressBar = (ProgressBar) findViewById(R.id.progressbar);
         progressBar.setMax(dataArray[0]);
         progressBar.setProgress(progress);
