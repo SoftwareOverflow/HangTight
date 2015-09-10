@@ -12,14 +12,9 @@
     android:background="@color/DarkSlateGray">
 
     <TextView
-        android:id="@+id/loadScreenTitle"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
+        style="@style/screenTitles"
         android:text="Saved Workouts"
-        android:textColor="@color/NavajoWhite"
-        android:textSize="30sp"
-        android:gravity="center"
-        android:textStyle="italic"/>
+        />
 
     <TextView
         android:layout_width="fill_parent"

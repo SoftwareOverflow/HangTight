@@ -65,6 +65,29 @@ public class MyDBHandler extends SQLiteOpenHelper {
 
     }
 
+    public boolean updateWorkout(int position, String[] workoutData){
+        SQLiteDatabase db = getWritableDatabase();
+
+        Cursor cursor = db.rawQuery("select * from " + TABLE_WORKOUTS, null);
+        cursor.moveToPosition(position);
+        final int ID = cursor.getInt(cursor.getColumnIndex(COLUMN_ID));
+        cursor.close();
+
+        ContentValues values = new ContentValues();
+        values.put(COLUMN_TITLE, workoutData[0]);
+        values.put(COLUMN_DESCRIPTION, workoutData[1]);
+        values.put(COLUMN_HANG, Integer.parseInt(workoutData[2]));
+        values.put(COLUMN_REST, Integer.parseInt(workoutData[3]));
+        values.put(COLUMN_REPS, Integer.parseInt(workoutData[4]));
+        values.put(COLUMN_SETS, Integer.parseInt(workoutData[5]));
+        values.put(COLUMN_RECOVER, Integer.parseInt(workoutData[6]));
+
+        db.close();
+
+        return (db.update(TABLE_WORKOUTS, values, COLUMN_ID + "='" + ID + "'", null) > 0);
+
+    }
+
     public boolean addWorkout(final String[] workoutData, boolean ignoreDupe){
         SQLiteDatabase db = getWritableDatabase();
 
@@ -88,14 +111,9 @@ public class MyDBHandler extends SQLiteOpenHelper {
                         }
                     })
                     .setIcon(android.R.drawable.ic_dialog_alert)
-                    .show();
-
+                    .show(); //TODO -- fix crash caused by alert dialog
         }
         return false;
-
-
-
-
     }
 
     private boolean completeAddingWorkout(SQLiteDatabase db, String[] workoutData) {
@@ -156,12 +174,24 @@ public class MyDBHandler extends SQLiteOpenHelper {
     }
 
 
-
     public int getRows() {
         SQLiteDatabase db = getReadableDatabase();
         int rows = (int) DatabaseUtils.queryNumEntries(db, TABLE_WORKOUTS);
         db.close();
 
         return rows;
+    }
+
+    public void deleteWorkout(int position) {
+        SQLiteDatabase db = getWritableDatabase();
+
+        Cursor cursor = db.rawQuery("select * from " + TABLE_WORKOUTS, null);
+        cursor.moveToPosition(position);
+        int ID = cursor.getInt(cursor.getColumnIndex(COLUMN_ID));
+        cursor.close();
+
+        db.delete(TABLE_WORKOUTS, COLUMN_ID + "=" + ID, null);
+
+        db.close();
     }
 }

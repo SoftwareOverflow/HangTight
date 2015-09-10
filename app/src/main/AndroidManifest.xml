@@ -19,20 +19,23 @@
         </activity>
         <activity
             android:name=".NewBasicWorkout"
-            android:label="@string/title_activity_new_basic_workout" >
+            android:label="@string/title_activity_new_basic_workout">
         </activity>
         <activity
             android:name=".Workout"
             android:configChanges="keyboardHidden|orientation|screenSize"
-            android:label="@string/title_activity_workout" >
+            android:label="@string/title_activity_workout"
+            >
         </activity>
         <activity
             android:name=".LoadSavedWorkouts"
-            android:label="@string/title_activity_load_saved_workouts" >
+            android:label="@string/title_activity_load_saved_workouts"
+            >
         </activity>
         <activity
             android:name=".EditSavedWorkout"
-            android:label="@string/title_activity_edit_saved_workout" >
+            android:label="@string/title_activity_edit_saved_workout"
+            >
         </activity>
     </application>
 

@@ -9,23 +9,144 @@
     android:orientation="vertical">
 
     <TextView
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:textAppearance="?android:attr/textAppearanceLarge"
+        style="@style/screenTitles"
         android:text="Edit Saved Workout"
-        android:textStyle="italic"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:textColor="@color/NavajoWhite"/>
+        />
 
     <View
         android:layout_width="wrap_content"
         android:layout_height="1dp"
-        android:background="@color/LightSlateGray"/>
+        android:background="@color/LightSlateGray"
+        android:layout_margin="5dp"/>
 
-    <TextView
+    <ScrollView
+        android:layout_width="fill_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:orientation="vertical">
+
+            <EditText
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/editSavedWorkoutTitle"
+                android:textSize="20sp"
+                android:textColor="@color/NavajoWhite"
+                />
+
+            <EditText
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/editSavedWorkoutDescription"
+                android:textColor="@color/NavajoWhite"
+                />
+
+            <LinearLayout style="@style/WorkoutLinearLayout">
+
+                <TextView
+                    style="@style/WorkoutTextView"
+                    android:text="Hang" />
+
+                <EditText
+                    android:id="@+id/editSavedWorkoutHang"
+                    style="@style/WorkoutEditText"
+                    android:layout_marginRight="15dp"/>
+
+            </LinearLayout>
+
+            <LinearLayout style="@style/WorkoutLinearLayout">
+
+                <TextView
+                    style="@style/WorkoutTextView"
+                    android:text="Rest" />
+
+                <EditText
+                    android:id="@+id/editSavedWorkoutRest"
+                    style="@style/WorkoutEditText"
+                    android:layout_marginRight="15dp"/>
+
+            </LinearLayout>
+
+            <LinearLayout style="@style/WorkoutLinearLayout">
+
+                <TextView
+                    style="@style/WorkoutTextView"
+                    android:text="Reps" />
+
+                <EditText
+                    android:id="@+id/editSavedWorkoutReps"
+                    style="@style/WorkoutEditText"
+                    android:layout_marginRight="15dp"
+                    />
+
+
+            </LinearLayout>
+
+            <LinearLayout style="@style/WorkoutLinearLayout">
+
+                <TextView
+                    style="@style/WorkoutTextView"
+                    android:text="Sets" />
+
+                <EditText
+                    android:id="@+id/editSavedWorkoutSets"
+                    style="@style/WorkoutEditText"
+                    android:layout_marginRight="15dp"
+                    />
+            </LinearLayout>
+
+            <LinearLayout style="@style/WorkoutLinearLayout">
+
+                <TextView
+                    style="@style/WorkoutTextView"
+                    android:text="Recover" />
+
+
+                <EditText
+                    android:id="@+id/editSavedWorkoutRecover"
+                    style="@style/WorkoutEditText"
+                    android:layout_marginRight="15dp"
+                    />
+
+
+            </LinearLayout>
+
+
+        </LinearLayout>
+
+    </ScrollView>
+
+    <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/editSavedTitle"/>
+        android:orientation="horizontal"
+        android:layout_margin="5dp">
+
+
+        <Button
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="10dp"
+            android:layout_weight="1"
+            android:background="@color/SlateGray"
+            android:onClick="cancelSave"
+            android:text="Cancel"
+            android:textColor="@color/White" />
+
+        <Button
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:layout_marginLeft="10dp"
+            android:layout_weight="1"
+            android:background="@color/SlateGray"
+            android:onClick="saveChanges"
+            android:text="Save Changes"
+            android:textColor="@color/White" />
+
+    </LinearLayout>
+
 </LinearLayout>
