@@ -25,14 +25,10 @@ public class NewBasicWorkout extends AppCompatActivity {
 
         Bundle data = getIntent().getExtras();
 
-        if (data!=null){
-            valuesArray = data.getIntArray("dataArray"); //{hang, rest, reps, sets, recover}
-        }
+        if (data!=null) valuesArray = data.getIntArray("dataArray"); //{hang, rest, reps, sets, recover}
 
         assignValues();
-
     }
-
 
     public void initViews(){
         LinearLayout rootView = (LinearLayout) findViewById(R.id.basicMainScreen);
@@ -135,6 +131,8 @@ public class NewBasicWorkout extends AppCompatActivity {
     } //method called when start button pressed
 
     public void saveWorkout(View v){
+        assignValues();
+
         final LinearLayout workoutExtraInfoScreen = (LinearLayout) findViewById(R.id.overlayScreen);
         final LinearLayout workoutScreen = (LinearLayout) findViewById(R.id.basicMainScreen);
 
