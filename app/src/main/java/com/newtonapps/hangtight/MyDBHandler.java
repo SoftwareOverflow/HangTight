@@ -73,6 +73,7 @@ public class MyDBHandler extends SQLiteOpenHelper {
         final int ID = cursor.getInt(cursor.getColumnIndex(COLUMN_ID));
         cursor.close();
 
+
         ContentValues values = new ContentValues();
         values.put(COLUMN_TITLE, workoutData[0]);
         values.put(COLUMN_DESCRIPTION, workoutData[1]);
@@ -82,10 +83,10 @@ public class MyDBHandler extends SQLiteOpenHelper {
         values.put(COLUMN_SETS, Integer.parseInt(workoutData[5]));
         values.put(COLUMN_RECOVER, Integer.parseInt(workoutData[6]));
 
+        int saveSuccess = db.update(TABLE_WORKOUTS, values, COLUMN_ID + "=" + ID + "", null);
         db.close();
 
-        return (db.update(TABLE_WORKOUTS, values, COLUMN_ID + "='" + ID + "'", null) > 0);
-
+        return ( saveSuccess > 0);
     }
 
     public boolean addWorkout(final String[] workoutData, boolean ignoreDupe){

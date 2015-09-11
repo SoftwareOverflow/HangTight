@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListAdapter;
 import android.widget.ListView;
+import android.widget.Toast;
 
 public class LoadSavedWorkouts extends Activity {
 
@@ -91,20 +92,22 @@ public class LoadSavedWorkouts extends Activity {
                 Intent intent = new Intent(getApplicationContext(), EditSavedWorkout.class);
                 intent.putExtra("workoutData", workoutData);
                 intent.putExtra("position", info.position);
-
+                startActivity(intent);
                 break;
-
-
             case 1:
-                dbHandler.deleteWorkout(info.position);
+                dbHandler.deleteWorkout(info.position); //TODO -- add alert dialog to confirm before deleting
+                Toast.makeText(this, "Workout Deleted", Toast.LENGTH_SHORT);
                 createListView();
                 break;
-
             case 2:
                 closeContextMenu();
                 break;
 
+            default:
+                closeContextMenu();
+                break;
         }
+
 
 
         return true;

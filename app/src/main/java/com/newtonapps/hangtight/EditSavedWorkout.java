@@ -46,9 +46,10 @@ public class EditSavedWorkout extends AppCompatActivity {
     public void saveChanges(View v){
         MyDBHandler dbHandler = new MyDBHandler(this, null);
 
-        assignValues();
-        if (dbHandler.updateWorkout(position, updatedData)) Toast.makeText(this, "Changes Saved", Toast.LENGTH_SHORT).show();
-        else Toast.makeText(this, "There was an error saving the updates", Toast.LENGTH_SHORT).show();
+        if(!assignValues()){
+            if (dbHandler.updateWorkout(position, updatedData)) Toast.makeText(this, "Changes Saved", Toast.LENGTH_SHORT).show();
+            else Toast.makeText(this, "There was an error saving the updates", Toast.LENGTH_SHORT).show();
+        } else Toast.makeText(this, "Title and Description cannot contain the pipe character '|'", Toast.LENGTH_SHORT).show();
 
         cancelSave(v);
     } //saves changes and goes back to screen for saved workouts
@@ -58,7 +59,7 @@ public class EditSavedWorkout extends AppCompatActivity {
         startActivity(i);
     } //goes back to load saved workout screen with no changes
 
-    private void assignValues() {
+    private boolean assignValues() {
         updatedData[0] = title.getText().toString();
         updatedData[1] = description.getText().toString();
         updatedData[2] = hang.getText().toString();
@@ -66,5 +67,8 @@ public class EditSavedWorkout extends AppCompatActivity {
         updatedData[4] = reps.getText().toString();
         updatedData[5] = sets.getText().toString();
         updatedData[6] = recover.getText().toString();
-    }
+
+        return (updatedData[0].contains("|") || updatedData[1].contains("|"));
+
+    } //returns true if title/desc contain invalid chars, false otherwise
 }
