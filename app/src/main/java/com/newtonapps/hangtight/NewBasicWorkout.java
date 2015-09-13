@@ -160,7 +160,7 @@ public class NewBasicWorkout extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(), "Title and Description cannot contain the pipe character '|'", Toast.LENGTH_SHORT).show();
                 }
                 else{
-                    MyDBHandler dbHandler = new MyDBHandler(getApplicationContext(), null);
+                    MyDBHandler dbHandler = new MyDBHandler(NewBasicWorkout.this, null);
 
                     workoutData[0] = titleString;
                     workoutData[1] = descriptionString;

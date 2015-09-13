@@ -9,6 +9,7 @@ import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
+import android.widget.Toast;
 
 
 public class MyDBHandler extends SQLiteOpenHelper {
@@ -83,10 +84,9 @@ public class MyDBHandler extends SQLiteOpenHelper {
         values.put(COLUMN_SETS, Integer.parseInt(workoutData[5]));
         values.put(COLUMN_RECOVER, Integer.parseInt(workoutData[6]));
 
-        int saveSuccess = db.update(TABLE_WORKOUTS, values, COLUMN_ID + "=" + ID + "", null);
+        boolean saved =  db.update(TABLE_WORKOUTS, values, COLUMN_ID + "=" + ID + "", null) !=0 ;
         db.close();
-
-        return ( saveSuccess > 0);
+        return saved;
     }
 
     public boolean addWorkout(final String[] workoutData, boolean ignoreDupe){
@@ -103,6 +103,7 @@ public class MyDBHandler extends SQLiteOpenHelper {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             addWorkout(workoutData, true);
+                            Toast.makeText(context, "Workout Saved!", Toast.LENGTH_SHORT);
                         }
                     })
                     .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -110,9 +111,9 @@ public class MyDBHandler extends SQLiteOpenHelper {
                         public void onClick(DialogInterface dialog, int which) {
 
                         }
-                    })
+                    }) //Does nothing
                     .setIcon(android.R.drawable.ic_dialog_alert)
-                    .show(); //TODO -- fix crash caused by alert dialog
+                    .show();
         }
         return false;
     }
@@ -183,16 +184,22 @@ public class MyDBHandler extends SQLiteOpenHelper {
         return rows;
     }
 
-    public void deleteWorkout(int position) {
-        SQLiteDatabase db = getWritableDatabase();
+    public boolean deleteWorkout(final int position) {
+        try {
+            SQLiteDatabase db = getWritableDatabase();
 
-        Cursor cursor = db.rawQuery("select * from " + TABLE_WORKOUTS, null);
-        cursor.moveToPosition(position);
-        int ID = cursor.getInt(cursor.getColumnIndex(COLUMN_ID));
-        cursor.close();
+            Cursor cursor = db.rawQuery("select * from " + TABLE_WORKOUTS, null);
+            cursor.moveToPosition(position);
+            int ID = cursor.getInt(cursor.getColumnIndex(COLUMN_ID));
+            cursor.close();
 
-        db.delete(TABLE_WORKOUTS, COLUMN_ID + "=" + ID, null);
+            db.delete(TABLE_WORKOUTS, COLUMN_ID + "=" + ID, null);
+            db.close();
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
 
-        db.close();
+            return false;}
+
     }
 }

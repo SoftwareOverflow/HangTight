@@ -1,6 +1,8 @@
 package com.newtonapps.hangtight;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -16,8 +18,7 @@ import android.widget.Toast;
 public class LoadSavedWorkouts extends Activity {
 
     private MyDBHandler dbHandler;
-    private ListView loadScreenListView;
-    private String[] menuItems, arrayAdapterStrings;
+    private String[] arrayAdapterStrings;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,8 +30,9 @@ public class LoadSavedWorkouts extends Activity {
     }
 
 
-    private void createListView() {
-       loadScreenListView = (ListView) findViewById(R.id.loadScreenListView);
+    public void createListView() {
+        setContentView(R.layout.activity_load_saved_workouts);
+        ListView loadScreenListView = (ListView) findViewById(R.id.loadScreenListView);
         int rows = dbHandler.getRows();
         arrayAdapterStrings = new String[rows];
 
@@ -72,8 +74,8 @@ public class LoadSavedWorkouts extends Activity {
             Log.d("menu", arrayAdapterStrings[info.position]);
             String[] splitData = arrayAdapterStrings[info.position].split("\\|");
             menu.setHeaderTitle("Edit '" + splitData[0] + "' Workout");
-            menuItems = new String[] {"Edit Workout", "Delete Workout", "Cancel"};
-            for (int i=0; i<menuItems.length; i++){
+            String[] menuItems = new String[]{"Edit Workout", "Delete Workout", "Cancel"};
+            for (int i=0; i< menuItems.length; i++){
                 menu.add(Menu.NONE, i, i, menuItems[i]);
             }
         }
@@ -83,21 +85,40 @@ public class LoadSavedWorkouts extends Activity {
     public boolean onContextItemSelected(MenuItem item) {
         AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
         int menuItemIndex = item.getItemId();
+        final int position = info.position;
 
         switch (menuItemIndex){
             case 0:
-                String dataFromDB = dbHandler.getInfo(info.position);
+                String dataFromDB = dbHandler.getInfo(position);
                 String[] workoutData = dataFromDB.split("\\|");
 
                 Intent intent = new Intent(getApplicationContext(), EditSavedWorkout.class);
                 intent.putExtra("workoutData", workoutData);
-                intent.putExtra("position", info.position);
+                intent.putExtra("position", position);
                 startActivity(intent);
                 break;
             case 1:
-                dbHandler.deleteWorkout(info.position); //TODO -- add alert dialog to confirm before deleting
-                Toast.makeText(this, "Workout Deleted", Toast.LENGTH_SHORT);
-                createListView();
+                new AlertDialog.Builder(LoadSavedWorkouts.this)
+                        .setTitle("Confirm Delete")
+                        .setMessage("You are about to delete the workout!\nThis action cannot be undone.\nDo you wish to proceed?")
+                        .setPositiveButton("Delete Workout", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                if (dbHandler.deleteWorkout(position)) Toast.makeText(LoadSavedWorkouts.this, "Workout Deleted", Toast.LENGTH_SHORT).show();
+                                else Toast.makeText(LoadSavedWorkouts.this, "Problem Deleting Workout.\nPlease try again later", Toast.LENGTH_SHORT).show();
+
+                                createListView();
+                            }
+                        })
+                        .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+
+                            }
+                        }) //Does nothing
+                        .setIcon(android.R.drawable.ic_dialog_alert)
+                        .show();
+
                 break;
             case 2:
                 closeContextMenu();
@@ -107,9 +128,6 @@ public class LoadSavedWorkouts extends Activity {
                 closeContextMenu();
                 break;
         }
-
-
-
         return true;
     }
 }
