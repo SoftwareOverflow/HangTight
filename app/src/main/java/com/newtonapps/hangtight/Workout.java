@@ -82,6 +82,12 @@ public class Workout extends AppCompatActivity {
     }
 
     private void workoutComplete() {
+        Bundle data = getIntent().getExtras();
+        boolean isSaved = data.getBoolean("isSaved");
+
+        if(!isSaved) //TODO -- button to save workout
+
+
         timeTextView.setText("0");
         title.setText("YOU'RE DONE!");
     } //TODO -- add ending screen for end of Workout (+ sound?) (option to save workout/go to home screen)
@@ -135,7 +141,7 @@ public class Workout extends AppCompatActivity {
 
                 else{
                     progressBar.setVisibility(View.GONE);
-                    workoutComplete();
+                    workoutComplete(); //TODO -- sort out workoutComplete() to include weather or not to save data
                 }
             }
         };
@@ -272,13 +278,12 @@ public class Workout extends AppCompatActivity {
             timeLeft*=1000;
         }
 
+
         whichTimer().cancel();
         whichTimer().onFinish();
+        resumeTimer.cancel();
 
-        if (pause){
-            whichTimer().cancel();
-            resumeTimer.cancel();
-        }
+        if (pause) whichTimer().cancel();
     } //skips current exercise and goes onto next one
     // end settings button methods
 

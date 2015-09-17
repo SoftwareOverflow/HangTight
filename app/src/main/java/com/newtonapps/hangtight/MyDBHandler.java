@@ -145,7 +145,9 @@ public class MyDBHandler extends SQLiteOpenHelper {
         int count = cursor.getCount();
         cursor.close();
 
+
         return (count>0);
+
 
     }
 
