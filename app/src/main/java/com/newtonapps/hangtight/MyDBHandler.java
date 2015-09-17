@@ -11,6 +11,10 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 import android.widget.Toast;
 
+import org.apache.http.NameValuePair;
+
+import java.util.ArrayList;
+
 
 public class MyDBHandler extends SQLiteOpenHelper {
 
@@ -145,7 +149,12 @@ public class MyDBHandler extends SQLiteOpenHelper {
         int count = cursor.getCount();
         cursor.close();
 
+
+        ArrayList<NameValuePair> dataToSend = new ArrayList<>();
+
+
         return (count>0);
+
 
     }
 

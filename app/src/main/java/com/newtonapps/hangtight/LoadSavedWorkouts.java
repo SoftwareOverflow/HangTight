@@ -41,8 +41,6 @@ public class LoadSavedWorkouts extends Activity {
             Log.d("db", "stringFromDB: " + arrayAdapterStrings[i]);
         }
 
-
-
         ListAdapter adapter = new CustomAdapter(this, arrayAdapterStrings);
         loadScreenListView.setAdapter(adapter);
         registerForContextMenu(loadScreenListView);
