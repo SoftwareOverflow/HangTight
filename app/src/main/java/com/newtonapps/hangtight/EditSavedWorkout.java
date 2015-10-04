@@ -36,11 +36,11 @@ public class EditSavedWorkout extends AppCompatActivity {
         assert dataArray != null;
         title.setText(dataArray[0]);
         description.setText(dataArray[1]);
-        hang.setText(dataArray[2]);
-        rest.setText(dataArray[3]);
-        reps.setText(dataArray[4]);
-        sets.setText(dataArray[5]);
-        recover.setText(dataArray[6]);
+        hang.setText(dataArray[3]);
+        rest.setText(dataArray[4]);
+        reps.setText(dataArray[5]);
+        sets.setText(dataArray[6]);
+        recover.setText(dataArray[7]);
     }
 
     public void saveChanges(View v){

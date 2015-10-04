@@ -29,7 +29,6 @@ public class LoadSavedWorkouts extends Activity {
         createListView();
     }
 
-
     public void createListView() {
         setContentView(R.layout.activity_load_saved_workouts);
         ListView loadScreenListView = (ListView) findViewById(R.id.loadScreenListView);
@@ -37,8 +36,7 @@ public class LoadSavedWorkouts extends Activity {
         arrayAdapterStrings = new String[rows];
 
         for(int i=0; i<rows; i++) {
-            if (dbHandler.getInfo(i) != null) arrayAdapterStrings[i] = dbHandler.getInfo(i);
-            Log.d("db", "stringFromDB: " + arrayAdapterStrings[i]);
+            if (dbHandler.getLoadScreenInfo(i) != null) arrayAdapterStrings[i] = dbHandler.getLoadScreenInfo(i);
         }
 
         ListAdapter adapter = new CustomAdapter(this, arrayAdapterStrings);
@@ -49,11 +47,7 @@ public class LoadSavedWorkouts extends Activity {
         loadScreenListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                String dataFromDB = dbHandler.getInfo(position);
-                String[] workoutData = dataFromDB.split("\\|");
-
-                int[] intWorkoutData = new int[]{Integer.parseInt(workoutData[2]), Integer.parseInt(workoutData[3]),
-                        Integer.parseInt(workoutData[4]), Integer.parseInt(workoutData[5]), Integer.parseInt(workoutData[6])};
+                int[] intWorkoutData = dbHandler.getWorkoutInfo(position);
 
                 Intent intent = new Intent(getApplicationContext(), Workout.class);
                 intent.putExtra("dataArray", intWorkoutData);
@@ -87,11 +81,14 @@ public class LoadSavedWorkouts extends Activity {
 
         switch (menuItemIndex){
             case 0:
-                String dataFromDB = dbHandler.getInfo(position);
-                String[] workoutData = dataFromDB.split("\\|");
+                String dataFromDB = dbHandler.getLoadScreenInfo(position);
+                int[] workoutData = dbHandler.getWorkoutInfo(position);
+
+                for (int i = 0; i< workoutData.length; i++) dataFromDB += "|" + workoutData[i];
+
 
                 Intent intent = new Intent(getApplicationContext(), EditSavedWorkout.class);
-                intent.putExtra("workoutData", workoutData);
+                intent.putExtra("workoutData", dataFromDB.split("\\|"));
                 intent.putExtra("position", position);
                 startActivity(intent);
                 break;
