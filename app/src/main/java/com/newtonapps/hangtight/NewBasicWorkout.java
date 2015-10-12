@@ -24,7 +24,6 @@ public class NewBasicWorkout extends AppCompatActivity {
         initViews();
 
         Bundle data = getIntent().getExtras();
-
         if (data!=null) valuesArray = data.getIntArray("dataArray"); //{hang, rest, reps, sets, recover}
 
         assignValues();

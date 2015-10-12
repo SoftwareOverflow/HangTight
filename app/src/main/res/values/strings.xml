@@ -8,4 +8,6 @@
     <string name="title_activity_workout">Workout</string>
     <string name="title_activity_load_saved_workouts">LoadSavedWorkouts</string>
     <string name="title_activity_edit_saved_workout">EditSavedWorkout</string>
+    <string name="title_activity_settings_page">settingsPage</string>
+    <string name="title_activity_help_page">helpPage</string>
 </resources>

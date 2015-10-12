@@ -23,7 +23,7 @@ public class Workout extends AppCompatActivity {
     private TextView timeTextView, title, remainingTimeTV;
     private int totalSets, totalReps, progress = 0;
     private Boolean mute = false;
-    private Boolean pause = false;
+    private Boolean pause = false, resumeTimerRunning = false;
     private String whichTimer;
     private ProgressBar progressBar;
 
@@ -32,7 +32,7 @@ public class Workout extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_workout);
-        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON); //TODO -- move this line into function with assinging sound/vibrate/readyTimer from settings page choices
 
         updateRepAndSet(); // sets current/total rep and sets
         timeTextView = (TextView) findViewById(R.id.timerTextView);
@@ -45,16 +45,18 @@ public class Workout extends AppCompatActivity {
         totalSets = dataArray[3];
         totalReps = dataArray[2];
 
-        totalTime = dataArray[0] * dataArray[2];
-        totalTime += dataArray[1] * (dataArray[2] - 1);
-        totalTime += dataArray[4];
-        totalTime *= dataArray[3];
-        totalTime -= dataArray[4];
+        if (dataArray.length == 6) totalTime = dataArray[5]; //Total time saved in DB - sent with pre-saved workouts
+        else { //If workout not saved manually calculate total time of workout
+            totalTime = dataArray[0] * dataArray[2];
+            totalTime += dataArray[1] * (dataArray[2] - 1);
+            totalTime += dataArray[4];
+            totalTime *= dataArray[3];
+            totalTime -= dataArray[4];
+        }
 
         TextView totalTimeTV = (TextView) findViewById(R.id.totalTimeTV);
         totalTimeTV.setText(String.format("%02d", totalTime / 60) + ":" + String.format("%02d", totalTime % 60));
         timeLeft = totalTime * 1000; //Time left in millis
-
 
         try {
             for (int i = 0; i < dataArray.length; i++) {
@@ -68,9 +70,10 @@ public class Workout extends AppCompatActivity {
         progressBar = (ProgressBar) findViewById(R.id.progressbar);
         progressBar.setMax(dataArray[0]);
         progressBar.setProgress(progress);
-        Animation rot = new RotateAnimation(0.0f, 90.0f, 100.0f, 100.0f);
+        Animation rot = new RotateAnimation(0.0f, 90.0f,Animation.RELATIVE_TO_SELF, 0.5f,Animation.RELATIVE_TO_SELF, 0.5f);
         rot.setFillAfter(true);
-        progressBar.startAnimation(rot);
+        progressBar.startAnimation(rot); //TODO -- fix issue of rotate moving image off center
+
 
         Timers(); //creates the workout
         updateRepAndSet();
@@ -78,15 +81,14 @@ public class Workout extends AppCompatActivity {
         title.setText("Get Ready!");
         title.setTextColor(getResources().getColor(R.color.DarkOrange));
         whichTimer = "ready";
-        readyTimer.start(); //starts chain reaction of timers!
+        readyTimer.start(); //starts chain reaction of timers
     }
 
     private void workoutComplete() {
         Bundle data = getIntent().getExtras();
-        boolean isSaved = data.getBoolean("isSaved");
+        //boolean isSaved = data.getBoolean("isSaved");
 
-        if(!isSaved) //TODO -- button to save workout
-
+        //if(!isSaved) //TODO -- button to save workout
 
         timeTextView.setText("0");
         title.setText("YOU'RE DONE!");
@@ -100,7 +102,7 @@ public class Workout extends AppCompatActivity {
         hangTimer = new CountDownTimer(dataArray[0], 100) {
 
             @Override
-            public void onTick(long millisUntilFinished) { updateScreen(millisUntilFinished, true); }
+            public void onTick(long millisUntilFinished) {updateScreen(millisUntilFinished, true); }
 
             @Override
             public void onFinish() {
@@ -141,7 +143,7 @@ public class Workout extends AppCompatActivity {
 
                 else{
                     progressBar.setVisibility(View.GONE);
-                    workoutComplete(); //TODO -- sort out workoutComplete() to include weather or not to save data
+                    workoutComplete();
                 }
             }
         };
@@ -179,7 +181,11 @@ public class Workout extends AppCompatActivity {
             public void onFinish() {
                 if (!mute) {beep.start();}
 
-                timeLeft = Math.round(timeLeft/1000f)*1000;
+                progress = 0;
+                progressBar.setProgress(progress);
+                progressBar.setMax(dataArray[0]);
+
+                timeLeft = Math.round(timeLeft / 1000f) * 1000;
                 remainingTimeTV.setText(String.format("%02d:%02d", Math.round((float)timeLeft/1000)/60, Math.round((float)timeLeft/1000)%60));
 
                 timeTextView.setText("0");
@@ -187,10 +193,6 @@ public class Workout extends AppCompatActivity {
                 title.setTextColor(getResources().getColor(R.color.Green));
                 whichTimer = "hang";
                 timeTextView.setText("" + dataArray[0] / 1000);
-
-                progress = 0;
-                progressBar.setProgress(progress);
-                progressBar.setMax(dataArray[0]);
 
                 updateRepAndSet();
                 hangTimer.start();
@@ -215,7 +217,7 @@ public class Workout extends AppCompatActivity {
                 hangTimer.start();
             }
         };
-    } //creates all timers for use
+    } //creates all timers
 
     private void updateRepAndSet(){
         TextView repNum = (TextView) findViewById(R.id.repsCounterTextView);
@@ -235,53 +237,52 @@ public class Workout extends AppCompatActivity {
     public void setPause(View v){
         pause = (!pause);
         ImageButton pauseButton = (ImageButton) findViewById(R.id.pauseButton);
-
-        int timeToFinish = Integer.parseInt(timeTextView.getText().toString());
-
-        resumeTimer = new CountDownTimer(timeToFinish*1000, 100) {
-
-            @Override
-            public void onTick(long millisUntilFinished) {
-                if (whichTimer.equals("hang")){updateScreen(millisUntilFinished, true);}
-                else if (!whichTimer.equals("ready")){updateScreen(millisUntilFinished, false); }
-        }
-
-            @Override
-            public void onFinish() {
-                whichTimer().onFinish();
-                timeLeft = Math.round(timeLeft/1000f) * 1000; //round to nearest second
-                remainingTimeTV.setText(String.format("%02d:%02d", Math.round((float)timeLeft/1000)/60, Math.round((float)timeLeft/1000)%60));
-            }
-        };
-
+         //TODO -- look into issue of play/pause spamming causing progress to increase....
         if (pause) {
             pauseButton.setImageResource(R.drawable.resume);
-            whichTimer().cancel();
-            resumeTimer.cancel();
-
+            if (resumeTimerRunning){
+                resumeTimer.cancel();
+                resumeTimerRunning = false;
+            }
+            else whichTimer().cancel();
         }
         else{
             pauseButton.setImageResource(R.drawable.pause);
-            whichTimer().cancel();
-            resumeTimer.cancel();
-            resumeTimer.start();
+            int timeToFinish = Integer.parseInt(timeTextView.getText().toString());
+
+            resumeTimer = new CountDownTimer(timeToFinish*1000, 100) {
+                @Override
+                public void onTick(long millisUntilFinished) {
+                    if (whichTimer.equals("hang")){updateScreen(millisUntilFinished, true);}
+                    else if (!whichTimer.equals("ready")){updateScreen(millisUntilFinished, false);}
+                }
+
+                @Override
+                public void onFinish() {
+                    resumeTimerRunning = false;
+                    whichTimer().onFinish();
+                    timeLeft = Math.round(timeLeft / 1000f) * 1000; //round to nearest second
+                    remainingTimeTV.setText(String.format("%02d:%02d", Math.round((float) timeLeft / 1000) / 60, Math.round((float) timeLeft / 1000) % 60));
+                }
+            }.start();
+            resumeTimerRunning = true;
         }
-
-
-
     } // pause/resume button and timer/progressbar
     public void skip(View v){
-
-        if (!whichTimer.matches("ready")) {
+        if (!whichTimer.equals("ready")) {
             int timeToFinish = Integer.parseInt(timeTextView.getText().toString());
             timeLeft = Math.round(timeLeft/1000f) - timeToFinish;
             timeLeft*=1000;
         }
 
-
-        whichTimer().cancel();
-        whichTimer().onFinish();
-        resumeTimer.cancel();
+        if (resumeTimerRunning){
+            resumeTimer.cancel();
+            resumeTimer.onFinish();
+        }
+        else{
+            whichTimer().cancel();
+            whichTimer().onFinish();
+        }
 
         if (pause) whichTimer().cancel();
     } //skips current exercise and goes onto next one
@@ -302,18 +303,13 @@ public class Workout extends AppCompatActivity {
             switch (whichTimer) {
                 case "hang":
                     return hangTimer;
-
                 case "rest":
                     return restTimer;
-
                 case "recover":
                     return recoveryTimer;
-
                 case "ready":
                     return readyTimer;
-
                 default:
-                    Log.d("whichTimer()", "No timers found in switch!");
                     return null;
             }
     } //returns current active timer or null if none active (Logs in this case)
@@ -329,7 +325,6 @@ public class Workout extends AppCompatActivity {
 
     private long firstBackPress;
     private static final int TIME_INTERVAL = 2000;
-
     @Override
     public void onBackPressed() {
         Toast toast = Toast.makeText(this, "Click BACK again to exit", Toast.LENGTH_SHORT);
@@ -338,11 +333,18 @@ public class Workout extends AppCompatActivity {
             toast.cancel();
             Intent i = new Intent(this, HomeScreenActivity.class);
             startActivity(i);
-            finish();
             return;
         }
         else toast.show();
 
         firstBackPress = System.currentTimeMillis();
+    } //press back twice within TIME_INTERVAL to avoid accidental exiting workout
+
+
+    //TODO -- end activity on back press to stop beeping
+    @Override
+    protected void onStop() {
+        super.onStop();
+        finish();
     }
 }

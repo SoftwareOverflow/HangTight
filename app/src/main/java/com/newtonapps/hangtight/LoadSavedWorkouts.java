@@ -17,6 +17,7 @@ import android.widget.Toast;
 
 public class LoadSavedWorkouts extends Activity {
 
+
     private MyDBHandler dbHandler;
     private String[] arrayAdapterStrings;
 
@@ -24,11 +25,9 @@ public class LoadSavedWorkouts extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_load_saved_workouts);
-
         dbHandler = new MyDBHandler(getBaseContext(), null);
         createListView();
     }
-
 
     public void createListView() {
         setContentView(R.layout.activity_load_saved_workouts);
@@ -36,9 +35,9 @@ public class LoadSavedWorkouts extends Activity {
         int rows = dbHandler.getRows();
         arrayAdapterStrings = new String[rows];
 
-        for(int i=0; i<rows; i++) {
-            if (dbHandler.getInfo(i) != null) arrayAdapterStrings[i] = dbHandler.getInfo(i);
-            Log.d("db", "stringFromDB: " + arrayAdapterStrings[i]);
+        for (int i = 0; i < rows; i++) {
+            if (dbHandler.getLoadScreenInfo(i) != null)
+                arrayAdapterStrings[i] = dbHandler.getLoadScreenInfo(i);
         }
 
         ListAdapter adapter = new CustomAdapter(this, arrayAdapterStrings);
@@ -49,11 +48,7 @@ public class LoadSavedWorkouts extends Activity {
         loadScreenListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                String dataFromDB = dbHandler.getInfo(position);
-                String[] workoutData = dataFromDB.split("\\|");
-
-                int[] intWorkoutData = new int[]{Integer.parseInt(workoutData[2]), Integer.parseInt(workoutData[3]),
-                        Integer.parseInt(workoutData[4]), Integer.parseInt(workoutData[5]), Integer.parseInt(workoutData[6])};
+                int[] intWorkoutData = dbHandler.getWorkoutInfo(position);
 
                 Intent intent = new Intent(getApplicationContext(), Workout.class);
                 intent.putExtra("dataArray", intWorkoutData);
@@ -61,8 +56,6 @@ public class LoadSavedWorkouts extends Activity {
                 finish();
             }
         });
-
-
     }
 
     @Override
@@ -87,8 +80,7 @@ public class LoadSavedWorkouts extends Activity {
 
         switch (menuItemIndex){
             case 0:
-                String dataFromDB = dbHandler.getInfo(position);
-                String[] workoutData = dataFromDB.split("\\|");
+                int workoutData[] = dbHandler.getWorkoutInfo(position);
 
                 Intent intent = new Intent(getApplicationContext(), EditSavedWorkout.class);
                 intent.putExtra("workoutData", workoutData);
@@ -114,7 +106,7 @@ public class LoadSavedWorkouts extends Activity {
 
                             }
                         }) //Does nothing
-                        .setIcon(android.R.drawable.ic_dialog_alert)
+                        .setIcon(R.drawable.ic_dialog_alert_holo_light)
                         .show();
 
                 break;

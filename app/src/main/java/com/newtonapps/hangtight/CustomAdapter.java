@@ -26,15 +26,9 @@ class CustomAdapter extends ArrayAdapter<String> {
         String dataString = getItem(position);
         String[] splitData = dataString.split("\\|");
 
-
-        String extraInfo = splitData[2];
-        for(int i=3; i<splitData.length; i++){
-            extraInfo += "-" + splitData[i];
-        }
-
         title.setText(splitData[0]);
         description.setText(splitData[1]);
-        extras.setText(extraInfo);
+        extras.setText(String.format("%02d:%02d", Integer.parseInt(splitData[2])/60, Integer.parseInt(splitData[2])%60));
 
         return customView;
     }
