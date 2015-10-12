@@ -17,6 +17,7 @@ import android.widget.Toast;
 
 public class LoadSavedWorkouts extends Activity {
 
+
     private MyDBHandler dbHandler;
     private String[] arrayAdapterStrings;
 
@@ -24,7 +25,6 @@ public class LoadSavedWorkouts extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_load_saved_workouts);
-
         dbHandler = new MyDBHandler(getBaseContext(), null);
         createListView();
     }
@@ -35,8 +35,9 @@ public class LoadSavedWorkouts extends Activity {
         int rows = dbHandler.getRows();
         arrayAdapterStrings = new String[rows];
 
-        for(int i=0; i<rows; i++) {
-            if (dbHandler.getLoadScreenInfo(i) != null) arrayAdapterStrings[i] = dbHandler.getLoadScreenInfo(i);
+        for (int i = 0; i < rows; i++) {
+            if (dbHandler.getLoadScreenInfo(i) != null)
+                arrayAdapterStrings[i] = dbHandler.getLoadScreenInfo(i);
         }
 
         ListAdapter adapter = new CustomAdapter(this, arrayAdapterStrings);
@@ -55,8 +56,6 @@ public class LoadSavedWorkouts extends Activity {
                 finish();
             }
         });
-
-
     }
 
     @Override
@@ -81,14 +80,10 @@ public class LoadSavedWorkouts extends Activity {
 
         switch (menuItemIndex){
             case 0:
-                String dataFromDB = dbHandler.getLoadScreenInfo(position);
-                int[] workoutData = dbHandler.getWorkoutInfo(position);
-
-                for (int i = 0; i< workoutData.length; i++) dataFromDB += "|" + workoutData[i];
-
+                int workoutData[] = dbHandler.getWorkoutInfo(position);
 
                 Intent intent = new Intent(getApplicationContext(), EditSavedWorkout.class);
-                intent.putExtra("workoutData", dataFromDB.split("\\|"));
+                intent.putExtra("workoutData", workoutData);
                 intent.putExtra("position", position);
                 startActivity(intent);
                 break;
@@ -111,7 +106,7 @@ public class LoadSavedWorkouts extends Activity {
 
                             }
                         }) //Does nothing
-                        .setIcon(android.R.drawable.ic_dialog_alert)
+                        .setIcon(R.drawable.ic_dialog_alert_holo_light)
                         .show();
 
                 break;

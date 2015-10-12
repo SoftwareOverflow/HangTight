@@ -32,7 +32,7 @@ public class Workout extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_workout);
-        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON); //TODO -- move this line into function with assinging sound/vibrate/readyTimer from settings page choices
 
         updateRepAndSet(); // sets current/total rep and sets
         timeTextView = (TextView) findViewById(R.id.timerTextView);
@@ -267,9 +267,8 @@ public class Workout extends AppCompatActivity {
             }.start();
             resumeTimerRunning = true;
         }
-    } // pause/resume button and timer/progressbar //TODO - fix issue when pause-resume-pause on same timer....
+    } // pause/resume button and timer/progressbar
     public void skip(View v){
-        //TODO - fix multiple timers when skipping
         if (!whichTimer.equals("ready")) {
             int timeToFinish = Integer.parseInt(timeTextView.getText().toString());
             timeLeft = Math.round(timeLeft/1000f) - timeToFinish;
@@ -341,4 +340,10 @@ public class Workout extends AppCompatActivity {
 
         firstBackPress = System.currentTimeMillis();
     } //press back twice within TIME_INTERVAL to avoid accidental exiting workout
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        onDestroy();
+    }
 }
