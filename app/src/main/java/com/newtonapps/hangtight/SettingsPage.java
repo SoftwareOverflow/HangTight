@@ -66,7 +66,7 @@ public class SettingsPage extends AppCompatActivity {
         editor.putBoolean("sound", toggleSound.isChecked());
         editor.putBoolean("vibrate", toggleVibrate.isChecked());
         editor.apply();
-        
+
 
 
         //TODO -- assign imageView for home screen background

@@ -333,7 +333,6 @@ public class Workout extends AppCompatActivity {
             toast.cancel();
             Intent i = new Intent(this, HomeScreenActivity.class);
             startActivity(i);
-            finish();
             return;
         }
         else toast.show();
@@ -341,9 +340,11 @@ public class Workout extends AppCompatActivity {
         firstBackPress = System.currentTimeMillis();
     } //press back twice within TIME_INTERVAL to avoid accidental exiting workout
 
+
+    //TODO -- end activity on back press to stop beeping
     @Override
-    protected void onPause() {
-        super.onPause();
-        onDestroy();
+    protected void onStop() {
+        super.onStop();
+        finish();
     }
 }
