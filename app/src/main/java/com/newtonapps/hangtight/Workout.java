@@ -1,11 +1,13 @@
 package com.newtonapps.hangtight;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.os.Vibrator;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.animation.Animation;
@@ -15,6 +17,9 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class Workout extends AppCompatActivity {
 
     private int[] dataArray = new int[5];
@@ -22,22 +27,29 @@ public class Workout extends AppCompatActivity {
     private int currentRep = 1, currentSet = 1, totalTime, timeLeft;
     private TextView timeTextView, title, remainingTimeTV;
     private int totalSets, totalReps, progress = 0;
-    private Boolean mute = false;
+    private Boolean mute = false, vibrate = true;
     private Boolean pause = false, resumeTimerRunning = false;
+    private int beepTone;
     private String whichTimer;
     private ProgressBar progressBar;
+
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_workout);
-        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON); //TODO -- move this line into function with assinging sound/vibrate/readyTimer from settings page choices
 
-        updateRepAndSet(); // sets current/total rep and sets
         timeTextView = (TextView) findViewById(R.id.timerTextView);
         title = (TextView) findViewById(R.id.titleTextView);
 
+        setupWorkout(); //unpacks all relevant data and starts the workout
+    }
+
+    private void setupWorkout() {
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+
+        //region Getting Workout Data (durations)
         Bundle data = getIntent().getExtras();
         dataArray = data.getIntArray("dataArray"); //{hang, rest, reps, sets, recover}
 
@@ -45,7 +57,8 @@ public class Workout extends AppCompatActivity {
         totalSets = dataArray[3];
         totalReps = dataArray[2];
 
-        if (dataArray.length == 6) totalTime = dataArray[5]; //Total time saved in DB - sent with pre-saved workouts
+        if (dataArray.length == 6)
+            totalTime = dataArray[5]; //Total time saved in DB - sent with pre-saved workouts
         else { //If workout not saved manually calculate total time of workout
             totalTime = dataArray[0] * dataArray[2];
             totalTime += dataArray[1] * (dataArray[2] - 1);
@@ -58,29 +71,31 @@ public class Workout extends AppCompatActivity {
         totalTimeTV.setText(String.format("%02d", totalTime / 60) + ":" + String.format("%02d", totalTime % 60));
         timeLeft = totalTime * 1000; //Time left in millis
 
-        try {
-            for (int i = 0; i < dataArray.length; i++) {
-                dataArray[i] *= 1000; //converting to millis (works fine)
-            }
-        } catch (NullPointerException e){
-            e.printStackTrace();
-            Log.d("convert2milli", "Error converting to millis");
-        }
+        for (int i = 0; i < dataArray.length; i++) dataArray[i] *= 1000; //converting to millis (works fine)
+        //endregion
 
+        //region setting up progressBar and getting sharedPreferences
         progressBar = (ProgressBar) findViewById(R.id.progressbar);
         progressBar.setMax(dataArray[0]);
         progressBar.setProgress(progress);
-        Animation rot = new RotateAnimation(0.0f, 90.0f,Animation.RELATIVE_TO_SELF, 0.5f,Animation.RELATIVE_TO_SELF, 0.5f);
+        Animation rot = new RotateAnimation(0.0f, 90.0f, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
         rot.setFillAfter(true);
-        progressBar.startAnimation(rot); //TODO -- fix issue of rotate moving image off center
+        progressBar.startAnimation(rot);
 
+        SharedPreferences settings = this.getSharedPreferences("settings", MODE_PRIVATE);
+        mute = !settings.getBoolean("sound", false);
+        beepTone = settings.getInt("beepTone", 0);
+        vibrate = settings.getBoolean("vibrate", true);
+        Vibrator v = (Vibrator) this.getSystemService(Context.VIBRATOR_SERVICE);
 
-        Timers(); //creates the workout
+        Timers(settings.getInt("timer", 5) * 1000, v); //creates the timers
         updateRepAndSet();
 
         title.setText("Get Ready!");
         title.setTextColor(getResources().getColor(R.color.DarkOrange));
         whichTimer = "ready";
+        //endregion
+
         readyTimer.start(); //starts chain reaction of timers
     }
 
@@ -94,10 +109,19 @@ public class Workout extends AppCompatActivity {
         title.setText("YOU'RE DONE!");
     } //TODO -- add ending screen for end of Workout (+ sound?) (option to save workout/go to home screen)
 
-    private void Timers() {
-        final MediaPlayer beep = MediaPlayer.create(getApplicationContext(), R.raw.beep);
+    private void Timers(int countdownTime, final Vibrator v) {
+        Map<Integer, Integer> soundMap = new HashMap<Integer, Integer>();
+        soundMap.put(0, R.raw.beep);
+        soundMap.put(1, R.raw.blooper);
+        soundMap.put(2, R.raw.censor);
+        soundMap.put(3, R.raw.ding);
+        soundMap.put(4,R.raw.ring);
+
+        final MediaPlayer beep = MediaPlayer.create(getApplicationContext(), soundMap.get(beepTone));
         remainingTimeTV = (TextView) findViewById(R.id.remainingTimeTV);
         remainingTimeTV.setText(String.format("%02d", totalTime / 60) + ":" + String.format("%02d", totalTime % 60));
+
+        //TODO - fix issue of sound not always playing
 
         hangTimer = new CountDownTimer(dataArray[0], 100) {
 
@@ -110,11 +134,12 @@ public class Workout extends AppCompatActivity {
                 progressBar.setProgress(progress);
 
                 timeLeft = Math.round(timeLeft/1000f)*1000; // round to nearest second
-                remainingTimeTV.setText(String.format("%02d:%02d", Math.round((float)timeLeft/1000)/60, Math.round((float)timeLeft/1000)%60));
+                remainingTimeTV.setText(String.format("%02d:%02d", Math.round((float) timeLeft / 1000) / 60, Math.round((float) timeLeft / 1000) % 60));
 
                 currentRep +=1;
 
-                if (!mute) {beep.start();}
+                if (!mute) beep.start();
+                if (vibrate) v.vibrate(500);
 
                 if (currentRep <= totalReps && currentSet <= totalSets){
                     title.setText("Rest");
@@ -154,10 +179,11 @@ public class Workout extends AppCompatActivity {
 
             @Override
             public void onFinish() {
-                if (! mute) {beep.start();}
+                if (!mute) beep.start();
+                if (vibrate) v.vibrate(500);
 
                 timeLeft = Math.round(timeLeft/1000f) * 1000; //round to nearest second
-                remainingTimeTV.setText(String.format("%02d:%02d", Math.round((float)timeLeft/1000)/60, Math.round((float)timeLeft/1000)%60));
+                remainingTimeTV.setText(String.format("%02d:%02d", Math.round((float) timeLeft / 1000) / 60, Math.round((float) timeLeft / 1000) % 60));
 
                 title.setTextColor(getResources().getColor(R.color.Green));
                 title.setText("Hang");
@@ -179,7 +205,8 @@ public class Workout extends AppCompatActivity {
 
             @Override
             public void onFinish() {
-                if (!mute) {beep.start();}
+                if (!mute) beep.start();
+                if (vibrate) v.vibrate(500);
 
                 progress = 0;
                 progressBar.setProgress(progress);
@@ -198,15 +225,16 @@ public class Workout extends AppCompatActivity {
                 hangTimer.start();
             }
         };
-        readyTimer = new CountDownTimer(5000, 100) {
+        readyTimer = new CountDownTimer(countdownTime, 100) {
             @Override
             public void onTick(long millisUntilFinished) {
-                timeTextView.setText(Integer.toString(safeLongToInt(millisUntilFinished + 1000)/1000));
+                timeTextView.setText(Integer.toString(safeLongToInt(millisUntilFinished + 1000) / 1000));
             }
 
             @Override
             public void onFinish() {
                 if (!mute) beep.start();
+                if (vibrate) v.vibrate(500);
 
                 title.setTextColor(getResources().getColor(R.color.Green));
                 timeTextView.setText("0");
