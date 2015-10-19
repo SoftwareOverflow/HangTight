@@ -85,6 +85,7 @@ public class LoadSavedWorkouts extends Activity {
                 Intent intent = new Intent(getApplicationContext(), EditSavedWorkout.class);
                 intent.putExtra("workoutData", workoutData);
                 intent.putExtra("position", position);
+                intent.putExtra("words", dbHandler.getLoadScreenInfo(position));
                 startActivity(intent);
                 break;
             case 1:

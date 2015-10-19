@@ -1,10 +1,7 @@
 package com.newtonapps.hangtight;
 
 import android.content.SharedPreferences;
-import android.media.AudioAttributes;
-import android.media.AudioManager;
-import android.media.SoundPool;
-import android.os.Build;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -18,12 +15,10 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class SettingsPage extends AppCompatActivity {
-
-    //TODO - finish settings page & help page
-    //TODO - settings page: sound default ON/OFF, vibrate ON/OFF, male/female home screen background, readyTimer length?
-    //TODO - help page: how to use the app, about section
-
 
     private Switch toggleSound, toggleVibrate;
     private SeekBar countdownSeekBar;
@@ -51,6 +46,8 @@ public class SettingsPage extends AppCompatActivity {
                 else chooseSoundLayout.setVisibility(View.GONE);
             }
         });
+
+        createSpinners(); //TODO - stop sound on entering page
 
         SharedPreferences settings = this.getSharedPreferences("settings", MODE_PRIVATE);
         Boolean isSoundOn = settings.getBoolean("sound", true);
@@ -83,24 +80,10 @@ public class SettingsPage extends AppCompatActivity {
         });
 
 
-        createSpinners();
+
 
     }
 
-    private SoundPool initSoundPool() {
-        SoundPool sp;
-
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            AudioAttributes aa = new AudioAttributes.Builder().setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
-                    .build();
-            sp = new SoundPool.Builder().setMaxStreams(1).setAudioAttributes(aa).build();
-        }
-        else{
-            sp = new SoundPool(1, AudioManager.STREAM_MUSIC, 0);
-        }
-
-        return sp;
-    }
 
     private void createSpinners() {
 
@@ -123,10 +106,12 @@ public class SettingsPage extends AppCompatActivity {
         //endregion
 
         //region SoundSpinner setup
-        final SoundPool sp = initSoundPool();
-        final int beep = sp.load(this, R.raw.beep, 1), blooper = sp.load(this, R.raw.blooper, 1),
-                censor = sp.load(this, R.raw.censor, 1), ding = sp.load(this, R.raw.ding, 1),
-                ring = sp.load(this, R.raw.ring, 1);
+        final Map<Integer, Integer> soundMap = new HashMap<Integer, Integer>();
+        soundMap.put(0, R.raw.beep);
+        soundMap.put(1, R.raw.blooper);
+        soundMap.put(2, R.raw.censor);
+        soundMap.put(3, R.raw.ding);
+        soundMap.put(4,R.raw.ring);
 
         Spinner soundSpinner = (Spinner) findViewById(R.id.soundSpinner);
         final String[] soundChoices = {"Beep","Blooper", "Censor", "Ding", "Ring"};
@@ -138,23 +123,8 @@ public class SettingsPage extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 sound = position;
-                switch (position){
-                    case 0:
-                        sp.play(beep, 1, 1, 1, 0, 1);
-                        break;
-                    case 1:
-                        sp.play(blooper, 1, 1, 1, 0, 1);
-                        break;
-                    case 2:
-                        sp.play(censor, 1, 1, 1, 0, 1);
-                        break;
-                    case 3:
-                        sp.play(ding, 1, 1, 1, 0, 1);
-                        break;
-                    case 4:
-                        sp.play(ring, 1, 1, 1, 0, 1);
-                        break;
-                }
+                MediaPlayer.create(SettingsPage.this, soundMap.get(position)).start();
+
             } // selects item and plays sound
 
             @Override

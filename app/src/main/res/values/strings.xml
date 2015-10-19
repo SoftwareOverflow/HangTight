@@ -10,4 +10,25 @@
     <string name="title_activity_edit_saved_workout">EditSavedWorkout</string>
     <string name="title_activity_settings_page">settingsPage</string>
     <string name="title_activity_help_page">helpPage</string>
+
+
+    <string name="intro_help_page">\nThis help page provides an overview of how the use the HangTight app.
+        The functionality of the app, including creating and saving workouts, is explained in this page.
+        \nThe \'about\' section can be found at the end of this page.</string>
+    <string name="workout_structure_help_page">The workout is structured using hang, rest, reps, sets and recover values.
+        \n\n1)A rep consists of a hang followed by a rest.
+        \n\n2)This is repeated until the chosen number of reps is reached.
+        \n\n3)The recover timer will start - this is a complete set.
+        \n\n4)The sets are repeated until the chosen number of sets is reached.</string>
+    <string name="create_workout_help">To create a workout click on the \'create new workout\' button on the home page.
+        A page will load where you can input values for hang, rest, reps, sets, recover. Once you have selected the values
+        wanted either press \'start workout\' to begin the workout.</string>
+    <string name="saveAndLoad_help_page">To load a workout click \'Load Saved Workout\' on the home screen.
+        A list of saved workouts will appear. Tap on a saved workout to start it. Press and hold on a saved workout
+        to edit or delete it.
+        \n\nTo save a workout for future use simply create the workout by pressing \'Create New Workout\' on the home screen
+        and then pressing the \'Save Workout\' button. A message will appear at the bottom of the screen if the save was successful.
+    </string>
+
+    <string name="change_settings_help_page"></string>
 </resources>

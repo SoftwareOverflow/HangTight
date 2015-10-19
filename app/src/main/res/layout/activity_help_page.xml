@@ -27,7 +27,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Using the app:"
+                    android:text="How to Use HangTight"
                     android:textColor="@color/NavajoWhite"
                     android:textSize="25sp" />
 
@@ -40,9 +40,67 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="How to use app text here.\nExample Text"
-                android:textColor="@color/NavajoWhite" />
-            <!--- TODO - write in strings file text for how to use app section and about section -->
+                android:text="@string/intro_help_page"
+                android:textColor="@color/NavajoWhite"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="\nWorkout Structure"
+                android:textStyle="bold"
+                android:textSize="18sp"
+                android:textColor="@color/PowderBlue" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/workout_structure_help_page"
+                android:textColor="@color/NavajoWhite"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="\nCreating a Workout"
+                android:textStyle="bold"
+                android:textSize="18sp"
+                android:textColor="@color/PowderBlue" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/NavajoWhite"
+                android:text="@string/create_workout_help"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="\nSaving and Loading Workouts"
+                android:textStyle="bold"
+                android:textSize="18sp"
+                android:textColor="@color/PowderBlue" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/NavajoWhite"
+                android:text="@string/saveAndLoad_help_page"/>
+            <!-- TODO - write saveAndLoad_help_page string -->
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="\nChanging Settings"
+                android:textStyle="bold"
+                android:textSize="18sp"
+                android:textColor="@color/PowderBlue" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/NavajoWhite"
+                android:text="@string/change_settings_help_page"/>
+           <!-- TODO - write change_settings_help_page string -->
+
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -52,7 +110,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="About:"
+                    android:text="\n\nAbout:"
                     android:textColor="@color/NavajoWhite"
                     android:textSize="25sp" />
 
