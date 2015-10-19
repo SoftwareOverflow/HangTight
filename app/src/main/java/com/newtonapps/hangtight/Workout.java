@@ -139,7 +139,7 @@ public class Workout extends AppCompatActivity {
                 currentRep +=1;
 
                 if (!mute) beep.start();
-                if (vibrate) v.vibrate(500);
+                if (vibrate) v.vibrate(250);
 
                 if (currentRep <= totalReps && currentSet <= totalSets){
                     title.setText("Rest");
@@ -180,7 +180,7 @@ public class Workout extends AppCompatActivity {
             @Override
             public void onFinish() {
                 if (!mute) beep.start();
-                if (vibrate) v.vibrate(500);
+                if (vibrate) v.vibrate(250);
 
                 timeLeft = Math.round(timeLeft/1000f) * 1000; //round to nearest second
                 remainingTimeTV.setText(String.format("%02d:%02d", Math.round((float) timeLeft / 1000) / 60, Math.round((float) timeLeft / 1000) % 60));

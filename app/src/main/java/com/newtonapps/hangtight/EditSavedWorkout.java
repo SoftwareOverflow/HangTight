@@ -26,21 +26,20 @@ public class EditSavedWorkout extends AppCompatActivity {
         sets = (EditText) findViewById(R.id.editSavedWorkoutSets);
         recover = (EditText) findViewById(R.id.editSavedWorkoutRecover);
 
-        String[] dataArray;
 
         Bundle data = getIntent().getExtras();
-        dataArray = data.getStringArray("workoutData");
+        int[] dataArray = data.getIntArray("workoutData");
         position = data.getInt("position");
 
+        title.setText(data.getString("words").split("\\|")[0]);
+        description.setText(data.getString("words").split("\\|")[1]);
 
         assert dataArray != null;
-        title.setText(dataArray[0]);
-        description.setText(dataArray[1]);
-        hang.setText(dataArray[3]);
-        rest.setText(dataArray[4]);
-        reps.setText(dataArray[5]);
-        sets.setText(dataArray[6]);
-        recover.setText(dataArray[7]);
+        hang.setText("" + dataArray[0]);
+        rest.setText("" + dataArray[1]);
+        reps.setText("" + dataArray[2]);
+        sets.setText("" + dataArray[3]);
+        recover.setText("" + dataArray[4]);
     }
 
     public void saveChanges(View v){
