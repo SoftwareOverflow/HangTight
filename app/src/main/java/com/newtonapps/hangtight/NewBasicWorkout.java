@@ -1,9 +1,14 @@
 package com.newtonapps.hangtight;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Toast;
@@ -12,6 +17,7 @@ public class NewBasicWorkout extends AppCompatActivity {
 
     private EditText hangTimeEditText, restTimeEditText, repsEditText, setsEditText, recoveryEditText, title, description;
     private int valuesArray[] = new int[5]; //[hang, rest, reps, sets, recovery]
+    private boolean workoutSaved = false;
 
 
 
@@ -117,16 +123,55 @@ public class NewBasicWorkout extends AppCompatActivity {
     public void startWorkout(View v){
         assignValues();
 
-
-        Intent i = new Intent(NewBasicWorkout.this, Workout.class);
-
+        final Intent i = new Intent(NewBasicWorkout.this, Workout.class);
         i.putExtra("dataArray", valuesArray);
-        startActivity(i);
+        i.putExtra("workoutSaved", workoutSaved);
+
+        final SharedPreferences settings = getSharedPreferences("settings", MODE_PRIVATE);
+
+        final View checkBoxView = View.inflate(this, R.layout.check_box_alert_dialog, null);
+        final CheckBox checkBox = (CheckBox) checkBoxView.findViewById(R.id.checkbox);
+        checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (checkBox.isChecked()) {
+                    settings.edit().putBoolean("showWarmUp", false).apply();
+                }
+            }
+        });
+        checkBox.setText("Do not show this warning again");
+
+        Boolean showWarning = settings.getBoolean("showWarmUp", true);
+
+        if (showWarning){
+            new AlertDialog.Builder(NewBasicWorkout.this)
+                    .setTitle("Have You Warmed Up?")
+                    .setMessage("Ensure you are thoroughly warmed up before beginning any" +
+                            " workout. Failure to do so could result in injury.\n\nIf you feel" +
+                            " any pain during the workout, discontinue immediately.")
+                    .setView(checkBoxView)
+                    .setPositiveButton("Start Workout", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            finish();
+                            startActivity(i);
+
+                        }
+                    }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.cancel();
+                }
+            })
+                    .show();
+        } else{
+            finish();
+            startActivity(i);
+        }
 
         title.setVisibility(View.GONE);
         description.setVisibility(View.GONE);
 
-        finish();
     } //method called when start button pressed
 
     public void saveWorkout(View v){
@@ -148,6 +193,8 @@ public class NewBasicWorkout extends AppCompatActivity {
         findViewById(R.id.saveButton).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                workoutSaved = true;
+
                 assignValues();
 
                 String titleString = title.getText().toString();
