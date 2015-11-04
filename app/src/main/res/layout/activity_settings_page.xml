@@ -126,6 +126,30 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
+                android:text="Show Warm Up Warning"
+                android:textColor="@color/NavajoWhite"
+                android:textSize="18sp" />
+
+            <Switch
+                android:id="@+id/warmUpWarning"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentTop="true" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:background="@color/LightSlateGray">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
                 android:layout_gravity="center"
                 android:text="Home Screen Background"
                 android:textColor="@color/NavajoWhite"
@@ -150,7 +174,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
-                android:text="Pre-Workout countdown"
+                android:text="Pre-Workout Countdown"
                 android:textColor="@color/NavajoWhite"
                 android:textSize="18sp" />
 

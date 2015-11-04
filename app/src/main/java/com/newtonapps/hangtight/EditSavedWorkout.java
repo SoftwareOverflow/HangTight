@@ -55,6 +55,7 @@ public class EditSavedWorkout extends AppCompatActivity {
 
     public void cancelSave(View v) {
         Intent i = new Intent(this, LoadSavedWorkouts.class);
+        finish();
         startActivity(i);
     } //goes back to load saved workout screen with no changes
 

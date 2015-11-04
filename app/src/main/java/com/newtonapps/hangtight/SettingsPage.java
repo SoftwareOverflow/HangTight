@@ -20,10 +20,11 @@ import java.util.Map;
 
 public class SettingsPage extends AppCompatActivity {
 
-    private Switch toggleSound, toggleVibrate;
+    private Switch toggleSound, toggleVibrate, toggleWarmUp;
     private SeekBar countdownSeekBar;
     private int backgroundImage = 0, countdownValue, sound;
     TextView countdownTV;
+    private boolean playSound = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,6 +35,7 @@ public class SettingsPage extends AppCompatActivity {
         final LinearLayout chooseSoundLayout = (LinearLayout) findViewById(R.id.chooseSoundLayout);
         toggleSound = (Switch) findViewById(R.id.soundSettingSwitch);
         toggleVibrate = (Switch) findViewById(R.id.vibrateSettingSwitch);
+        toggleWarmUp = (Switch) findViewById(R.id.warmUpWarning);
         countdownTV = (TextView) findViewById(R.id.countdownTV);
         countdownSeekBar = (SeekBar) findViewById(R.id.countdownSeekBar);
         countdownSeekBar.setMax(10);
@@ -44,14 +46,16 @@ public class SettingsPage extends AppCompatActivity {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) chooseSoundLayout.setVisibility(View.VISIBLE);
                 else chooseSoundLayout.setVisibility(View.GONE);
+
             }
         });
 
-        createSpinners(); //TODO - stop sound on entering page
+        createSpinners();
 
         SharedPreferences settings = this.getSharedPreferences("settings", MODE_PRIVATE);
         Boolean isSoundOn = settings.getBoolean("sound", true);
         Boolean isVibrateOn = settings.getBoolean("vibrate", false);
+        Boolean showWarmUpWarning = settings.getBoolean("showWarmUp", true);
         backgroundImage = settings.getInt("backgroundImage", 0);
         countdownValue = settings.getInt("timer", 5);
         sound = settings.getInt("beepTone", 0);
@@ -60,6 +64,9 @@ public class SettingsPage extends AppCompatActivity {
         countdownSeekBar.setProgress(countdownValue);
         toggleSound.setChecked(isSoundOn);
         toggleVibrate.setChecked(isVibrateOn);
+        toggleWarmUp.setChecked(showWarmUpWarning);
+
+        if (!isSoundOn) chooseSoundLayout.setVisibility(View.GONE);
 
         countdownSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
@@ -78,9 +85,6 @@ public class SettingsPage extends AppCompatActivity {
 
             }
         });
-
-
-
 
     }
 
@@ -123,7 +127,9 @@ public class SettingsPage extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 sound = position;
-                MediaPlayer.create(SettingsPage.this, soundMap.get(position)).start();
+                if (playSound) MediaPlayer.create(SettingsPage.this, soundMap.get(position)).start();
+
+                playSound = true;
 
             } // selects item and plays sound
 
@@ -158,6 +164,7 @@ public class SettingsPage extends AppCompatActivity {
         editor.putInt("backgroundImage", backgroundImage);
         editor.putInt("timer", countdownValue);
         editor.putInt("beepTone", sound);
+        editor.putBoolean("showWarmUp", toggleWarmUp.isChecked());
         editor.apply();
 
         //TODO -- assign imageView for home screen background & change to Male/Female

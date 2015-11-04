@@ -84,7 +84,7 @@
                 android:layout_height="wrap_content"
                 android:textColor="@color/NavajoWhite"
                 android:text="@string/saveAndLoad_help_page"/>
-            <!-- TODO - write saveAndLoad_help_page string -->
+
 
             <TextView
                 android:layout_width="wrap_content"
@@ -101,31 +101,6 @@
                 android:text="@string/change_settings_help_page"/>
            <!-- TODO - write change_settings_help_page string -->
 
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="\n\nAbout:"
-                    android:textColor="@color/NavajoWhite"
-                    android:textSize="25sp" />
-
-                <View
-                    android:layout_width="fill_parent"
-                    android:layout_height="1dp"
-                    android:background="@color/LightSlateGray" />
-            </LinearLayout>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="example text here. This is the about section"
-                android:textColor="@color/NavajoWhite"/>
-            <!--- TODO - write in strings file text for how to use app section and about section -->
 
         </LinearLayout>
     </ScrollView>

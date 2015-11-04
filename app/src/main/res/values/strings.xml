@@ -14,7 +14,8 @@
 
     <string name="intro_help_page">\nThis help page provides an overview of how the use the HangTight app.
         The functionality of the app, including creating and saving workouts, is explained in this page.
-        \nThe \'about\' section can be found at the end of this page.</string>
+        \nHangboards are only recommended for advanced climbers and should never be used without thoroughly
+        warming up first.</string>
     <string name="workout_structure_help_page">The workout is structured using hang, rest, reps, sets and recover values.
         \n\n1)A rep consists of a hang followed by a rest.
         \n\n2)This is repeated until the chosen number of reps is reached.
@@ -29,6 +30,12 @@
         \n\nTo save a workout for future use simply create the workout by pressing \'Create New Workout\' on the home screen
         and then pressing the \'Save Workout\' button. A message will appear at the bottom of the screen if the save was successful.
     </string>
+    <string name="change_settings_help_page">The settings page can be accessed by clicking the settings icon at the top right of the
+        home screen.
+        \nThere are then options to change the default for sound and vibrate to be On/Off, change the default for showing the warning about
+        up properly before beginning any workout as well as options to change the background image to male/female. Finally, there is a slider
+        for the \'Pre-Workout Countdown\'. This is set to 5 by default but can be altered to allow more or less time to get ready after starting
+        the workout.
+        </string>
 
-    <string name="change_settings_help_page"></string>
 </resources>

@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.RotateAnimation;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -84,6 +85,10 @@ public class Workout extends AppCompatActivity {
 
         SharedPreferences settings = this.getSharedPreferences("settings", MODE_PRIVATE);
         mute = !settings.getBoolean("sound", false);
+        if (mute){
+            ImageButton muteButton = (ImageButton) findViewById(R.id.muteButton);
+            muteButton.setImageResource(R.drawable.muted);
+        }
         beepTone = settings.getInt("beepTone", 0);
         vibrate = settings.getBoolean("vibrate", true);
         Vibrator v = (Vibrator) this.getSystemService(Context.VIBRATOR_SERVICE);
@@ -100,17 +105,27 @@ public class Workout extends AppCompatActivity {
     }
 
     private void workoutComplete() {
-        Bundle data = getIntent().getExtras();
-        //boolean isSaved = data.getBoolean("isSaved");
+        findViewById(R.id.workoutLayout).setVisibility(View.GONE);
+        findViewById(R.id.endWorkoutLayout).setVisibility(View.VISIBLE);
+        TextView tv = (TextView) findViewById(R.id.endWorkoutTV);
+        tv.setTextColor(getResources().getColor(R.color.Green));
 
-        //if(!isSaved) //TODO -- button to save workout
+        Button homeButton = (Button) findViewById(R.id.homeButton);
 
-        timeTextView.setText("0");
-        title.setText("YOU'RE DONE!");
-    } //TODO -- add ending screen for end of Workout (+ sound?) (option to save workout/go to home screen)
+        homeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(getApplicationContext(), HomeScreenActivity.class);
+                finish();
+                whichTimer().cancel();
+                startActivity(i);
+            }
+        });
+
+    }
 
     private void Timers(int countdownTime, final Vibrator v) {
-        Map<Integer, Integer> soundMap = new HashMap<Integer, Integer>();
+        Map<Integer, Integer> soundMap = new HashMap<>();
         soundMap.put(0, R.raw.beep);
         soundMap.put(1, R.raw.blooper);
         soundMap.put(2, R.raw.censor);
@@ -121,7 +136,6 @@ public class Workout extends AppCompatActivity {
         remainingTimeTV = (TextView) findViewById(R.id.remainingTimeTV);
         remainingTimeTV.setText(String.format("%02d", totalTime / 60) + ":" + String.format("%02d", totalTime % 60));
 
-        //TODO - fix issue of sound not always playing
 
         hangTimer = new CountDownTimer(dataArray[0], 100) {
 
@@ -139,7 +153,7 @@ public class Workout extends AppCompatActivity {
                 currentRep +=1;
 
                 if (!mute) beep.start();
-                if (vibrate) v.vibrate(250);
+                if (vibrate) v.vibrate(200);
 
                 if (currentRep <= totalReps && currentSet <= totalSets){
                     title.setText("Rest");
@@ -180,7 +194,7 @@ public class Workout extends AppCompatActivity {
             @Override
             public void onFinish() {
                 if (!mute) beep.start();
-                if (vibrate) v.vibrate(250);
+                if (vibrate) v.vibrate(200);
 
                 timeLeft = Math.round(timeLeft/1000f) * 1000; //round to nearest second
                 remainingTimeTV.setText(String.format("%02d:%02d", Math.round((float) timeLeft / 1000) / 60, Math.round((float) timeLeft / 1000) % 60));
@@ -206,7 +220,7 @@ public class Workout extends AppCompatActivity {
             @Override
             public void onFinish() {
                 if (!mute) beep.start();
-                if (vibrate) v.vibrate(500);
+                if (vibrate) v.vibrate(200);
 
                 progress = 0;
                 progressBar.setProgress(progress);
@@ -234,7 +248,7 @@ public class Workout extends AppCompatActivity {
             @Override
             public void onFinish() {
                 if (!mute) beep.start();
-                if (vibrate) v.vibrate(500);
+                if (vibrate) v.vibrate(200);
 
                 title.setTextColor(getResources().getColor(R.color.Green));
                 timeTextView.setText("0");
@@ -255,7 +269,7 @@ public class Workout extends AppCompatActivity {
         repNum.setText(String.valueOf(currentRep) + "/" + String.valueOf(totalReps));
     }
 
-    //begin settings button methods
+    //region settings button methods
     public void setMute(View v){
         ImageButton muteButton = (ImageButton) findViewById(R.id.muteButton);
         mute = (!mute);
@@ -265,7 +279,7 @@ public class Workout extends AppCompatActivity {
     public void setPause(View v){
         pause = (!pause);
         ImageButton pauseButton = (ImageButton) findViewById(R.id.pauseButton);
-         //TODO -- look into issue of play/pause spamming causing progress to increase....
+
         if (pause) {
             pauseButton.setImageResource(R.drawable.resume);
             if (resumeTimerRunning){
@@ -314,7 +328,7 @@ public class Workout extends AppCompatActivity {
 
         if (pause) whichTimer().cancel();
     } //skips current exercise and goes onto next one
-    // end settings button methods
+    //endregion settings button methods
 
     public void updateScreen(long millisUntilFinished, boolean incProgress){
         if (incProgress) progress += 100;
@@ -359,8 +373,11 @@ public class Workout extends AppCompatActivity {
 
         if (firstBackPress + TIME_INTERVAL > System.currentTimeMillis()){
             toast.cancel();
+            whichTimer().cancel();
             Intent i = new Intent(this, HomeScreenActivity.class);
+            finish();
             startActivity(i);
+
             return;
         }
         else toast.show();
@@ -369,10 +386,4 @@ public class Workout extends AppCompatActivity {
     } //press back twice within TIME_INTERVAL to avoid accidental exiting workout
 
 
-    //TODO -- end activity on back press to stop beeping
-    @Override
-    protected void onStop() {
-        super.onStop();
-        finish();
-    }
 }
