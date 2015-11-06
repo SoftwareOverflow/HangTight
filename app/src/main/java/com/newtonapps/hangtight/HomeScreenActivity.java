@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
 
 public class HomeScreenActivity extends AppCompatActivity {
 
@@ -16,7 +17,14 @@ public class HomeScreenActivity extends AppCompatActivity {
         setContentView(R.layout.activity_home_screen);
 
         SharedPreferences settings = getSharedPreferences("settings", MODE_PRIVATE);
-        settings.getInt("imageBackground", 0); // TODO - change image to male/female
+
+        ImageView background = (ImageView) findViewById(R.id.background);
+        if (settings.getInt("imageBackground", 1) == 1){
+            background.setImageResource(R.drawable.bg_female);
+        } else{
+            background.setImageResource(R.drawable.bg_male);
+        }
+
     }
 
 
@@ -55,4 +63,16 @@ public class HomeScreenActivity extends AppCompatActivity {
     }
 
 
+    @Override
+    protected void onResume() {
+        SharedPreferences settings = getSharedPreferences("settings", MODE_PRIVATE);
+        ImageView background = (ImageView) findViewById(R.id.background);
+
+        if (settings.getInt("backgroundImage", 1) == 1){
+            background.setImageResource(R.drawable.bg_female);
+        } else{
+            background.setImageResource(R.drawable.bg_male);
+        }
+        super.onResume();
+    }
 }

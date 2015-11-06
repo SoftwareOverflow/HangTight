@@ -22,7 +22,7 @@ public class SettingsPage extends AppCompatActivity {
 
     private Switch toggleSound, toggleVibrate, toggleWarmUp;
     private SeekBar countdownSeekBar;
-    private int backgroundImage = 0, countdownValue, sound;
+    private static int backgroundImage, countdownValue, sound;
     TextView countdownTV;
     private boolean playSound = false;
 
@@ -56,7 +56,7 @@ public class SettingsPage extends AppCompatActivity {
         Boolean isSoundOn = settings.getBoolean("sound", true);
         Boolean isVibrateOn = settings.getBoolean("vibrate", false);
         Boolean showWarmUpWarning = settings.getBoolean("showWarmUp", true);
-        backgroundImage = settings.getInt("backgroundImage", 0);
+        backgroundImage = settings.getInt("backgroundImage", 1);
         countdownValue = settings.getInt("timer", 5);
         sound = settings.getInt("beepTone", 0);
 
@@ -167,7 +167,6 @@ public class SettingsPage extends AppCompatActivity {
         editor.putBoolean("showWarmUp", toggleWarmUp.isChecked());
         editor.apply();
 
-        //TODO -- assign imageView for home screen background & change to Male/Female
 
         Toast.makeText(this, "Settings saved", Toast.LENGTH_SHORT).show();
 

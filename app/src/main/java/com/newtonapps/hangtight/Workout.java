@@ -297,7 +297,10 @@ public class Workout extends AppCompatActivity {
                 public void onTick(long millisUntilFinished) {
                     if (whichTimer.equals("hang")){updateScreen(millisUntilFinished, true);}
                     else if (!whichTimer.equals("ready")){updateScreen(millisUntilFinished, false);}
+                    else{updateScreen(millisUntilFinished, false);}
                 }
+
+                //TODO - fix issue of no pause timer during ready timer
 
                 @Override
                 public void onFinish() {
@@ -331,12 +334,14 @@ public class Workout extends AppCompatActivity {
     //endregion settings button methods
 
     public void updateScreen(long millisUntilFinished, boolean incProgress){
-        if (incProgress) progress += 100;
-        else progress -= 100;
-        progressBar.setProgress(progress);
+        if (!whichTimer.equals("ready")) {
+            if (incProgress) progress += 100;
+            else progress -= 100;
+            progressBar.setProgress(progress);
 
-        timeLeft -= 100;
-        remainingTimeTV.setText(String.format("%02d:%02d", Math.round((float)timeLeft/1000)/60, Math.round((float)timeLeft/1000)%60));
+            timeLeft -= 100;
+            remainingTimeTV.setText(String.format("%02d:%02d", Math.round((float) timeLeft / 1000) / 60, Math.round((float) timeLeft / 1000) % 60));
+        }
         timeTextView.setText(Integer.toString(Math.round(safeLongToInt(millisUntilFinished+500) / 1000)));
     }
 
