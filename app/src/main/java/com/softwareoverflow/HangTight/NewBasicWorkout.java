@@ -1,4 +1,4 @@
-package com.newtonapps.hangtight;
+package com.softwareoverflow.HangTight;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;

@@ -1,4 +1,4 @@
-package com.newtonapps.hangtight;
+package com.softwareoverflow.HangTight;
 
 import android.content.Context;
 import android.view.LayoutInflater;

@@ -1,4 +1,4 @@
-package com.newtonapps.hangtight;
+package com.softwareoverflow.HangTight;
 
 import android.app.AlertDialog;
 import android.content.ContentValues;
@@ -8,7 +8,6 @@ import android.database.Cursor;
 import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.util.Log;
 import android.widget.Toast;
 
 
@@ -40,16 +39,30 @@ public class MyDBHandler extends SQLiteOpenHelper {
         db.execSQL(query);
 
         ContentValues values = new ContentValues();
-        values.put(COLUMN_TITLE, "5 on 5 off");
-        values.put(COLUMN_DESCRIPTION, "Hang/Rest for 5 seconds for a minute.\n3 minute rest between sets");
+        values.put(COLUMN_TITLE, "5 on 5 off - Beginner");
+        values.put(COLUMN_DESCRIPTION, "6 sets. We recommend: jugs - jugs - 3 finger pocket - crimp - 3 finger pockets - 4 finger pockets\n" +
+                "Change the holds to suit your board and ability");
         values.put(COLUMN_HANG, 5);
         values.put(COLUMN_REST, 5);
         values.put(COLUMN_REPS, 6);
-        values.put(COLUMN_SETS, 5);
+        values.put(COLUMN_SETS, 6);
         values.put(COLUMN_RECOVER, 180);
         values.put(COLUMN_TIME, 995);
 
+
+        ContentValues values2 = new ContentValues();
+        values2.put(COLUMN_TITLE, "7 on 3 off - Intermediate/Hard");
+        values2.put(COLUMN_DESCRIPTION, "6 sets. We recommend: 4 finger pockets - 3 finger pockets - slopers - crimps - 2 finger pocket - 3 finger pocket" +
+                "\nChange the holds to suit your board and ability.");
+        values2.put(COLUMN_HANG, 7);
+        values2.put(COLUMN_REST, 3);
+        values2.put(COLUMN_REPS, 6);
+        values2.put(COLUMN_SETS, 6);
+        values2.put(COLUMN_RECOVER, 180);
+        values2.put(COLUMN_TIME, 995);
+
         db.insert(TABLE_WORKOUTS, null, values);
+        db.insert(TABLE_WORKOUTS, null, values2);
     }
 
     @Override
@@ -144,8 +157,6 @@ public class MyDBHandler extends SQLiteOpenHelper {
 
         db.insert(TABLE_WORKOUTS, null, values);
         db.close();
-
-        Log.d("db", workoutData[0] + " saved successfully");
 
         return true;
     }

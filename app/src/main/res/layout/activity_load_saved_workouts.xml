@@ -8,7 +8,7 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="com.newtonapps.hangtight.LoadSavedWorkouts"
+    tools:context="com.softwareoverflow.HangTight.LoadSavedWorkouts"
     android:background="@color/DarkSlateGray">
 
     <TextView

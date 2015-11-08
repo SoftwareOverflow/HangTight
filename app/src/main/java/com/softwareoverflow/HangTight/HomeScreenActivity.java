@@ -1,4 +1,4 @@
-package com.newtonapps.hangtight;
+package com.softwareoverflow.HangTight;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -16,17 +16,16 @@ public class HomeScreenActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home_screen);
 
-        SharedPreferences settings = getSharedPreferences("settings", MODE_PRIVATE);
-
         ImageView background = (ImageView) findViewById(R.id.background);
+
+
+        SharedPreferences settings = getSharedPreferences("settings", MODE_PRIVATE);
         if (settings.getInt("imageBackground", 1) == 1){
             background.setImageResource(R.drawable.bg_female);
         } else{
             background.setImageResource(R.drawable.bg_male);
         }
-
     }
-
 
     public void newBasicWorkout(View v){
         Intent i = new Intent(this, NewBasicWorkout.class);
@@ -48,12 +47,10 @@ public class HomeScreenActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
 
         switch (item.getItemId()) {
-
             case R.id.action_bar_settings:
                 Intent settingsIntent = new Intent(this, SettingsPage.class);
                 startActivity(settingsIntent);
                 return true;
-
             case R.id.action_bar_help:
                 Intent helpIntent = new Intent(this, HelpPage.class);
                 startActivity(helpIntent);
@@ -61,7 +58,6 @@ public class HomeScreenActivity extends AppCompatActivity {
         }
                 return false;
     }
-
 
     @Override
     protected void onResume() {

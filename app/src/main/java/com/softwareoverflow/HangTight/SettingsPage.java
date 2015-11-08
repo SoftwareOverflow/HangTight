@@ -1,4 +1,4 @@
-package com.newtonapps.hangtight;
+package com.softwareoverflow.HangTight;
 
 import android.content.SharedPreferences;
 import android.media.MediaPlayer;
@@ -22,6 +22,7 @@ public class SettingsPage extends AppCompatActivity {
 
     private Switch toggleSound, toggleVibrate, toggleWarmUp;
     private SeekBar countdownSeekBar;
+    private Spinner soundSpinner, backgroundSpinner;
     private static int backgroundImage, countdownValue, sound;
     TextView countdownTV;
     private boolean playSound = false;
@@ -65,6 +66,8 @@ public class SettingsPage extends AppCompatActivity {
         toggleSound.setChecked(isSoundOn);
         toggleVibrate.setChecked(isVibrateOn);
         toggleWarmUp.setChecked(showWarmUpWarning);
+        soundSpinner.setSelection(sound);
+        backgroundSpinner.setSelection(backgroundImage);
 
         if (!isSoundOn) chooseSoundLayout.setVisibility(View.GONE);
 
@@ -92,7 +95,7 @@ public class SettingsPage extends AppCompatActivity {
     private void createSpinners() {
 
         //region BackgroundSpinner setup
-        Spinner backgroundSpinner = (Spinner) findViewById(R.id.backgroundSpinner);
+        backgroundSpinner = (Spinner) findViewById(R.id.backgroundSpinner);
         final String[] backgroundChoices = {"Male", "Female"};
         ArrayAdapter<String> backgroundAdapter = new ArrayAdapter<>(this, R.layout.support_simple_spinner_dropdown_item, backgroundChoices);
         backgroundSpinner.setAdapter(backgroundAdapter);
@@ -117,7 +120,7 @@ public class SettingsPage extends AppCompatActivity {
         soundMap.put(3, R.raw.ding);
         soundMap.put(4,R.raw.ring);
 
-        Spinner soundSpinner = (Spinner) findViewById(R.id.soundSpinner);
+        soundSpinner = (Spinner) findViewById(R.id.soundSpinner);
         final String[] soundChoices = {"Beep","Blooper", "Censor", "Ding", "Ring"};
         ArrayAdapter<String> soundAdapter = new ArrayAdapter<String>(this, R.layout.support_simple_spinner_dropdown_item, soundChoices);
         soundSpinner.setAdapter(soundAdapter);
@@ -161,7 +164,6 @@ public class SettingsPage extends AppCompatActivity {
         editor.putInt("backgroundImage", backgroundImage);
         editor.putBoolean("sound", toggleSound.isChecked());
         editor.putBoolean("vibrate", toggleVibrate.isChecked());
-        editor.putInt("backgroundImage", backgroundImage);
         editor.putInt("timer", countdownValue);
         editor.putInt("beepTone", sound);
         editor.putBoolean("showWarmUp", toggleWarmUp.isChecked());
