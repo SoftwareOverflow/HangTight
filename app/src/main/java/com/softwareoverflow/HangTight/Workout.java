@@ -112,6 +112,8 @@ public class Workout extends AppCompatActivity {
 
         Button homeButton = (Button) findViewById(R.id.homeButton);
 
+        AppRater.app_launched(this);
+
         homeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
