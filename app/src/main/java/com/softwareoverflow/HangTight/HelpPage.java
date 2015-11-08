@@ -1,4 +1,4 @@
-package com.newtonapps.hangtight;
+package com.softwareoverflow.HangTight;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;

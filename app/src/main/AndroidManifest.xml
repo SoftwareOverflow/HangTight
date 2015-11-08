@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.newtonapps.hangtight" >
+    package="com.softwareoverflow.HangTight">
 
     <uses-permission android:name="android.permission.VIBRATE"/>
 
@@ -12,7 +12,7 @@
         android:configChanges="orientation"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".HomeScreenActivity"
+            android:name="com.softwareoverflow.HangTight.HomeScreenActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait"
             android:configChanges="orientation">
@@ -23,38 +23,38 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".NewBasicWorkout"
+            android:name="com.softwareoverflow.HangTight.NewBasicWorkout"
             android:label="@string/title_activity_new_basic_workout"
             android:screenOrientation="portrait"
             android:configChanges="orientation">
         </activity>
         <activity
-            android:name=".Workout"
+            android:name="com.softwareoverflow.HangTight.Workout"
             android:noHistory="true"
             android:screenOrientation="portrait"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:label="@string/title_activity_workout" >
         </activity>
         <activity
-            android:name=".LoadSavedWorkouts"
+            android:name="com.softwareoverflow.HangTight.LoadSavedWorkouts"
             android:label="@string/title_activity_load_saved_workouts"
             android:screenOrientation="portrait"
             android:configChanges="orientation">
         </activity>
         <activity
-            android:name=".EditSavedWorkout"
+            android:name="com.softwareoverflow.HangTight.EditSavedWorkout"
             android:label="@string/title_activity_edit_saved_workout"
             android:screenOrientation="portrait"
             android:configChanges="orientation">
         </activity>
         <activity
-            android:name=".SettingsPage"
+            android:name="com.softwareoverflow.HangTight.SettingsPage"
             android:label="@string/title_activity_settings_page"
             android:screenOrientation="portrait"
             android:configChanges="orientation">
         </activity>
         <activity
-            android:name=".HelpPage"
+            android:name="com.softwareoverflow.HangTight.HelpPage"
             android:label="@string/title_activity_help_page"
             android:screenOrientation="portrait"
             android:configChanges="orientation">

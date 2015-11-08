@@ -8,7 +8,7 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="com.newtonapps.hangtight.HelpPage">
+    tools:context="com.softwareoverflow.HangTight.HelpPage">
 
     <ScrollView
         android:layout_width="fill_parent"
@@ -99,7 +99,6 @@
                 android:layout_height="wrap_content"
                 android:textColor="@color/NavajoWhite"
                 android:text="@string/change_settings_help_page"/>
-           <!-- TODO - write change_settings_help_page string -->
 
 
         </LinearLayout>

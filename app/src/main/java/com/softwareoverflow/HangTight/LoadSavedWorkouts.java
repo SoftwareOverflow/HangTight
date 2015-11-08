@@ -1,4 +1,4 @@
-package com.newtonapps.hangtight;
+package com.softwareoverflow.HangTight;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -6,7 +6,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.ContextMenu;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -107,7 +106,6 @@ public class LoadSavedWorkouts extends Activity {
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
         if (v.getId() == R.id.loadScreenListView){
             AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuInfo;
-            Log.d("menu", arrayAdapterStrings[info.position]);
             String[] splitData = arrayAdapterStrings[info.position].split("\\|");
             menu.setHeaderTitle("Edit '" + splitData[0] + "' Workout");
             String[] menuItems = new String[]{"Edit Workout", "Delete Workout", "Cancel"};

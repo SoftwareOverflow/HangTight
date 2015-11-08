@@ -1,4 +1,4 @@
-package com.newtonapps.hangtight;
+package com.softwareoverflow.HangTight;
 
 import android.content.Context;
 import android.content.Intent;
@@ -300,8 +300,6 @@ public class Workout extends AppCompatActivity {
                     else{updateScreen(millisUntilFinished, false);}
                 }
 
-                //TODO - fix issue of no pause timer during ready timer
-
                 @Override
                 public void onFinish() {
                     resumeTimerRunning = false;
@@ -359,7 +357,7 @@ public class Workout extends AppCompatActivity {
                 default:
                     return null;
             }
-    } //returns current active timer or null if none active (Logs in this case)
+    } //returns current active timer or null if none active
 
     public static int safeLongToInt(long l) {
         if (l < Integer.MIN_VALUE || l > Integer.MAX_VALUE) {
