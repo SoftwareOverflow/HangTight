@@ -16,7 +16,7 @@ import android.widget.Toast;
 public class NewBasicWorkout extends AppCompatActivity {
 
     private EditText hangTimeEditText, restTimeEditText, repsEditText, setsEditText, recoveryEditText, title, description;
-    private int valuesArray[] = new int[5]; //[hang, rest, reps, sets, recovery]
+    private int[] valuesArray = new int[5]; //[hang, rest, reps, sets, recovery]
     private boolean workoutSaved = false;
 
 
@@ -36,16 +36,16 @@ public class NewBasicWorkout extends AppCompatActivity {
     }
 
     public void initViews(){
-        LinearLayout rootView = (LinearLayout) findViewById(R.id.basicMainScreen);
+        LinearLayout rootView = findViewById(R.id.basicMainScreen);
 
-        hangTimeEditText = (EditText) rootView.findViewById(R.id.hangTimeTextView);
-        restTimeEditText = (EditText) rootView.findViewById(R.id.restTimeTextView);
-        repsEditText = (EditText) rootView.findViewById(R.id.repsTimeTextView);
-        setsEditText = (EditText) rootView.findViewById(R.id.setsTimeTextView);
-        recoveryEditText = (EditText) rootView.findViewById(R.id.recoveryTimeTextView);
+        hangTimeEditText = rootView.findViewById(R.id.hangTimeTextView);
+        restTimeEditText = rootView.findViewById(R.id.restTimeTextView);
+        repsEditText = rootView.findViewById(R.id.repsTimeTextView);
+        setsEditText = rootView.findViewById(R.id.setsTimeTextView);
+        recoveryEditText = rootView.findViewById(R.id.recoveryTimeTextView);
 
-        title = (EditText) findViewById(R.id.titleEditText);
-        description = (EditText) findViewById(R.id.descriptionEditText);
+        title = findViewById(R.id.titleEditText);
+        description = findViewById(R.id.descriptionEditText);
 
     } //creates all views for referencing later
 
@@ -130,7 +130,7 @@ public class NewBasicWorkout extends AppCompatActivity {
         final SharedPreferences settings = getSharedPreferences("settings", MODE_PRIVATE);
 
         final View checkBoxView = View.inflate(this, R.layout.check_box_alert_dialog, null);
-        final CheckBox checkBox = (CheckBox) checkBoxView.findViewById(R.id.checkbox);
+        final CheckBox checkBox = checkBoxView.findViewById(R.id.checkbox);
         checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -177,13 +177,13 @@ public class NewBasicWorkout extends AppCompatActivity {
     public void saveWorkout(View v){
         assignValues();
 
-        final LinearLayout workoutExtraInfoScreen = (LinearLayout) findViewById(R.id.overlayScreen);
-        final LinearLayout workoutScreen = (LinearLayout) findViewById(R.id.basicMainScreen);
+        final LinearLayout workoutExtraInfoScreen = findViewById(R.id.overlayScreen);
+        final LinearLayout workoutScreen = findViewById(R.id.basicMainScreen);
 
         workoutScreen.setVisibility(View.GONE);
         workoutExtraInfoScreen.setVisibility(View.VISIBLE);
 
-        final String workoutData[] = new String[7];
+        final String[] workoutData = new String[7];
 
 
         for (int i=0; i<valuesArray.length; i++){

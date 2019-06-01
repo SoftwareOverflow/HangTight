@@ -41,8 +41,8 @@ public class Workout extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_workout);
 
-        timeTextView = (TextView) findViewById(R.id.timerTextView);
-        title = (TextView) findViewById(R.id.titleTextView);
+        timeTextView = findViewById(R.id.timerTextView);
+        title = findViewById(R.id.titleTextView);
 
         setupWorkout(); //unpacks all relevant data and starts the workout
     }
@@ -68,7 +68,7 @@ public class Workout extends AppCompatActivity {
             totalTime -= dataArray[4];
         }
 
-        TextView totalTimeTV = (TextView) findViewById(R.id.totalTimeTV);
+        TextView totalTimeTV = findViewById(R.id.totalTimeTV);
         totalTimeTV.setText(String.format("%02d", totalTime / 60) + ":" + String.format("%02d", totalTime % 60));
         timeLeft = totalTime * 1000; //Time left in millis
 
@@ -76,7 +76,7 @@ public class Workout extends AppCompatActivity {
         //endregion
 
         //region setting up progressBar and getting sharedPreferences
-        progressBar = (ProgressBar) findViewById(R.id.progressbar);
+        progressBar = findViewById(R.id.progressbar);
         progressBar.setMax(dataArray[0]);
         progressBar.setProgress(progress);
         Animation rot = new RotateAnimation(0.0f, 90.0f, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
@@ -86,7 +86,7 @@ public class Workout extends AppCompatActivity {
         SharedPreferences settings = this.getSharedPreferences("settings", MODE_PRIVATE);
         mute = !settings.getBoolean("sound", false);
         if (mute){
-            ImageButton muteButton = (ImageButton) findViewById(R.id.muteButton);
+            ImageButton muteButton = findViewById(R.id.muteButton);
             muteButton.setImageResource(R.drawable.muted);
         }
         beepTone = settings.getInt("beepTone", 0);
@@ -107,10 +107,10 @@ public class Workout extends AppCompatActivity {
     private void workoutComplete() {
         findViewById(R.id.workoutLayout).setVisibility(View.GONE);
         findViewById(R.id.endWorkoutLayout).setVisibility(View.VISIBLE);
-        TextView tv = (TextView) findViewById(R.id.endWorkoutTV);
+        TextView tv = findViewById(R.id.endWorkoutTV);
         tv.setTextColor(getResources().getColor(R.color.Green));
 
-        Button homeButton = (Button) findViewById(R.id.homeButton);
+        Button homeButton = findViewById(R.id.homeButton);
 
         AppRater.app_launched(this);
 
@@ -135,7 +135,7 @@ public class Workout extends AppCompatActivity {
         soundMap.put(4,R.raw.ring);
 
         final MediaPlayer beep = MediaPlayer.create(getApplicationContext(), soundMap.get(beepTone));
-        remainingTimeTV = (TextView) findViewById(R.id.remainingTimeTV);
+        remainingTimeTV = findViewById(R.id.remainingTimeTV);
         remainingTimeTV.setText(String.format("%02d", totalTime / 60) + ":" + String.format("%02d", totalTime % 60));
 
 
@@ -264,23 +264,23 @@ public class Workout extends AppCompatActivity {
     } //creates all timers
 
     private void updateRepAndSet(){
-        TextView repNum = (TextView) findViewById(R.id.repsCounterTextView);
-        TextView setNum = (TextView) findViewById(R.id.setCounterTextView);
+        TextView repNum = findViewById(R.id.repsCounterTextView);
+        TextView setNum = findViewById(R.id.setCounterTextView);
 
-        setNum.setText(String.valueOf(currentSet) + "/" + String.valueOf(totalSets));
-        repNum.setText(String.valueOf(currentRep) + "/" + String.valueOf(totalReps));
+        setNum.setText(currentSet + "/" + totalSets);
+        repNum.setText(currentRep + "/" + totalReps);
     }
 
     //region settings button methods
     public void setMute(View v){
-        ImageButton muteButton = (ImageButton) findViewById(R.id.muteButton);
+        ImageButton muteButton = findViewById(R.id.muteButton);
         mute = (!mute);
         if (mute) { muteButton.setImageResource(R.drawable.muted); }
         else{ muteButton.setImageResource(R.drawable.unmuted); }
     } //deals with mute/un mute button pressed
     public void setPause(View v){
         pause = (!pause);
-        ImageButton pauseButton = (ImageButton) findViewById(R.id.pauseButton);
+        ImageButton pauseButton = findViewById(R.id.pauseButton);
 
         if (pause) {
             pauseButton.setImageResource(R.drawable.resume);

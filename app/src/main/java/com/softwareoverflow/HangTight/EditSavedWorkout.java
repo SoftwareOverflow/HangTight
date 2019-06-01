@@ -18,13 +18,13 @@ public class EditSavedWorkout extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_saved_workout);
 
-        title = (EditText) findViewById(R.id.editSavedWorkoutTitle);
-        description = (EditText) findViewById(R.id.editSavedWorkoutDescription);
-        hang = (EditText) findViewById(R.id.editSavedWorkoutHang);
-        rest = (EditText) findViewById(R.id.editSavedWorkoutRest);
-        reps = (EditText) findViewById(R.id.editSavedWorkoutReps);
-        sets = (EditText) findViewById(R.id.editSavedWorkoutSets);
-        recover = (EditText) findViewById(R.id.editSavedWorkoutRecover);
+        title = findViewById(R.id.editSavedWorkoutTitle);
+        description = findViewById(R.id.editSavedWorkoutDescription);
+        hang = findViewById(R.id.editSavedWorkoutHang);
+        rest = findViewById(R.id.editSavedWorkoutRest);
+        reps = findViewById(R.id.editSavedWorkoutReps);
+        sets = findViewById(R.id.editSavedWorkoutSets);
+        recover = findViewById(R.id.editSavedWorkoutRecover);
 
 
         Bundle data = getIntent().getExtras();

@@ -16,7 +16,7 @@ public class HomeScreenActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home_screen);
 
-        ImageView background = (ImageView) findViewById(R.id.background);
+        ImageView background = findViewById(R.id.background);
 
 
         SharedPreferences settings = getSharedPreferences("settings", MODE_PRIVATE);
@@ -62,7 +62,7 @@ public class HomeScreenActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         SharedPreferences settings = getSharedPreferences("settings", MODE_PRIVATE);
-        ImageView background = (ImageView) findViewById(R.id.background);
+        ImageView background = findViewById(R.id.background);
 
         if (settings.getInt("backgroundImage", 1) == 1){
             background.setImageResource(R.drawable.bg_female);

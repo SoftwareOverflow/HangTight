@@ -33,12 +33,12 @@ public class SettingsPage extends AppCompatActivity {
         setContentView(R.layout.activity_settings_page);
         getSupportActionBar().hide();
 
-        final LinearLayout chooseSoundLayout = (LinearLayout) findViewById(R.id.chooseSoundLayout);
-        toggleSound = (Switch) findViewById(R.id.soundSettingSwitch);
-        toggleVibrate = (Switch) findViewById(R.id.vibrateSettingSwitch);
-        toggleWarmUp = (Switch) findViewById(R.id.warmUpWarning);
-        countdownTV = (TextView) findViewById(R.id.countdownTV);
-        countdownSeekBar = (SeekBar) findViewById(R.id.countdownSeekBar);
+        final LinearLayout chooseSoundLayout = findViewById(R.id.chooseSoundLayout);
+        toggleSound = findViewById(R.id.soundSettingSwitch);
+        toggleVibrate = findViewById(R.id.vibrateSettingSwitch);
+        toggleWarmUp = findViewById(R.id.warmUpWarning);
+        countdownTV = findViewById(R.id.countdownTV);
+        countdownSeekBar = findViewById(R.id.countdownSeekBar);
         countdownSeekBar.setMax(10);
 
 
@@ -95,7 +95,7 @@ public class SettingsPage extends AppCompatActivity {
     private void createSpinners() {
 
         //region BackgroundSpinner setup
-        backgroundSpinner = (Spinner) findViewById(R.id.backgroundSpinner);
+        backgroundSpinner = findViewById(R.id.backgroundSpinner);
         final String[] backgroundChoices = {"Male", "Female"};
         ArrayAdapter<String> backgroundAdapter = new ArrayAdapter<>(this, R.layout.support_simple_spinner_dropdown_item, backgroundChoices);
         backgroundSpinner.setAdapter(backgroundAdapter);
@@ -120,7 +120,7 @@ public class SettingsPage extends AppCompatActivity {
         soundMap.put(3, R.raw.ding);
         soundMap.put(4,R.raw.ring);
 
-        soundSpinner = (Spinner) findViewById(R.id.soundSpinner);
+        soundSpinner = findViewById(R.id.soundSpinner);
         final String[] soundChoices = {"Beep","Blooper", "Censor", "Ding", "Ring"};
         ArrayAdapter<String> soundAdapter = new ArrayAdapter<String>(this, R.layout.support_simple_spinner_dropdown_item, soundChoices);
         soundSpinner.setAdapter(soundAdapter);
