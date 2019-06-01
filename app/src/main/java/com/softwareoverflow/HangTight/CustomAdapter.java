@@ -19,9 +19,9 @@ class CustomAdapter extends ArrayAdapter<String> {
         LayoutInflater inflater = LayoutInflater.from(getContext());
         View customView = inflater.inflate(R.layout.loadscreen_list_view_elements, parent, false);
 
-        TextView title = (TextView) customView.findViewById(R.id.title);
-        TextView description = (TextView) customView.findViewById(R.id.description);
-        TextView extras = (TextView) customView.findViewById(R.id.extrasTV);
+        TextView title = customView.findViewById(R.id.title);
+        TextView description = customView.findViewById(R.id.description);
+        TextView extras = customView.findViewById(R.id.extrasTV);
 
         String dataString = getItem(position);
         String[] splitData = dataString.split("\\|");

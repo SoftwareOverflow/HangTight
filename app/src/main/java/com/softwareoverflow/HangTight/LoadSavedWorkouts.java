@@ -33,7 +33,7 @@ public class LoadSavedWorkouts extends Activity {
 
     public void createListView() {
         setContentView(R.layout.activity_load_saved_workouts);
-        ListView loadScreenListView = (ListView) findViewById(R.id.loadScreenListView);
+        ListView loadScreenListView = findViewById(R.id.loadScreenListView);
         int rows = dbHandler.getRows();
         arrayAdapterStrings = new String[rows];
 
@@ -49,7 +49,7 @@ public class LoadSavedWorkouts extends Activity {
         final SharedPreferences settings = getSharedPreferences("settings", MODE_PRIVATE);
 
         final View checkBoxView = View.inflate(this, R.layout.check_box_alert_dialog, null);
-        final CheckBox checkBox = (CheckBox) checkBoxView.findViewById(R.id.checkbox);
+        final CheckBox checkBox = checkBoxView.findViewById(R.id.checkbox);
         checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -69,7 +69,7 @@ public class LoadSavedWorkouts extends Activity {
                 intent.putExtra("dataArray", intWorkoutData);
                 intent.putExtra("workoutSaved", true);
 
-                Boolean showWarning = settings.getBoolean("showWarmUp", true);
+                boolean showWarning = settings.getBoolean("showWarmUp", true);
 
                 if (showWarning){
                     new AlertDialog.Builder(LoadSavedWorkouts.this)
@@ -123,7 +123,7 @@ public class LoadSavedWorkouts extends Activity {
 
         switch (menuItemIndex){
             case 0:
-                int workoutData[] = dbHandler.getWorkoutInfo(position);
+                int[] workoutData = dbHandler.getWorkoutInfo(position);
 
                 Intent intent = new Intent(getApplicationContext(), EditSavedWorkout.class);
                 intent.putExtra("workoutData", workoutData);
