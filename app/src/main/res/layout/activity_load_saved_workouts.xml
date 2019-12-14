@@ -8,7 +8,7 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="com.softwareoverflow.HangTight.LoadSavedWorkouts"
+    tools:context="com.softwareoverflow.HangTight.ActivityLoadSavedWorkouts"
     android:background="@color/DarkSlateGray">
 
     <TextView
@@ -16,14 +16,14 @@
         android:text="Saved Workouts"
         />
 
-    <TextView
+    <!--<TextView
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:text="Tap to start, press and hold to edit"
         android:textStyle="italic"
         android:textSize="18sp"
         android:textColor="@color/NavajoWhite"
-        android:gravity="center"/>
+        android:gravity="center"/>-->
 
     <View
         android:layout_width="fill_parent"
@@ -32,13 +32,9 @@
         android:layout_marginTop="3dp"
         android:layout_marginBottom="3dp"/>
 
-    <ListView
+    <androidx.recyclerview.widget.RecyclerView
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:id="@+id/loadScreenListView">
-
-
-    </ListView>
-
+        android:id="@+id/loadSavedWorkouts_recyclerView" />
 
 </LinearLayout>

@@ -1,4 +1,4 @@
-package com.softwareoverflow.HangTight;
+package com.softwareoverflow.HangTight.workout;
 
 import android.app.AlertDialog;
 import android.content.ContentValues;
@@ -9,6 +9,9 @@ import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.widget.Toast;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class MyDBHandler extends SQLiteOpenHelper {
@@ -105,12 +108,12 @@ public class MyDBHandler extends SQLiteOpenHelper {
         return saved;
     }
 
-    public boolean addWorkout(final String[] workoutData, boolean ignoreDupe){
+    public boolean addWorkout(final Workout workout, boolean ignoreDupe){
         SQLiteDatabase db = getWritableDatabase();
 
-        boolean isDupe = checkForDupe(db, workoutData[0]);
+        boolean isDupe = checkForDupe(db, workout.getWorkoutName());
 
-        if (!isDupe || ignoreDupe) return completeAddingWorkout(db, workoutData);
+        if (!isDupe || ignoreDupe) return completeAddingWorkout(db, workout);
         else{
             new AlertDialog.Builder(context)
                     .setTitle("Duplicate Found!")
@@ -118,8 +121,8 @@ public class MyDBHandler extends SQLiteOpenHelper {
                     .setPositiveButton("Save anyway", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            addWorkout(workoutData, true);
-                            Toast.makeText(context, "Workout Saved!", Toast.LENGTH_SHORT);
+                            addWorkout(workout, true);
+                            Toast.makeText(context, "ActivityWorkout Saved!", Toast.LENGTH_SHORT);
                         }
                     })
                     .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -134,11 +137,11 @@ public class MyDBHandler extends SQLiteOpenHelper {
         return false;
     }
 
-    private boolean completeAddingWorkout(SQLiteDatabase db, String[] workoutData) {
+    private boolean completeAddingWorkout(SQLiteDatabase db, Workout workout) {
 
-        int hang = Integer.parseInt(workoutData[2]), rest = Integer.parseInt(workoutData[3]),
-                reps = Integer.parseInt(workoutData[4]), sets = Integer.parseInt(workoutData[5]),
-                recover = Integer.parseInt(workoutData[6]);
+        int hang = workout.getHangTime(), rest = workout.getRestTime(),
+                reps = workout.getNumReps(), sets = workout.getNumReps(),
+                recover = workout.getRecoverTime();
 
         int totalTime = (hang + rest) * reps;
         totalTime += recover - rest;
@@ -146,8 +149,8 @@ public class MyDBHandler extends SQLiteOpenHelper {
         totalTime -= recover;
 
         ContentValues values = new ContentValues();
-        values.put(COLUMN_TITLE, workoutData[0]);
-        values.put(COLUMN_DESCRIPTION, workoutData[1]);
+        values.put(COLUMN_TITLE, workout.getWorkoutName());
+        values.put(COLUMN_DESCRIPTION, workout.getWorkoutDescription());
         values.put(COLUMN_HANG, hang);
         values.put(COLUMN_REST, rest);
         values.put(COLUMN_REPS, reps);
@@ -175,7 +178,7 @@ public class MyDBHandler extends SQLiteOpenHelper {
 
     }
 
-    public String getLoadScreenInfo(int position){
+/*    public String getLoadScreenInfo(int position){
         String workoutString;
 
         SQLiteDatabase db = getReadableDatabase();
@@ -189,7 +192,7 @@ public class MyDBHandler extends SQLiteOpenHelper {
         cursor.close();
         db.close();
         return workoutString;
-    }
+    }*/
 
     public int getRows() {
         SQLiteDatabase db = getReadableDatabase();
@@ -217,24 +220,50 @@ public class MyDBHandler extends SQLiteOpenHelper {
         }
     }
 
-    public int[] getWorkoutInfo(int position) {
-        int[] workoutData = new int[6];
+    public Workout getWorkoutInfo(int position) {
+        Workout workout = new Workout();
 
         SQLiteDatabase db = getReadableDatabase();
 
         Cursor cursor = db.rawQuery("select * from " + TABLE_WORKOUTS, null);
         cursor.moveToPosition(position);
 
-        workoutData[0] = cursor.getInt(cursor.getColumnIndex(COLUMN_HANG));
-        workoutData[1] = cursor.getInt(cursor.getColumnIndex(COLUMN_REST));
-        workoutData[2] = cursor.getInt(cursor.getColumnIndex(COLUMN_REPS));
-        workoutData[3] = cursor.getInt(cursor.getColumnIndex(COLUMN_SETS));
-        workoutData[4] = cursor.getInt(cursor.getColumnIndex(COLUMN_RECOVER));
-        workoutData[5] = cursor.getInt(cursor.getColumnIndex(COLUMN_TIME));
+        workout.setHangTime(cursor.getInt(cursor.getColumnIndex(COLUMN_HANG)));
+        workout.setRestTime(cursor.getInt(cursor.getColumnIndex(COLUMN_REST)));
+        workout.setNumReps(cursor.getInt(cursor.getColumnIndex(COLUMN_REPS)));
+        workout.setNumSets(cursor.getInt(cursor.getColumnIndex(COLUMN_SETS)));
+        workout.setRecoverTime(cursor.getInt(cursor.getColumnIndex(COLUMN_RECOVER)));
+        workout.setWorkoutDuration(cursor.getInt(cursor.getColumnIndex(COLUMN_TIME)));
 
         cursor.close();
         db.close();
 
-        return workoutData;
+        return workout;
+    }
+
+    public List<Workout> loadAllWorkouts(){
+        ArrayList<Workout> workouts = new ArrayList<>();
+
+        SQLiteDatabase db = getReadableDatabase();
+        Cursor cursor = db.rawQuery("select * from " + TABLE_WORKOUTS, null);
+        while (cursor.moveToNext()){
+            Workout workout = new Workout();
+
+            workout.setWorkoutName(cursor.getString(cursor.getColumnIndex(COLUMN_TITLE)));
+            workout.setWorkoutDescription(cursor.getString(cursor.getColumnIndex(COLUMN_DESCRIPTION)));
+            workout.setHangTime(cursor.getInt(cursor.getColumnIndex(COLUMN_HANG)));
+            workout.setRestTime(cursor.getInt(cursor.getColumnIndex(COLUMN_REST)));
+            workout.setNumReps(cursor.getInt(cursor.getColumnIndex(COLUMN_REPS)));
+            workout.setNumSets(cursor.getInt(cursor.getColumnIndex(COLUMN_SETS)));
+            workout.setRecoverTime(cursor.getInt(cursor.getColumnIndex(COLUMN_RECOVER)));
+            workout.setWorkoutDuration(cursor.getInt(cursor.getColumnIndex(COLUMN_TIME)));
+
+            workouts.add(workout);
+        }
+
+        cursor.close();
+        db.close();
+
+        return workouts;
     }
 }

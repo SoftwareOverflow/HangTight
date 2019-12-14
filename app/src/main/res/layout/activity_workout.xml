@@ -7,7 +7,7 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="com.softwareoverflow.HangTight.Workout">
+    tools:context="com.softwareoverflow.HangTight.ActivityWorkout">
 
 
     <RelativeLayout
@@ -81,6 +81,7 @@
             android:layout_below="@id/linearLayout"
             android:background="@color/LightSlateGray" />
 
+
         <TextView
             android:id="@+id/titleTextView"
             android:layout_width="wrap_content"
@@ -88,21 +89,10 @@
             android:layout_above="@+id/progressbar"
             android:layout_centerHorizontal="true"
             android:layout_marginBottom="40dp"
-            android:text="HANG"
+            android:text="@string/timer_hang"
             android:textAllCaps="true"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:textSize="40sp" />
-
-
-        <TextView
-            android:id="@+id/timerTextView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:text="0"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:textColor="@color/WhiteSmoke"
-            android:textSize="25sp" />
 
         <ProgressBar
             android:id="@+id/progressbar"
@@ -111,9 +101,15 @@
             android:layout_height="100dip"
             android:layout_centerInParent="true"
             android:indeterminate="false"
-            android:max="48"
-            android:progress="45"
             android:progressDrawable="@drawable/circular_progress_bar" />
+
+        <TextView
+            android:visibility="visible"
+            android:id="@+id/timerTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:textSize="25sp" />
 
         <LinearLayout
             android:id="@+id/linearLayout3"
@@ -127,13 +123,13 @@
             <ImageButton
                 android:id="@+id/muteButton"
                 style="@style/SettingButtons"
-                android:onClick="setMute"
+                android:onClick="toggleMute"
                 android:src="@drawable/unmuted" />
 
             <ImageButton
                 android:id="@+id/pauseButton"
                 style="@style/SettingButtons"
-                android:onClick="setPause"
+                android:onClick="togglePause"
                 android:src="@drawable/pause" />
 
             <ImageButton

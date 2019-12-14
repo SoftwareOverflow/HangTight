@@ -3,13 +3,14 @@ package com.softwareoverflow.HangTight;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 
-public class HomeScreenActivity extends AppCompatActivity {
+import androidx.appcompat.app.AppCompatActivity;
+
+public class ActivityHomeScreen extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -17,7 +18,6 @@ public class HomeScreenActivity extends AppCompatActivity {
         setContentView(R.layout.activity_home_screen);
 
         ImageView background = findViewById(R.id.background);
-
 
         SharedPreferences settings = getSharedPreferences("settings", MODE_PRIVATE);
         if (settings.getInt("imageBackground", 1) == 1){
@@ -28,12 +28,12 @@ public class HomeScreenActivity extends AppCompatActivity {
     }
 
     public void newBasicWorkout(View v){
-        Intent i = new Intent(this, NewBasicWorkout.class);
+        Intent i = new Intent(this, ActivityWorkoutCreator.class);
         startActivity(i);
     }
 
     public void loadWorkouts(View v){
-        Intent i = new Intent(this, LoadSavedWorkouts.class);
+        Intent i = new Intent(this, ActivityLoadSavedWorkouts.class);
         startActivity(i);
     }
 
@@ -48,7 +48,7 @@ public class HomeScreenActivity extends AppCompatActivity {
 
         switch (item.getItemId()) {
             case R.id.action_bar_settings:
-                Intent settingsIntent = new Intent(this, SettingsPage.class);
+                Intent settingsIntent = new Intent(this, ActivitySettings.class);
                 startActivity(settingsIntent);
                 return true;
             case R.id.action_bar_help:

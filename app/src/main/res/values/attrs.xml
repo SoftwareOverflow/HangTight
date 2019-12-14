@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="NumberPickerPlusMinus">
+        <attr name="np_name" format="string" />
+        <attr name="np_defaultValue" format="integer" />
+        <attr name="np_maxValue" format="integer" />
+    </declare-styleable>
+
+</resources>

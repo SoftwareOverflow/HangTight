@@ -1,7 +1,6 @@
 <resources>
     <string name="app_name">HangTight</string>
 
-    <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
     <string name="title_activity_create_new_workout">CreateNewWorkout</string>
     <string name="title_activity_new_basic_workout">NewBasicWorkout</string>
@@ -10,6 +9,12 @@
     <string name="title_activity_edit_saved_workout">EditSavedWorkout</string>
     <string name="title_activity_settings_page">settingsPage</string>
     <string name="title_activity_help_page">helpPage</string>
+
+    <!-- ActivityWorkout -->
+    <string name="timer_prepare">Prepare</string>
+    <string name="timer_hang">Hang</string>
+    <string name="timer_rest">Rest</string>
+    <string name="timer_recover">Recover</string>
 
 
     <string name="intro_help_page">\nThis help page provides an overview of how to use the HangTight app.
@@ -39,4 +44,20 @@
         the workout.
         </string>
 
+    <string name="invalid_numbers">Unable to create Workout. Please ensure you have entered valid values.</string>
+
+
+    <string-array name="spinner_sound_options">
+        <item>None</item>
+        <item>Beep</item>
+        <item>Blooper</item>
+        <item>Censor</item>
+        <item>Ding</item>
+        <item>Ring</item>
+    </string-array>
+
+    <string-array name="spinner_background_options">
+        <item>Male</item>
+        <item>Female</item>
+    </string-array>
 </resources>
