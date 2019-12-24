@@ -13,10 +13,10 @@ import android.view.animation.RotateAnimation;
 import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.android.material.snackbar.Snackbar;
 import com.softwareoverflow.HangTight.helper.SharedPreferenceHelper;
 import com.softwareoverflow.HangTight.helper.StringHelper;
 import com.softwareoverflow.HangTight.helper.WorkoutHelper.WorkoutSection;
@@ -225,23 +225,28 @@ public class ActivityWorkout extends AppCompatActivity implements IWorkoutTimerO
             vibrator.vibrate(200);
     }
 
+    private Snackbar snackbar;
     private long firstBackPress;
     private static final int TIME_INTERVAL = 2000;
     //press back twice within TIME_INTERVAL to avoid accidentally exiting workout
     @Override
     public void onBackPressed() {
-        Toast toast = Toast.makeText(this, "Click BACK again to exit", Toast.LENGTH_SHORT);
+        if(snackbar == null){
+            View rootView = findViewById(R.id.activity_workout_root_view);
+            snackbar = Snackbar.make(rootView, "Click BACK again to exit", Snackbar.LENGTH_SHORT);
+        }
 
         if (firstBackPress + TIME_INTERVAL > System.currentTimeMillis()){
-            toast.cancel();
+            snackbar.dismiss();
             timer.cancel();
             Intent i = new Intent(this, ActivityHomeScreen.class);
-            finish();
+            i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(i);
 
+            finish();
             return;
         }
-        else toast.show();
+        else snackbar.show();
 
         firstBackPress = System.currentTimeMillis();
     }

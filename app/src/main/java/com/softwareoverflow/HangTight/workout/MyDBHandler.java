@@ -10,6 +10,8 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.widget.Toast;
 
+import com.softwareoverflow.HangTight.R;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -102,7 +104,6 @@ public class MyDBHandler extends SQLiteOpenHelper {
         values.put(COLUMN_RECOVER, recover);
         values.put(COLUMN_TIME, totalTime);
 
-
         boolean saved =  db.update(TABLE_WORKOUTS, values, COLUMN_ID + "=" + ID + "", null) !=0 ;
         db.close();
         return saved;
@@ -115,7 +116,7 @@ public class MyDBHandler extends SQLiteOpenHelper {
 
         if (!isDupe || ignoreDupe) return completeAddingWorkout(db, workout);
         else{
-            new AlertDialog.Builder(context)
+            new AlertDialog.Builder(context, R.style.CustomDialogTheme)
                     .setTitle("Duplicate Found!")
                     .setMessage("A workout with the same title has been found in the saved workouts.\nSave anyway?")
                     .setPositiveButton("Save anyway", new DialogInterface.OnClickListener() {

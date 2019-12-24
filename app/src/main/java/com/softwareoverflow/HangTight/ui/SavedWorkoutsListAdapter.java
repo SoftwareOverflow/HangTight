@@ -1,6 +1,7 @@
 package com.softwareoverflow.HangTight.ui;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,29 +18,34 @@ import androidx.transition.ChangeTransform;
 import androidx.transition.TransitionManager;
 import androidx.transition.TransitionSet;
 
+import com.google.android.material.snackbar.Snackbar;
 import com.softwareoverflow.HangTight.ActivityWorkout;
+import com.softwareoverflow.HangTight.ActivityWorkoutCreator;
 import com.softwareoverflow.HangTight.R;
 import com.softwareoverflow.HangTight.helper.StringHelper;
+import com.softwareoverflow.HangTight.workout.MyDBHandler;
 import com.softwareoverflow.HangTight.workout.Workout;
 
 import java.util.List;
 
 public class SavedWorkoutsListAdapter extends RecyclerView.Adapter<SavedWorkoutsListAdapter.ViewHolder> {
 
+    private MyDBHandler dbHandler;
     private RecyclerView recyclerView;
     private List<Workout> workouts;
     private int expandedPosition = -1;
 
     private TransitionSet transitions;
 
-    public SavedWorkoutsListAdapter(List<Workout> workouts) {
+    public SavedWorkoutsListAdapter(List<Workout> workouts, MyDBHandler dbHandler) {
         super();
 
         this.workouts = workouts;
+        this.dbHandler = dbHandler;
 
         transitions = new TransitionSet();
-        transitions.addTransition(new ChangeTransform()); // For the button rotation
-        transitions.addTransition(new AutoTransition()); // For the expanded view visibility
+        transitions.addTransition(new ChangeTransform()); // Button rotation
+        transitions.addTransition(new AutoTransition()); // Expanded view visibility
     }
 
     @Override
@@ -116,17 +122,28 @@ public class SavedWorkoutsListAdapter extends RecyclerView.Adapter<SavedWorkouts
             extendViewIcon = itemView.findViewById(R.id.row_savedWorkout_expandIcon);
         }
 
-
         @Override
         public void onClick(View v) {
             switch(v.getId()){
                 case R.id.row_savedWorkout_delete:
                         // TODO - show 'Are you sure?' message
+                    new AlertDialogConfirmation(v.getContext(), "delete", workouts.get(getAdapterPosition()).getWorkoutName(), (DialogInterface dialog, Integer which) -> {
+                        if (dbHandler.deleteWorkout(getAdapterPosition())) Snackbar.make(recyclerView, "Workout Deleted", Snackbar.LENGTH_SHORT).show();
+                        else Snackbar.make(recyclerView, "Problem Deleting ActivityWorkout.\nPlease try again later", Snackbar.LENGTH_SHORT).show();
+
+                        workouts.remove(getAdapterPosition());
+                        notifyItemRemoved(getAdapterPosition());
+                        // TODO -- is there a better option than BiFunction as we aren't using a return value?
+                        return null;
+                    }).show();
                     break;
                 case R.id.row_savedWorkout_edit:
-                        // TODO - Send user back to ActivityWorkoutCreator with extra flag on intent? Or add flag to Workout class for if it is saved or not?
-                    break;
+                     // TODO - Send user back to ActivityWorkoutCreator with extra flag on intent? Or add flag to Workout class for if it is saved or not?
 
+                     Intent editWorkoutIntent = new Intent(v.getContext(), ActivityWorkoutCreator.class);
+                     editWorkoutIntent.putExtra("workout", workouts.get(getAdapterPosition()));
+                     v.getContext().startActivity(editWorkoutIntent);
+                    break;
                 case R.id.row_savedWorkout_start:
                     Intent i = new Intent(v.getContext(), ActivityWorkout.class);
                     i.putExtra("workout", workouts.get(getAdapterPosition()));

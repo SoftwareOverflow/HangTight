@@ -11,7 +11,6 @@ import com.softwareoverflow.HangTight.helper.WorkoutHelper;
 public class Workout implements Parcelable {
 
     // TODO - sort out workoutDuration. Should NOT exist in the parcel as it can be derived. Database SHOULD NOT STORE IT EITHER
-
     private String workoutName, workoutDescription;
     private int hangTime, restTime, numReps, numSets, recoverTime, workoutDuration;
 

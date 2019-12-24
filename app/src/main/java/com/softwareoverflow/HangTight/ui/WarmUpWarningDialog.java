@@ -2,6 +2,7 @@ package com.softwareoverflow.HangTight.ui;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.view.LayoutInflater;
@@ -27,7 +28,7 @@ public class WarmUpWarningDialog extends AlertDialog.Builder {
     private AlertDialog dialog;
 
     public WarmUpWarningDialog(Context context, Intent intent) {
-        super(context);
+        super(context, R.style.CustomDialogTheme);
 
         final SharedPreferences settings = context.getSharedPreferences("settings", MODE_PRIVATE);
         showWarning = settings.getBoolean("showWarmUp", true);
@@ -49,7 +50,7 @@ public class WarmUpWarningDialog extends AlertDialog.Builder {
                 " any pain during the workout, discontinue immediately.");
         setView(view);
 
-        setPositiveButton("Start Workout", (dialog, which) -> {
+        setPositiveButton("Start Workout", (DialogInterface dialog, int which) -> {
                     settings.edit().putBoolean("showWarmUp", showWarning).apply();
                     context.startActivity(intent);
                 }

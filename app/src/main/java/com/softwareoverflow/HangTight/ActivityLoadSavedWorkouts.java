@@ -31,7 +31,7 @@ public class ActivityLoadSavedWorkouts extends Activity {
 
         savedWorkouts = dbHandler.loadAllWorkouts();
 
-        RecyclerView.Adapter adapter = new SavedWorkoutsListAdapter(savedWorkouts);
+        RecyclerView.Adapter adapter = new SavedWorkoutsListAdapter(savedWorkouts, dbHandler);
         loadScreenListView.setAdapter(adapter);
         loadScreenListView.setLayoutManager(new LinearLayoutManager(this));
 
