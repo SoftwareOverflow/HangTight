@@ -1,4 +1,4 @@
-package com.softwareoverflow.HangTight.ui;
+package com.softwareoverflow.HangTight.ui.dialog;
 
 import android.app.Activity;
 import android.content.Context;
@@ -22,10 +22,9 @@ import static android.content.Context.MODE_PRIVATE;
 /**
  * Creates and shows the warm up warning dialog to the user, if they haven't previously turned it off
  */
-public class WarmUpWarningDialog extends AlertDialog.Builder {
+public class WarmUpWarningDialog extends AlertDialog {
 
     private boolean showWarning;
-    private AlertDialog dialog;
 
     public WarmUpWarningDialog(Context context, Intent intent) {
         super(context, R.style.CustomDialogTheme);
@@ -38,23 +37,24 @@ public class WarmUpWarningDialog extends AlertDialog.Builder {
         }
 
         ViewGroup rootView = ((Activity) context).getWindow().getDecorView().findViewById(android.R.id.content);
-        View view = LayoutInflater.from(context).inflate(R.layout.checkbox, rootView, false);
+        View view = LayoutInflater.from(context).inflate(R.layout.dialog_warm_up_warning_checkbox, rootView, false);
 
-        CheckBox checkbox = view.findViewById(R.id.checkbox);
-        checkbox.setSelected(!showWarning);
-        checkbox.setOnClickListener(v -> showWarning = v.isSelected());
+        CheckBox dialog_warm_up_warning_checkbox = view.findViewById(R.id.checkbox);
+        dialog_warm_up_warning_checkbox.setSelected(!showWarning);
+        dialog_warm_up_warning_checkbox.setOnClickListener(v -> showWarning = v.isSelected());
 
         setTitle("Have You Warmed Up?");
+        setIcon(android.R.drawable.ic_dialog_alert);
         setMessage("Ensure you are thoroughly warmed up before beginning any" +
                 " workout. Failure to do so could result in injury.\n\nIf you feel" +
                 " any pain during the workout, discontinue immediately.");
         setView(view);
 
-        setPositiveButton("Start Workout", (DialogInterface dialog, int which) -> {
+        setButton(BUTTON_POSITIVE, "Start Workout", (DialogInterface dialog, int which) -> {
                     settings.edit().putBoolean("showWarmUp", showWarning).apply();
                     context.startActivity(intent);
                 }
         );
-        setNegativeButton("Cancel", (dialog, which) -> dialog.cancel());
+        setButton(BUTTON_NEGATIVE, "Cancel", (dialog, which) -> dialog.cancel());
     }
 }

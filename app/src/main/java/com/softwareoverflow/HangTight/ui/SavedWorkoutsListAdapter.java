@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -23,7 +22,9 @@ import com.softwareoverflow.HangTight.ActivityWorkout;
 import com.softwareoverflow.HangTight.ActivityWorkoutCreator;
 import com.softwareoverflow.HangTight.R;
 import com.softwareoverflow.HangTight.helper.StringHelper;
-import com.softwareoverflow.HangTight.workout.MyDBHandler;
+import com.softwareoverflow.HangTight.ui.dialog.ConfirmationDialog;
+import com.softwareoverflow.HangTight.ui.dialog.WarmUpWarningDialog;
+import com.softwareoverflow.HangTight.database.MyDBHandler;
 import com.softwareoverflow.HangTight.workout.Workout;
 
 import java.util.List;
@@ -37,15 +38,20 @@ public class SavedWorkoutsListAdapter extends RecyclerView.Adapter<SavedWorkouts
 
     private TransitionSet transitions;
 
-    public SavedWorkoutsListAdapter(List<Workout> workouts, MyDBHandler dbHandler) {
+    public SavedWorkoutsListAdapter(MyDBHandler dbHandler) {
         super();
 
-        this.workouts = workouts;
+        this.workouts = dbHandler.loadAllWorkouts();
         this.dbHandler = dbHandler;
 
         transitions = new TransitionSet();
         transitions.addTransition(new ChangeTransform()); // Button rotation
         transitions.addTransition(new AutoTransition()); // Expanded view visibility
+    }
+
+    public void updateDataSet(){
+        this.workouts = dbHandler.loadAllWorkouts();
+        notifyDataSetChanged();
     }
 
     @Override
@@ -79,9 +85,15 @@ public class SavedWorkoutsListAdapter extends RecyclerView.Adapter<SavedWorkouts
         holder.itemView.setElevation( isExpanded ? 25 : 10);
 
         holder.itemView.setOnClickListener((v) -> {
+            int oldExpandedPosition = expandedPosition;
             expandedPosition = isExpanded ? -1 : position;
             TransitionManager.beginDelayedTransition(recyclerView, transitions);
-            notifyDataSetChanged();
+
+            // IF no item expanded, oldExpandedPosition = -1 and NewExpandedPos -> end needs updating
+            // IF item expanded, either newly expanded or currently expanded -> end needs updating
+
+            int startItem = oldExpandedPosition == -1 ? expandedPosition : Math.min(oldExpandedPosition, expandedPosition);
+            notifyItemRangeChanged(startItem, getItemCount() - startItem);
         });
     }
 
@@ -94,10 +106,8 @@ public class SavedWorkoutsListAdapter extends RecyclerView.Adapter<SavedWorkouts
 
         View itemView;
         TextView workoutNameTV, workoutDurationTV, workoutDescriptionTV;
-        ImageButton deleteWorkoutButton, editWorkoutButton, startWorkoutButton;
+        ConstraintLayout deleteWorkoutButton, editWorkoutButton, startWorkoutButton, expandedView;
         ImageView extendViewIcon;
-
-        ConstraintLayout expandedView;
 
 
         ViewHolder(@NonNull View itemView) {
@@ -126,15 +136,12 @@ public class SavedWorkoutsListAdapter extends RecyclerView.Adapter<SavedWorkouts
         public void onClick(View v) {
             switch(v.getId()){
                 case R.id.row_savedWorkout_delete:
-                        // TODO - show 'Are you sure?' message
-                    new AlertDialogConfirmation(v.getContext(), "delete", workouts.get(getAdapterPosition()).getWorkoutName(), (DialogInterface dialog, Integer which) -> {
+                    new ConfirmationDialog(v.getContext(), "delete", workouts.get(getAdapterPosition()).getWorkoutName(), (DialogInterface dialog, Integer which) -> {
                         if (dbHandler.deleteWorkout(getAdapterPosition())) Snackbar.make(recyclerView, "Workout Deleted", Snackbar.LENGTH_SHORT).show();
                         else Snackbar.make(recyclerView, "Problem Deleting ActivityWorkout.\nPlease try again later", Snackbar.LENGTH_SHORT).show();
 
                         workouts.remove(getAdapterPosition());
                         notifyItemRemoved(getAdapterPosition());
-                        // TODO -- is there a better option than BiFunction as we aren't using a return value?
-                        return null;
                     }).show();
                     break;
                 case R.id.row_savedWorkout_edit:
@@ -147,9 +154,8 @@ public class SavedWorkoutsListAdapter extends RecyclerView.Adapter<SavedWorkouts
                 case R.id.row_savedWorkout_start:
                     Intent i = new Intent(v.getContext(), ActivityWorkout.class);
                     i.putExtra("workout", workouts.get(getAdapterPosition()));
-                    v.getContext().startActivity(i);
+                    new WarmUpWarningDialog(v.getContext(), i).show(); // Creates and shows the warm up warning (if required)
                     break;
-
             }
         }
     }

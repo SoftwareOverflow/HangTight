@@ -30,6 +30,7 @@
     </style>
 
     <style name="AppEditTextTheme" parent="@style/AppTheme">
+        <item name="android:textColorSecondary">@color/Blue</item>
         <item name="android:textColorHint">@color/NavajoWhite</item>
         <item name="android:autofillHints" tools:targetApi="o">no</item>
         <item name="android:background">@android:color/transparent</item>

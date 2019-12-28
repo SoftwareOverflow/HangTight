@@ -11,13 +11,23 @@ import com.softwareoverflow.HangTight.helper.WorkoutHelper;
 public class Workout implements Parcelable {
 
     // TODO - sort out workoutDuration. Should NOT exist in the parcel as it can be derived. Database SHOULD NOT STORE IT EITHER
+    private Integer id;
     private String workoutName, workoutDescription;
     private int hangTime, restTime, numReps, numSets, recoverTime, workoutDuration;
 
     // Empty constructor to allow instantiation. Parcelable constructor also exists.
-    public Workout(){}
+    public Workout() {
+    }
 
     //region getters/setters
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
     public String getWorkoutName() {
         return workoutName;
     }
@@ -83,8 +93,9 @@ public class Workout implements Parcelable {
     }
     //endregion getters/setters
 
-// region Parcelable
-    public Workout(Parcel in){
+    // region Parcelable
+    public Workout(Parcel in) {
+        this.id = in.readInt();
         this.workoutName = in.readString();
         this.workoutDescription = in.readString();
         this.hangTime = in.readInt();
@@ -103,6 +114,7 @@ public class Workout implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(id);
         dest.writeString(workoutName);
         dest.writeString(workoutDescription);
         dest.writeInt(hangTime);
@@ -114,7 +126,7 @@ public class Workout implements Parcelable {
     }
 
     public static final Parcelable.Creator CREATOR = new Parcelable.Creator() {
-        public Workout createFromParcel(Parcel in){
+        public Workout createFromParcel(Parcel in) {
             return new Workout(in);
         }
 

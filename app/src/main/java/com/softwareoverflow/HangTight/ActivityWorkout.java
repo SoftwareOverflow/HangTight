@@ -70,6 +70,10 @@ public class ActivityWorkout extends AppCompatActivity implements IWorkoutTimerO
         } else {
             throw new IllegalArgumentException("Unable to load workout");
         }
+
+        // Set the current rep and set to 1/<num>
+        updateRep(1);
+        updateSet(1);
     }
 
     private void setupViews(){
@@ -125,7 +129,6 @@ public class ActivityWorkout extends AppCompatActivity implements IWorkoutTimerO
 
     @Override
     public void onPrepareStart() {
-        // TODO - did it use the progress bar for prepare?
         title.setText(WorkoutSection.PREPARE.getNameResourceId());
     }
 
@@ -148,7 +151,7 @@ public class ActivityWorkout extends AppCompatActivity implements IWorkoutTimerO
     }
 
     private void updateWorkoutUI(int colorId, int workoutSectionResId, int sectionTime, boolean setProgressToZero){
-        title.setTextColor(getResources().getColor(colorId));
+        title.setTextColor(getResources().getColor(colorId, getTheme()));
         title.setText(workoutSectionResId);
 
         setProgress(sectionTime, setProgressToZero);

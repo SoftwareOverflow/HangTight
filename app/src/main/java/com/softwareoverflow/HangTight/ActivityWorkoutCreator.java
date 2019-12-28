@@ -1,26 +1,20 @@
 package com.softwareoverflow.HangTight;
 
 import android.content.Intent;
-import android.graphics.BlendMode;
-import android.graphics.BlendModeColorFilter;
-import android.graphics.PorterDuff;
-import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.EditText;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.snackbar.Snackbar;
 import com.softwareoverflow.HangTight.ui.NumberPickerPlusMinus;
-import com.softwareoverflow.HangTight.ui.WarmUpWarningDialog;
-import com.softwareoverflow.HangTight.workout.MyDBHandler;
+import com.softwareoverflow.HangTight.ui.dialog.SaveWorkoutDialog;
+import com.softwareoverflow.HangTight.ui.dialog.WarmUpWarningDialog;
 import com.softwareoverflow.HangTight.workout.Workout;
 
 public class ActivityWorkoutCreator extends AppCompatActivity {
 
-    private View rootView, saveWorkoutView;
-    private EditText workoutName, workoutDescription;
+    private View rootView;
     private NumberPickerPlusMinus hangTimePicker, restTimePicker, repsPicker, setsPicker, recoverPicker;
     private Workout workout = new Workout();
     private boolean workoutSaved = false; // TODO - might need to move this, as we need to know after the workout to offer the option to save
@@ -48,9 +42,6 @@ public class ActivityWorkoutCreator extends AppCompatActivity {
         repsPicker.setValue(workout.getNumReps());
         recoverPicker.setValue(workout.getRecoverTime());
         setsPicker.setValue(workout.getNumSets());
-
-        workoutName.setText(workout.getWorkoutName());
-        workoutDescription.setText(workout.getWorkoutDescription());
     }
 
     public void initViews(){
@@ -62,35 +53,14 @@ public class ActivityWorkoutCreator extends AppCompatActivity {
         recoverPicker = findViewById(R.id.recoverTimeNumberPicker);
         setsPicker = findViewById(R.id.setsNumberPicker);
 
-        saveWorkoutView = findViewById(R.id.workout_creator_save_workout_view);
-        workoutName = saveWorkoutView.findViewById(R.id.editText_saveWorkout_workoutName);
-        workoutDescription = saveWorkoutView.findViewById(R.id.editText_saveWorkout_workoutDescription);
+        // TODO - do I need to move this to SaveWorkout dialog class???
+//        int color = getResources().getColor(R.color.Charcoal, getTheme());
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+//            saveWorkoutView.getBackground().setColorFilter(new BlendModeColorFilter(R.color.Charcoal, BlendMode.DST_OVER));
+//        } else {
+//            saveWorkoutView.getBackground().setColorFilter(color, PorterDuff.Mode.DST_OVER);
+//        }
 
-        int color = getResources().getColor(R.color.Charcoal, getTheme());
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            saveWorkoutView.getBackground().setColorFilter(new BlendModeColorFilter(R.color.Charcoal, BlendMode.DST_OVER));
-        } else {
-            saveWorkoutView.getBackground().setColorFilter(color, PorterDuff.Mode.DST_OVER);
-        }
-
-        saveWorkoutView.findViewById(R.id.save_workout_button).setOnClickListener((View v) -> {
-            String name = workoutName.getText().toString();
-            String description = workoutDescription.getText().toString();
-
-            if(name.matches("")){
-                Snackbar.make(saveWorkoutView, "Please enter a name.", Snackbar.LENGTH_SHORT);
-                return;
-            }
-
-            workout.setWorkoutName(name);
-            workout.setWorkoutDescription(description);
-
-            MyDBHandler dbHandler = new MyDBHandler(ActivityWorkoutCreator.this, null);
-
-            if (dbHandler.addWorkout(workout, false)) Snackbar.make(rootView, "Workout Saved!", Snackbar.LENGTH_SHORT).show();
-            hideSaveScreen();
-        });
-        saveWorkoutView.findViewById(R.id.cancel_saving_workout_button).setOnClickListener((View v) -> hideSaveScreen());
     }
 
     /**
@@ -133,16 +103,20 @@ public class ActivityWorkoutCreator extends AppCompatActivity {
             return;
         }
 
+        new SaveWorkoutDialog(this, workout, workoutSaved).show();
+
         // TODO - load title and description from workout object into the fields.
         // TODO - If the workout has been saved previously, add a toggle for overwriting existing workout
 
-        saveWorkoutView.setVisibility(View.VISIBLE);
-        workoutName.setFocusableInTouchMode(true);
-        workoutName.requestFocus();
-        rootView.setFocusable(false);
-        rootView.setFocusableInTouchMode(false);
-        rootView.setAlpha(0.4f);
-        saveWorkoutView.setAlpha(1f);
+        // TODO - improve the saveWorkoutView layout
+//        saveWorkoutView.setVisibility(View.VISIBLE);
+//        workoutName.setFocusableInTouchMode(true);
+//        workoutDescription.setFocusableInTouchMode(true);
+//        workoutName.requestFocus();
+//        rootView.setFocusable(false);
+//        rootView.setFocusableInTouchMode(false);
+//        rootView.setAlpha(0.4f);
+//        saveWorkoutView.setAlpha(1f);
 
 
 
@@ -190,7 +164,8 @@ public class ActivityWorkoutCreator extends AppCompatActivity {
         });*/
     }
 
-    private void hideSaveScreen(){
+    // TODO - tidy this up
+/*    private void hideSaveScreen(){
         rootView.setFocusable(true);
         rootView.setFocusableInTouchMode(true);
         rootView.setAlpha(1f);
@@ -199,13 +174,13 @@ public class ActivityWorkoutCreator extends AppCompatActivity {
         workoutDescription.setText("");
         saveWorkoutView.setVisibility(View.GONE);
         rootView.requestFocus();
-    }
+    }*/
 
-    @Override
+/*    @Override
     public void onBackPressed() {
         if(saveWorkoutView.getVisibility() == View.VISIBLE)
             hideSaveScreen();
         else
             super.onBackPressed();
-    }
+    }*/
 }
