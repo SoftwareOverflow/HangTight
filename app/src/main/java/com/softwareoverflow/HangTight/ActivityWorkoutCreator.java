@@ -3,21 +3,21 @@ package com.softwareoverflow.HangTight;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.EditText;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.snackbar.Snackbar;
 import com.softwareoverflow.HangTight.ui.NumberPickerPlusMinus;
-import com.softwareoverflow.HangTight.ui.WarmUpWarningDialog;
+import com.softwareoverflow.HangTight.ui.dialog.SaveWorkoutDialog;
+import com.softwareoverflow.HangTight.ui.dialog.WarmUpWarningDialog;
 import com.softwareoverflow.HangTight.workout.Workout;
 
 public class ActivityWorkoutCreator extends AppCompatActivity {
 
-    private EditText title, description;
+    private View rootView;
     private NumberPickerPlusMinus hangTimePicker, restTimePicker, repsPicker, setsPicker, recoverPicker;
     private Workout workout = new Workout();
-    private boolean workoutSaved = false;
+    private boolean workoutSaved = false; // TODO - might need to move this, as we need to know after the workout to offer the option to save
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,20 +28,39 @@ public class ActivityWorkoutCreator extends AppCompatActivity {
         initViews();
 
         Bundle data = getIntent().getExtras();
-        if (data != null) workout = data.getParcelable("workout");
+        if (data != null) {
+            workout = data.getParcelable("workout");
+            workoutSaved = true;
 
-        assignValues();
+            loadWorkoutValues();
+        }
+    }
+
+    private void loadWorkoutValues(){
+        hangTimePicker.setValue(workout.getHangTime());
+        restTimePicker.setValue(workout.getRestTime());
+        repsPicker.setValue(workout.getNumReps());
+        recoverPicker.setValue(workout.getRecoverTime());
+        setsPicker.setValue(workout.getNumSets());
     }
 
     public void initViews(){
+        rootView = findViewById(R.id.root_new_basic_workout);
+
         hangTimePicker = findViewById(R.id.hangTimeNumberPicker);
         restTimePicker = findViewById(R.id.restTimeNumberPicker);
         repsPicker = findViewById(R.id.repsNumberPicker);
         recoverPicker = findViewById(R.id.recoverTimeNumberPicker);
         setsPicker = findViewById(R.id.setsNumberPicker);
 
-        title = findViewById(R.id.titleEditText);
-        description = findViewById(R.id.descriptionEditText);
+        // TODO - do I need to move this to SaveWorkout dialog class???
+//        int color = getResources().getColor(R.color.Charcoal, getTheme());
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+//            saveWorkoutView.getBackground().setColorFilter(new BlendModeColorFilter(R.color.Charcoal, BlendMode.DST_OVER));
+//        } else {
+//            saveWorkoutView.getBackground().setColorFilter(color, PorterDuff.Mode.DST_OVER);
+//        }
+
     }
 
     /**
@@ -59,7 +78,7 @@ public class ActivityWorkoutCreator extends AppCompatActivity {
             return true;
         } catch(NumberFormatException e){
             // At least one of the values is not parsable. Inform the user
-            Snackbar.make(findViewById(R.id.root_new_basic_workout), R.string.invalid_numbers, Snackbar.LENGTH_SHORT).show();
+            Snackbar.make(rootView, R.string.invalid_numbers, Snackbar.LENGTH_SHORT).show();
 
             return false;
         }
@@ -83,6 +102,23 @@ public class ActivityWorkoutCreator extends AppCompatActivity {
         if(!assignValues()){
             return;
         }
+
+        new SaveWorkoutDialog(this, workout, workoutSaved).show();
+
+        // TODO - load title and description from workout object into the fields.
+        // TODO - If the workout has been saved previously, add a toggle for overwriting existing workout
+
+        // TODO - improve the saveWorkoutView layout
+//        saveWorkoutView.setVisibility(View.VISIBLE);
+//        workoutName.setFocusableInTouchMode(true);
+//        workoutDescription.setFocusableInTouchMode(true);
+//        workoutName.requestFocus();
+//        rootView.setFocusable(false);
+//        rootView.setFocusableInTouchMode(false);
+//        rootView.setAlpha(0.4f);
+//        saveWorkoutView.setAlpha(1f);
+
+
 
         /*
         final LinearLayout workoutExtraInfoScreen = findViewById(R.id.overlayScreen);
@@ -126,6 +162,25 @@ public class ActivityWorkoutCreator extends AppCompatActivity {
                 workoutScreen.setVisibility(View.VISIBLE);
             }
         });*/
-        assignValues();
     }
+
+    // TODO - tidy this up
+/*    private void hideSaveScreen(){
+        rootView.setFocusable(true);
+        rootView.setFocusableInTouchMode(true);
+        rootView.setAlpha(1f);
+        //reset the entered values and hide the view
+        workoutName.setText("");
+        workoutDescription.setText("");
+        saveWorkoutView.setVisibility(View.GONE);
+        rootView.requestFocus();
+    }*/
+
+/*    @Override
+    public void onBackPressed() {
+        if(saveWorkoutView.getVisibility() == View.VISIBLE)
+            hideSaveScreen();
+        else
+            super.onBackPressed();
+    }*/
 }

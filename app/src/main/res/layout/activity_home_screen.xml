@@ -18,14 +18,14 @@
         android:src="@drawable/bg_female" />
 
     <Button
-        android:textSize="20sp"
         android:id="@+id/newBasicWorkout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
-        android:onClick="newBasicWorkout"
         android:layout_marginTop="50dp"
-        android:text="Create New Workout" />
+        android:onClick="newBasicWorkout"
+        android:text="Create New Workout"
+        android:textSize="20sp" />
 
     <Button
         android:textSize="20sp"

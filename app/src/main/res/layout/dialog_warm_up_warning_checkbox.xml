@@ -11,7 +11,9 @@
         android:id="@+id/checkbox"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Do not show this warning again" >
+        android:buttonTint="@android:color/white"
+        android:text="Do not show this warning again"
+        android:textColor="@android:color/white">
     </CheckBox>
 
 </LinearLayout>

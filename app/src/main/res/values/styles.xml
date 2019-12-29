@@ -1,5 +1,7 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
 
+    <!-- TODO remove redundant code and clean up code to use styles where applicable -->
+
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
         <item name="android:windowActionBarOverlay">true</item>
@@ -11,15 +13,29 @@
         <item name="editTextStyle">@style/AppEditTextTheme</item>
     </style>
 
+    <style name="CustomDialogTheme" parent="Theme.AppCompat.Light.Dialog.Alert">
+        <!--buttons color-->
+        <item name="colorAccent">@android:color/white</item>
+        <!--title and message color-->
+        <item name="android:textColorPrimary">@android:color/white</item>
+        <!--dialog background-->
+        <item name="android:windowBackground">@drawable/rounded_background</item>
+    </style>
+
     <style name="AppButtonTheme" parent="@style/AppTheme" >
         <item name="android:padding">8dp</item>
         <item name="android:background">@drawable/rounded_background</item>
         <item name="android:textSize">20sp</item>
+        <item name="android:gravity">center</item>
     </style>
 
     <style name="AppEditTextTheme" parent="@style/AppTheme">
+        <item name="android:textColorSecondary">@color/Blue</item>
         <item name="android:textColorHint">@color/NavajoWhite</item>
         <item name="android:autofillHints" tools:targetApi="o">no</item>
+        <item name="android:background">@android:color/transparent</item>
+        <item name="android:textSize">18sp</item>
+        <item name="android:gravity">center</item>
     </style>
 
     <style name="screenTitles" parent="AppTheme">

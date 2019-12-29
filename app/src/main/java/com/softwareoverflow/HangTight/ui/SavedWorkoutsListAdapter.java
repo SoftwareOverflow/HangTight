@@ -1,11 +1,11 @@
 package com.softwareoverflow.HangTight.ui;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -17,29 +17,41 @@ import androidx.transition.ChangeTransform;
 import androidx.transition.TransitionManager;
 import androidx.transition.TransitionSet;
 
+import com.google.android.material.snackbar.Snackbar;
 import com.softwareoverflow.HangTight.ActivityWorkout;
+import com.softwareoverflow.HangTight.ActivityWorkoutCreator;
 import com.softwareoverflow.HangTight.R;
 import com.softwareoverflow.HangTight.helper.StringHelper;
+import com.softwareoverflow.HangTight.ui.dialog.ConfirmationDialog;
+import com.softwareoverflow.HangTight.ui.dialog.WarmUpWarningDialog;
+import com.softwareoverflow.HangTight.database.MyDBHandler;
 import com.softwareoverflow.HangTight.workout.Workout;
 
 import java.util.List;
 
 public class SavedWorkoutsListAdapter extends RecyclerView.Adapter<SavedWorkoutsListAdapter.ViewHolder> {
 
+    private MyDBHandler dbHandler;
     private RecyclerView recyclerView;
     private List<Workout> workouts;
     private int expandedPosition = -1;
 
     private TransitionSet transitions;
 
-    public SavedWorkoutsListAdapter(List<Workout> workouts) {
+    public SavedWorkoutsListAdapter(MyDBHandler dbHandler) {
         super();
 
-        this.workouts = workouts;
+        this.workouts = dbHandler.loadAllWorkouts();
+        this.dbHandler = dbHandler;
 
         transitions = new TransitionSet();
-        transitions.addTransition(new ChangeTransform()); // For the button rotation
-        transitions.addTransition(new AutoTransition()); // For the expanded view visibility
+        transitions.addTransition(new ChangeTransform()); // Button rotation
+        transitions.addTransition(new AutoTransition()); // Expanded view visibility
+    }
+
+    public void updateDataSet(){
+        this.workouts = dbHandler.loadAllWorkouts();
+        notifyDataSetChanged();
     }
 
     @Override
@@ -73,9 +85,15 @@ public class SavedWorkoutsListAdapter extends RecyclerView.Adapter<SavedWorkouts
         holder.itemView.setElevation( isExpanded ? 25 : 10);
 
         holder.itemView.setOnClickListener((v) -> {
+            int oldExpandedPosition = expandedPosition;
             expandedPosition = isExpanded ? -1 : position;
             TransitionManager.beginDelayedTransition(recyclerView, transitions);
-            notifyDataSetChanged();
+
+            // IF no item expanded, oldExpandedPosition = -1 and NewExpandedPos -> end needs updating
+            // IF item expanded, either newly expanded or currently expanded -> end needs updating
+
+            int startItem = oldExpandedPosition == -1 ? expandedPosition : Math.min(oldExpandedPosition, expandedPosition);
+            notifyItemRangeChanged(startItem, getItemCount() - startItem);
         });
     }
 
@@ -88,10 +106,8 @@ public class SavedWorkoutsListAdapter extends RecyclerView.Adapter<SavedWorkouts
 
         View itemView;
         TextView workoutNameTV, workoutDurationTV, workoutDescriptionTV;
-        ImageButton deleteWorkoutButton, editWorkoutButton, startWorkoutButton;
+        ConstraintLayout deleteWorkoutButton, editWorkoutButton, startWorkoutButton, expandedView;
         ImageView extendViewIcon;
-
-        ConstraintLayout expandedView;
 
 
         ViewHolder(@NonNull View itemView) {
@@ -116,23 +132,30 @@ public class SavedWorkoutsListAdapter extends RecyclerView.Adapter<SavedWorkouts
             extendViewIcon = itemView.findViewById(R.id.row_savedWorkout_expandIcon);
         }
 
-
         @Override
         public void onClick(View v) {
             switch(v.getId()){
                 case R.id.row_savedWorkout_delete:
-                        // TODO - show 'Are you sure?' message
+                    new ConfirmationDialog(v.getContext(), "delete", workouts.get(getAdapterPosition()).getWorkoutName(), (DialogInterface dialog, Integer which) -> {
+                        if (dbHandler.deleteWorkout(getAdapterPosition())) Snackbar.make(recyclerView, "Workout Deleted", Snackbar.LENGTH_SHORT).show();
+                        else Snackbar.make(recyclerView, "Problem Deleting ActivityWorkout.\nPlease try again later", Snackbar.LENGTH_SHORT).show();
+
+                        workouts.remove(getAdapterPosition());
+                        notifyItemRemoved(getAdapterPosition());
+                    }).show();
                     break;
                 case R.id.row_savedWorkout_edit:
-                        // TODO - Send user back to ActivityWorkoutCreator with extra flag on intent? Or add flag to Workout class for if it is saved or not?
-                    break;
+                     // TODO - Send user back to ActivityWorkoutCreator with extra flag on intent? Or add flag to Workout class for if it is saved or not?
 
+                     Intent editWorkoutIntent = new Intent(v.getContext(), ActivityWorkoutCreator.class);
+                     editWorkoutIntent.putExtra("workout", workouts.get(getAdapterPosition()));
+                     v.getContext().startActivity(editWorkoutIntent);
+                    break;
                 case R.id.row_savedWorkout_start:
                     Intent i = new Intent(v.getContext(), ActivityWorkout.class);
                     i.putExtra("workout", workouts.get(getAdapterPosition()));
-                    v.getContext().startActivity(i);
+                    new WarmUpWarningDialog(v.getContext(), i).show(); // Creates and shows the warm up warning (if required)
                     break;
-
             }
         }
     }
