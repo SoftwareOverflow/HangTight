@@ -3,7 +3,6 @@
     android:id="@+id/activity_workout_root_view"
     android:layout_width="wrap_content"
     android:layout_height="match_parent"
-    android:background="@color/DarkSlateGray"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
@@ -21,7 +20,6 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
-            android:layout_alignParentLeft="true"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="10dp"
             android:layout_marginBottom="5dp"
@@ -31,21 +29,19 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="fill_parent"
-                android:layout_marginLeft="15dp"
+                android:layout_marginStart="16dp"
                 android:gravity="center"
                 android:text="SET: "
                 android:textAllCaps="true"
-                android:textColor="@color/CornflowerBlue"
                 android:textSize="15sp" />
 
             <TextView
                 android:id="@+id/setCounterTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="left|center"
+                android:layout_gravity="start|center"
                 android:gravity="center"
                 android:text="1/6"
-                android:textColor="@color/CornflowerBlue"
                 android:textSize="25sp" />
 
             <TextView
@@ -59,18 +55,16 @@
                 android:gravity="center"
                 android:text="REP: "
                 android:textAllCaps="true"
-                android:textColor="@color/CornflowerBlue"
                 android:textSize="15sp" />
 
             <TextView
                 android:id="@+id/repsCounterTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="right|center"
-                android:layout_marginRight="15dp"
+                android:layout_gravity="end|center"
+                android:layout_marginEnd="16dp"
                 android:gravity="center"
                 android:text="1/6"
-                android:textColor="@color/CornflowerBlue"
                 android:textSize="25sp" />
 
         </LinearLayout>
@@ -79,7 +73,7 @@
             android:layout_width="fill_parent"
             android:layout_height="2dp"
             android:layout_below="@id/linearLayout"
-            android:background="@color/LightSlateGray" />
+            android:background="@android:color/white" />
 
 
         <TextView
@@ -122,23 +116,21 @@
 
             <ImageButton
                 android:id="@+id/muteButton"
-                style="@style/SettingButtons"
+                style="@style/WorkoutControlButtons"
                 android:onClick="toggleMute"
                 android:src="@drawable/unmuted" />
 
             <ImageButton
                 android:id="@+id/pauseButton"
-                style="@style/SettingButtons"
+                style="@style/WorkoutControlButtons"
                 android:onClick="togglePause"
                 android:src="@drawable/pause" />
 
             <ImageButton
                 android:id="@+id/skipButton"
-                style="@style/SettingButtons"
+                style="@style/WorkoutControlButtons"
                 android:onClick="skip"
                 android:src="@drawable/skip" />
-
-
         </LinearLayout>
 
         <View
@@ -147,7 +139,7 @@
             android:layout_height="2dp"
             android:layout_above="@id/linearLayout3"
             android:layout_margin="5dp"
-            android:background="@color/LightSlateGray" />
+            android:background="@android:color/white" />
 
         <LinearLayout
             android:id="@+id/linearLayout2"
@@ -162,11 +154,10 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="fill_parent"
-                android:layout_marginLeft="15dp"
+                android:layout_marginStart="16dp"
                 android:gravity="center"
                 android:text="REMAINING: "
                 android:textAllCaps="true"
-                android:textColor="@color/CornflowerBlue"
                 android:textSize="15sp" />
 
             <TextView
@@ -174,7 +165,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="00:00"
-                android:textColor="@color/CornflowerBlue"
                 android:textSize="25sp" />
 
             <TextView
@@ -182,22 +172,19 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1" />
 
-
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="fill_parent"
                 android:gravity="center"
                 android:text="TOTAL: "
-                android:textColor="@color/CornflowerBlue"
                 android:textSize="15sp" />
 
             <TextView
                 android:id="@+id/totalTimeTV"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginRight="15dp"
+                android:layout_marginEnd="16dp"
                 android:text="00:00"
-                android:textColor="@color/CornflowerBlue"
                 android:textSize="25sp" />
 
         </LinearLayout>
@@ -208,40 +195,7 @@
             android:layout_height="2dp"
             android:layout_above="@id/linearLayout2"
             android:layout_margin="5dp"
-            android:background="@color/LightSlateGray" />
-    </RelativeLayout>
-
-    <RelativeLayout
-        android:id="@+id/endWorkoutLayout"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:visibility="gone">
-
-        <TextView
-
-            android:id="@+id/endWorkoutTV"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="126dp"
-            android:gravity="center_horizontal"
-            android:text="Workout Complete!\n\nGood Job"
-            android:textSize="30sp" />
-
-
-        <Button
-            android:id="@+id/homeButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_centerHorizontal="true"
-            android:layout_marginBottom="24dp"
-            android:background="@color/LightSlateGray"
-            android:padding="10dp"
-            android:text="RETURN HOME"
-            android:textColor="@color/NavajoWhite" />
-
+            android:background="@android:color/white" />
 
     </RelativeLayout>
 

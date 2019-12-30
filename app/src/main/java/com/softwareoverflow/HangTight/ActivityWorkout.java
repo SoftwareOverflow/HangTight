@@ -140,13 +140,13 @@ public class ActivityWorkout extends AppCompatActivity implements IWorkoutTimerO
 
     @Override
     public void onRestStart() {
-        updateWorkoutUI(R.color.DarkOrange, WorkoutSection.REST.getNameResourceId(),
+        updateWorkoutUI(R.color.Orange, WorkoutSection.REST.getNameResourceId(),
                 workout.getRestTime(), false);
     }
 
     @Override
     public void onRecoverStart() {
-        updateWorkoutUI(R.color.DarkOrange, WorkoutSection.RECOVER.getNameResourceId(),
+        updateWorkoutUI(R.color.Orange, WorkoutSection.RECOVER.getNameResourceId(),
                 workout.getRecoverTime(), false);
     }
 

@@ -46,7 +46,20 @@
 
     <string name="invalid_numbers">Unable to create Workout. Please ensure you have entered valid values.</string>
 
+    <!-- Shared Preferences -->
+    <!-- TODO -->
 
+    <!-- Dialog text -->
+    <string name="cancel">Cancel</string>
+    <string name="dialog_warm_up_title">Have You Warmed Up?</string>
+    <string name="dialog_warm_up_message">Ensure you are thoroughly warmed up before beginning
+        any workout. Failure to do so could result in injury.\n\n
+        If you feel any pain during the workout, stop immediately.
+    </string>
+    <string name="dialog_warm_up_start_workout">Start Workout</string>
+
+
+    <!-- Sound options -->
     <string-array name="spinner_sound_options">
         <item>None</item>
         <item>Beep</item>
@@ -56,6 +69,8 @@
         <item>Ring</item>
     </string-array>
 
+    <!-- Background options -->
+    <!-- TODO - this will become unused when the background is changed to both images (from top and bottom, reaching for the buttons) -->
     <string-array name="spinner_background_options">
         <item>Male</item>
         <item>Female</item>

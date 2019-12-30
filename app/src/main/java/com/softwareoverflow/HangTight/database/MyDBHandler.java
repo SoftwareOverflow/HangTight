@@ -99,10 +99,10 @@ public class MyDBHandler extends SQLiteOpenHelper {
         else {
             new AlertDialog.Builder(context, R.style.CustomDialogTheme)
                     .setTitle("Duplicate Found!")
-                    .setMessage("A workout with the same title has been found in the saved workouts.\nSave anyway?")
+                    .setMessage("A workout with the same name has been found in the saved workouts.\nSave anyway?")
                     .setPositiveButton("Save anyway", (dialog, which) ->
                             addWorkout(workout, true, overwriteExisting, delayedResultConsumer))
-                    .setNegativeButton("Cancel", ((dialog, which) -> delayedResultConsumer.accept(false)))
+                    .setNegativeButton(R.string.cancel, ((dialog, which) -> delayedResultConsumer.accept(false)))
                     .setIcon(android.R.drawable.ic_dialog_alert)
                     .show();
         }
@@ -127,7 +127,9 @@ public class MyDBHandler extends SQLiteOpenHelper {
         if (overwriteExisting) {
             db.update(TABLE_WORKOUTS, values, COLUMN_ID + " = ?", new String[]{String.valueOf(workout.getId())});
         } else {
-            db.insert(TABLE_WORKOUTS, null, values);
+            int id = (int) db.insert(TABLE_WORKOUTS, null, values);
+            if(id != -1)
+                workout.setId(id);
         }
         db.close();
 

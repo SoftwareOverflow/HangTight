@@ -43,18 +43,16 @@ public class WarmUpWarningDialog extends AlertDialog {
         dialog_warm_up_warning_checkbox.setSelected(!showWarning);
         dialog_warm_up_warning_checkbox.setOnClickListener(v -> showWarning = v.isSelected());
 
-        setTitle("Have You Warmed Up?");
+        setTitle(getContext().getString(R.string.dialog_warm_up_title));
         setIcon(android.R.drawable.ic_dialog_alert);
-        setMessage("Ensure you are thoroughly warmed up before beginning any" +
-                " workout. Failure to do so could result in injury.\n\nIf you feel" +
-                " any pain during the workout, discontinue immediately.");
+        setMessage(getContext().getString(R.string.dialog_warm_up_message));
         setView(view);
 
-        setButton(BUTTON_POSITIVE, "Start Workout", (DialogInterface dialog, int which) -> {
+        setButton(BUTTON_POSITIVE, getContext().getString(R.string.dialog_warm_up_start_workout), (DialogInterface dialog, int which) -> {
                     settings.edit().putBoolean("showWarmUp", showWarning).apply();
                     context.startActivity(intent);
                 }
         );
-        setButton(BUTTON_NEGATIVE, "Cancel", (dialog, which) -> dialog.cancel());
+        setButton(BUTTON_NEGATIVE, getContext().getString(R.string.cancel), (dialog, which) -> dialog.cancel());
     }
 }

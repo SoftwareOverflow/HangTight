@@ -3,7 +3,14 @@ package com.softwareoverflow.HangTight.ui.dialog;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
+import android.graphics.BlendMode;
+import android.graphics.BlendModeColorFilter;
 import android.graphics.Color;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.GradientDrawable;
+import android.graphics.drawable.LayerDrawable;
+import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +21,8 @@ import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.Switch;
 import android.widget.TextView;
+
+import androidx.core.content.ContextCompat;
 
 import com.google.android.material.snackbar.Snackbar;
 import com.softwareoverflow.HangTight.R;
@@ -36,7 +45,7 @@ public class SaveWorkoutDialog extends AlertDialog
     private TextView saveFailedWarning, saveNew, overwriteExisting;
     private Switch saveTypeSwitch;
 
-    public SaveWorkoutDialog(Context context, Workout workout, boolean isAlreadySaved) {
+    public SaveWorkoutDialog(Context context, Workout workout) {
         super(context, R.style.CustomDialogTheme);
 
         this.context = context;
@@ -50,12 +59,12 @@ public class SaveWorkoutDialog extends AlertDialog
         View view = LayoutInflater.from(context).inflate(R.layout.dialog_save_workout, rootView, false);
 
         ViewGroup saveTypeLayout = view.findViewById(R.id.save_workout_save_type_layout);
-        if(!isAlreadySaved)
+        if(workout.getId() == null) // The workout has not been saved before
             saveTypeLayout.setVisibility(View.GONE);
 
         // TODO - change @+id/ to @id/ where required (almost everywhere :/ )
 
-        setButton(BUTTON_NEGATIVE, "Cancel", (dialog, which) -> dialog.cancel());
+        setButton(BUTTON_NEGATIVE, getContext().getString(R.string.cancel), (dialog, which) -> dialog.cancel());
         // null listener - added onShow to allow validation without closing the dialog
         setButton(BUTTON_POSITIVE, "Save Workout", (OnClickListener) null);
 
@@ -77,7 +86,7 @@ public class SaveWorkoutDialog extends AlertDialog
             overwriteExisting = ((AlertDialog) dialog).findViewById(R.id.save_workout_overwrite_existing);
             saveNew = ((AlertDialog) dialog).findViewById(R.id.save_workout_save_new);
 
-            if(isAlreadySaved) {
+            if(workout.getId() != null) { // The workout has been saved before
                 saveTypeSwitch = ((AlertDialog) dialog).findViewById(R.id.save_workout_save_type_switch);
                 saveTypeSwitch.setOnCheckedChangeListener(SaveWorkoutDialog.this);
                 saveTypeSwitch.setEnabled(true);
@@ -106,7 +115,8 @@ public class SaveWorkoutDialog extends AlertDialog
 
         if(workoutName.equals("")){
             saveFailedWarning.setVisibility(View.INVISIBLE);
-            etWorkoutName.setHintTextColor(Color.RED);
+            int color = v.getContext().getResources().getColor(R.color.Red, v.getContext().getTheme());
+            setNameBackgroundColor(color);
             return;
         }
 
@@ -116,7 +126,8 @@ public class SaveWorkoutDialog extends AlertDialog
         workout.setWorkoutDescription(workoutDescription);
 
         MyDBHandler dbHandler = new MyDBHandler(context, null);
-        dbHandler.addWorkout(workout, false, saveTypeSwitch.isChecked(), this::handleResult);
+        boolean overwriteExisting = saveTypeSwitch != null && saveTypeSwitch.isChecked();
+        dbHandler.addWorkout(workout, false, overwriteExisting, this::handleResult);
     }
 
     private void handleResult(boolean success){
@@ -127,8 +138,16 @@ public class SaveWorkoutDialog extends AlertDialog
 
             Snackbar.make(rootView, "Workout saved!", Snackbar.LENGTH_SHORT).show();
         } else {
-            etWorkoutName.setHintTextColor(Color.WHITE);
+            int color = getContext().getResources().getColor(R.color.Blue, getContext().getTheme());
+            setNameBackgroundColor(color);
             saveFailedWarning.setVisibility(View.VISIBLE);
         }
+    }
+
+    private void setNameBackgroundColor(int color) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q)
+            etWorkoutName.getBackground().setColorFilter(new BlendModeColorFilter(R.color.Charcoal, BlendMode.SRC_ATOP));
+        else
+            etWorkoutName.getBackground().setColorFilter(color, PorterDuff.Mode.SRC_ATOP);
     }
 }

@@ -17,7 +17,6 @@ public class ActivityWorkoutCreator extends AppCompatActivity {
     private View rootView;
     private NumberPickerPlusMinus hangTimePicker, restTimePicker, repsPicker, setsPicker, recoverPicker;
     private Workout workout = new Workout();
-    private boolean workoutSaved = false; // TODO - might need to move this, as we need to know after the workout to offer the option to save
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,8 +29,6 @@ public class ActivityWorkoutCreator extends AppCompatActivity {
         Bundle data = getIntent().getExtras();
         if (data != null) {
             workout = data.getParcelable("workout");
-            workoutSaved = true;
-
             loadWorkoutValues();
         }
     }
@@ -52,15 +49,6 @@ public class ActivityWorkoutCreator extends AppCompatActivity {
         repsPicker = findViewById(R.id.repsNumberPicker);
         recoverPicker = findViewById(R.id.recoverTimeNumberPicker);
         setsPicker = findViewById(R.id.setsNumberPicker);
-
-        // TODO - do I need to move this to SaveWorkout dialog class???
-//        int color = getResources().getColor(R.color.Charcoal, getTheme());
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-//            saveWorkoutView.getBackground().setColorFilter(new BlendModeColorFilter(R.color.Charcoal, BlendMode.DST_OVER));
-//        } else {
-//            saveWorkoutView.getBackground().setColorFilter(color, PorterDuff.Mode.DST_OVER);
-//        }
-
     }
 
     /**
@@ -92,95 +80,16 @@ public class ActivityWorkoutCreator extends AppCompatActivity {
 
         final Intent i = new Intent(ActivityWorkoutCreator.this, ActivityWorkout.class);
         i.putExtra("workout", workout);
-        i.putExtra("workoutSaved", workoutSaved);
 
         new WarmUpWarningDialog(this, i).show(); // Creates and shows the warm up warning (if required)
     }
 
-    public void saveWorkout(View v){
+    public void saveWorkout(View v) {
         // Stop if we can't assign the values correctly
-        if(!assignValues()){
+        if (!assignValues()) {
             return;
         }
 
-        new SaveWorkoutDialog(this, workout, workoutSaved).show();
-
-        // TODO - load title and description from workout object into the fields.
-        // TODO - If the workout has been saved previously, add a toggle for overwriting existing workout
-
-        // TODO - improve the saveWorkoutView layout
-//        saveWorkoutView.setVisibility(View.VISIBLE);
-//        workoutName.setFocusableInTouchMode(true);
-//        workoutDescription.setFocusableInTouchMode(true);
-//        workoutName.requestFocus();
-//        rootView.setFocusable(false);
-//        rootView.setFocusableInTouchMode(false);
-//        rootView.setAlpha(0.4f);
-//        saveWorkoutView.setAlpha(1f);
-
-
-
-        /*
-        final LinearLayout workoutExtraInfoScreen = findViewById(R.id.overlayScreen);
-        final LinearLayout workoutScreen = findViewById(R.id.basicMainScreen);
-
-        workoutScreen.setVisibility(View.GONE);
-        workoutExtraInfoScreen.setVisibility(View.VISIBLE);
-
-        findViewById(R.id.saveButton).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                workoutSaved = true;
-
-                assignValues();
-
-                String titleString = title.getText().toString();
-                String descriptionString = description.getText().toString();
-
-
-                if (titleString.matches("") || descriptionString.matches("")) Toast.makeText(getApplicationContext(), "Please enter a title and a description", Toast.LENGTH_SHORT).show();
-                else if (titleString.contains("|") || descriptionString.contains("|")){
-                    Toast.makeText(getApplicationContext(), "Title and Description cannot contain the pipe character '|'", Toast.LENGTH_SHORT).show();
-                }
-                else{
-                    MyDBHandler dbHandler = new MyDBHandler(ActivityWorkoutCreator.this, null);
-
-                    workout.setWorkoutName(titleString);
-                    workout.setWorkoutDescription(descriptionString);
-
-                    if (dbHandler.addWorkout(workout, false)) Toast.makeText(getApplicationContext(), "ActivityWorkout Saved!", Toast.LENGTH_SHORT).show();
-                    workoutExtraInfoScreen.setVisibility(View.GONE);
-                    workoutScreen.setVisibility(View.VISIBLE);
-                }
-            }
-        });
-
-        findViewById(R.id.cancelButton).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                workoutExtraInfoScreen.setVisibility(View.GONE);
-                workoutScreen.setVisibility(View.VISIBLE);
-            }
-        });*/
+        new SaveWorkoutDialog(this, workout).show();
     }
-
-    // TODO - tidy this up
-/*    private void hideSaveScreen(){
-        rootView.setFocusable(true);
-        rootView.setFocusableInTouchMode(true);
-        rootView.setAlpha(1f);
-        //reset the entered values and hide the view
-        workoutName.setText("");
-        workoutDescription.setText("");
-        saveWorkoutView.setVisibility(View.GONE);
-        rootView.requestFocus();
-    }*/
-
-/*    @Override
-    public void onBackPressed() {
-        if(saveWorkoutView.getVisibility() == View.VISIBLE)
-            hideSaveScreen();
-        else
-            super.onBackPressed();
-    }*/
 }
