@@ -6,4 +6,7 @@
         <attr name="np_maxValue" format="integer" />
     </declare-styleable>
 
+    <declare-styleable name="CustomBannerAd">
+        <attr name="cba_adUnitId" format="string" />
+    </declare-styleable>
 </resources>

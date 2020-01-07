@@ -15,7 +15,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
-        android:text="Example Workout 1 - with a really long name"
         android:textSize="20sp"
         app:layout_constrainedWidth="true"
         app:layout_constraintBottom_toTopOf="@+id/row_savedWorkout_expandedView"
@@ -30,7 +29,6 @@
         android:layout_height="fill_parent"
         android:layout_gravity="center"
         android:layout_marginEnd="8dp"
-        android:text="16:15"
         android:textColor="@color/NavajoWhite"
         android:textSize="20sp"
         android:textStyle="italic"
@@ -47,7 +45,8 @@
         app:layout_constraintDimensionRatio="W,1:1"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/row_savedWorkout_duration"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintVertical_bias="0.0"
+        android:contentDescription="@string/expand_workout" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/row_savedWorkout_expandedView"
@@ -65,7 +64,6 @@
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
-            android:text="This an example description for a workout. It should be shown to be correctly formatted inside of the text area... Also, use the jugs, then the crimps you maniac"
             android:textSize="16sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -73,12 +71,12 @@
 
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:focusable="true"
-            android:clickable="true"
             android:id="@+id/row_savedWorkout_delete"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="32dp"
+            android:clickable="true"
+            android:focusable="true"
             android:padding="8dp"
             app:layout_constraintEnd_toStartOf="@+id/row_savedWorkout_edit"
             app:layout_constraintHorizontal_bias="0.5"
@@ -92,19 +90,22 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:background="@android:drawable/ic_menu_delete"
+                android:clickable="false"
                 android:duplicateParentState="true"
+                android:focusable="false"
                 android:padding="16dp"
                 app:layout_constraintBottom_toTopOf="@+id/row_savedWorkout_delete_label"
                 app:layout_constraintEnd_toEndOf="@+id/row_savedWorkout_delete_label"
                 app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toStartOf="@+id/row_savedWorkout_delete_label" />
+                app:layout_constraintStart_toStartOf="@+id/row_savedWorkout_delete_label"
+                android:contentDescription="@string/delete_workout" />
 
             <TextView
                 android:id="@+id/row_savedWorkout_delete_label"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:duplicateParentState="true"
-                android:text="Delete"
+                android:text="@string/delete"
                 android:textSize="14sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -113,11 +114,11 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:focusable="true"
-            android:clickable="true"
             android:id="@+id/row_savedWorkout_edit"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:clickable="true"
+            android:focusable="true"
             android:padding="8dp"
             app:layout_constraintEnd_toStartOf="@+id/row_savedWorkout_start"
             app:layout_constraintHorizontal_bias="0.5"
@@ -130,19 +131,22 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:background="@android:drawable/ic_menu_edit"
+                android:clickable="false"
                 android:duplicateParentState="true"
+                android:focusable="false"
                 android:padding="16dp"
                 app:layout_constraintBottom_toTopOf="@+id/row_savedWorkout_edit_label"
                 app:layout_constraintEnd_toEndOf="@+id/row_savedWorkout_edit_label"
                 app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toStartOf="@+id/row_savedWorkout_edit_label" />
+                app:layout_constraintStart_toStartOf="@+id/row_savedWorkout_edit_label"
+                android:contentDescription="@string/edit_workout" />
 
             <TextView
                 android:id="@+id/row_savedWorkout_edit_label"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:duplicateParentState="true"
-                android:text="Edit"
+                android:text="@string/edit"
                 android:textSize="14sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -151,12 +155,12 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:focusable="true"
-            android:clickable="true"
             android:id="@+id/row_savedWorkout_start"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="32dp"
+            android:clickable="true"
+            android:focusable="true"
             android:padding="8dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
@@ -169,12 +173,15 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:background="@android:drawable/ic_media_play"
+                android:clickable="false"
                 android:duplicateParentState="true"
+                android:focusable="false"
                 android:padding="16dp"
                 app:layout_constraintBottom_toTopOf="@+id/row_savedWorkout_start_label"
                 app:layout_constraintEnd_toEndOf="@+id/row_savedWorkout_start_label"
                 app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toStartOf="@+id/row_savedWorkout_start_label" />
+                app:layout_constraintStart_toStartOf="@+id/row_savedWorkout_start_label"
+                android:contentDescription="@string/start_workout" />
 
             <TextView
                 android:id="@+id/row_savedWorkout_start_label"
@@ -182,7 +189,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="8dp"
                 android:duplicateParentState="true"
-                android:text="Start"
+                android:text="@string/start"
                 android:textSize="14sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"

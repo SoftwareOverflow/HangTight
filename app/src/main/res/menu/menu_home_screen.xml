@@ -6,7 +6,7 @@
     <item
         android:id="@+id/action_bar_help"
         android:orderInCategory="1"
-        android:title="Help"
+        android:title="@string/help"
         app:showAsAction="ifRoom"
         android:icon="@drawable/help_button"/>
     <item

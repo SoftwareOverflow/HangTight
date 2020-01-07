@@ -11,8 +11,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
-        android:text="Recover"
+        android:text="@string/timer_recover"
         android:textColor="@color/NavajoWhite"
         android:textSize="25sp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -24,12 +23,11 @@
         android:id="@+id/minusButton"
         android:layout_width="0dp"
         android:layout_height="match_parent"
-        android:background="@android:color/transparent"
-        android:padding="8dp"
-        android:layout_marginRight="8dp"
         android:layout_marginEnd="8dp"
-        android:text="-"
+        android:background="@android:color/transparent"
         android:gravity="center"
+        android:padding="8dp"
+        android:text="@string/negative"
         android:textColor="@color/NavajoWhite"
         android:textSize="28sp"
         android:textStyle="bold"
@@ -45,9 +43,8 @@
         android:gravity="center"
         android:inputType="number"
         android:maxEms="3"
-        android:textIsSelectable="true"
-        android:text="125"
         android:textColor="@color/NavajoWhite"
+        android:textIsSelectable="true"
         android:textSize="25sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/plusButton"
@@ -55,15 +52,14 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
-        android:layout_marginLeft="8dp"
-        android:layout_marginStart="8dp"
         android:id="@+id/plusButton"
         android:layout_width="0dp"
         android:layout_height="match_parent"
+        android:layout_marginStart="8dp"
         android:background="@android:color/transparent"
-        android:padding="8dp"
-        android:text="+"
         android:gravity="center"
+        android:padding="8dp"
+        android:text="@string/positive"
         android:textColor="@color/NavajoWhite"
         android:textSize="28sp"
         android:textStyle="bold"
@@ -78,6 +74,5 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         app:layout_constraintGuide_percent="0.5" />
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>

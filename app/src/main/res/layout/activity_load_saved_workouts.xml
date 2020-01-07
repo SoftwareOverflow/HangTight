@@ -5,11 +5,11 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:padding="16dp"
-    tools:context="com.softwareoverflow.HangTight.ActivityLoadSavedWorkouts">
+    tools:context="com.softwareoverflow.hangtight.ActivityLoadSavedWorkouts">
 
     <TextView
         style="@style/screenTitles"
-        android:text="Saved Workouts" />
+        android:text="@string/saved_workouts" />
 
     <View
         android:layout_width="fill_parent"

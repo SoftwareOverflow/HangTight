@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="Charcoal">#383838</color>
+    <color name="CharcoalDark">#1D1D1D</color>
     <color name="NavajoWhite">#BFFFFFFF</color>
-    <color name="Blue">#2196F3</color>
+    <color name="Blue">#64B5F6</color>
     <color name="Orange">#FFA500</color>
     <color name="Green">#43A047</color>
     <color name="LightGreen">#66BB6A</color>

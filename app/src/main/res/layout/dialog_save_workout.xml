@@ -16,7 +16,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:text="Workout Name:"
+        android:labelFor="@+id/editText_saveWorkout_workoutName"
+        android:text="@string/workout_name_label"
         app:layout_constraintBottom_toBottomOf="@+id/editText_saveWorkout_workoutName"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/editText_saveWorkout_workoutName" />
@@ -29,6 +30,7 @@
         android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="16dp"
+        android:autofillHints="no"
         android:background="@drawable/bg_edit_text"
         android:focusable="true"
         android:focusableInTouchMode="true"
@@ -41,13 +43,15 @@
         app:layout_constraintBottom_toTopOf="@+id/editText_saveWorkout_workoutDescription"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/textView8"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:targetApi="o" />
 
     <TextView
         android:id="@+id/textView7"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Description:"
+        android:labelFor="@id/editText_saveWorkout_workoutDescription"
+        android:text="@string/description_label"
         app:layout_constraintBottom_toBottomOf="@+id/editText_saveWorkout_workoutDescription"
         app:layout_constraintEnd_toEndOf="@+id/textView8"
         app:layout_constraintTop_toTopOf="@+id/editText_saveWorkout_workoutDescription" />
@@ -59,6 +63,7 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
+        android:autofillHints="no"
         android:background="@drawable/bg_edit_text"
         android:focusable="true"
         android:focusableInTouchMode="true"
@@ -70,7 +75,8 @@
         android:paddingRight="4dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/textView7"
-        app:layout_constraintTop_toBottomOf="@id/editText_saveWorkout_workoutName" />
+        app:layout_constraintTop_toBottomOf="@id/editText_saveWorkout_workoutName"
+        tools:targetApi="o" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/save_workout_save_type_layout"
@@ -85,8 +91,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="2dp"
-            android:alpha="0.3"
-            android:text="Save New"
+            android:alpha="0.6"
+            android:text="@string/save_new"
             app:layout_constraintBottom_toBottomOf="@id/save_workout_save_type_switch"
             app:layout_constraintEnd_toStartOf="@id/save_workout_save_type_switch"
             app:layout_constraintHorizontal_bias="0.5"
@@ -111,7 +117,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="2dp"
             android:enabled="false"
-            android:text="Overwrite Existing"
+            android:text="@string/overwrite_existing"
             app:layout_constraintBottom_toBottomOf="@id/save_workout_save_type_switch"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
@@ -126,7 +132,7 @@
         android:layout_height="wrap_content"
         android:background="@android:color/transparent"
         android:gravity="center"
-        android:text="The workout failed to save, please try again"
+        android:text="@string/workout_save_failed"
         android:textColor="@color/Red"
         android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="parent"

@@ -1,7 +1,5 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
 
-    <!-- TODO remove redundant code and clean up code to use styles where applicable -->
-
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
         <item name="android:windowActionBarOverlay">true</item>
@@ -60,5 +58,4 @@
         <item name="android:padding">10dp</item>
     </style>
 
-    
 </resources>
