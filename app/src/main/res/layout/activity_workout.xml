@@ -1,253 +1,219 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="wrap_content"
+    android:id="@+id/activity_workout_root_view"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/DarkSlateGray"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="com.softwareoverflow.HangTight.Workout">
+    android:padding="16dp"
+    tools:context="com.softwareoverflow.hangtight.ActivityWorkout">
 
+    <com.softwareoverflow.hangtight.ui.CustomBannerAd
+        android:id="@+id/admob_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-    <RelativeLayout
+    <TextView
+        android:id="@+id/tv_set_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:gravity="center"
+        android:text="@string/set_label"
+        android:textAllCaps="true"
+        android:textSize="15sp"
+        app:layout_constraintBottom_toBottomOf="@+id/setCounterTextView"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/setCounterTextView" />
+
+    <TextView
+        android:id="@+id/setCounterTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="start|center"
+        android:layout_marginStart="8dp"
+        android:gravity="center"
+        android:textSize="25sp"
+        app:layout_constraintStart_toEndOf="@+id/tv_set_label"
+        app:layout_constraintTop_toBottomOf="@+id/admob_layout" />
+
+    <TextView
+        android:id="@+id/tv_rep_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:gravity="center"
+        android:text="@string/rep_label"
+        android:textAllCaps="true"
+        android:textSize="15sp"
+        app:layout_constraintBottom_toBottomOf="@+id/repsCounterTextView"
+        app:layout_constraintEnd_toStartOf="@+id/repsCounterTextView"
+        app:layout_constraintTop_toTopOf="@+id/repsCounterTextView" />
+
+    <TextView
+        android:id="@+id/repsCounterTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end|center"
+        android:layout_marginEnd="8dp"
+        android:gravity="center"
+        android:textSize="25sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/admob_layout" />
+
+    <View
+        android:id="@+id/view"
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:id="@+id/workoutLayout"
-        >
+        android:layout_height="2dp"
+        android:background="@android:color/white"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/repsCounterTextView" />
 
-        <LinearLayout
-            android:id="@+id/linearLayout"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:layout_centerHorizontal="true"
-            android:layout_marginBottom="5dp"
-            android:layout_marginTop="10dp"
-            android:orientation="horizontal">
+    <TextView
+        android:id="@+id/titleTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="40dp"
+        android:textAllCaps="true"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:textSize="40sp"
+        app:layout_constraintBottom_toTopOf="@+id/progressbar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/view"
+        app:layout_constraintVertical_chainStyle="packed" />
 
+    <ProgressBar
+        android:id="@+id/progressbar"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="100dip"
+        android:layout_height="100dip"
+        android:layout_centerInParent="true"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:indeterminate="false"
+        android:progressDrawable="@drawable/circular_progress_bar"
+        app:layout_constraintBottom_toTopOf="@+id/lineView2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/titleTextView" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="fill_parent"
-                android:layout_marginLeft="15dp"
-                android:gravity="center"
-                android:text="SET: "
-                android:textAllCaps="true"
-                android:textColor="@color/CornflowerBlue"
-                android:textSize="15sp" />
+    <TextView
+        android:id="@+id/timerTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:textSize="25sp"
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="@+id/progressbar"
+        app:layout_constraintEnd_toEndOf="@+id/progressbar"
+        app:layout_constraintStart_toStartOf="@+id/progressbar"
+        app:layout_constraintTop_toTopOf="@+id/progressbar" />
 
-            <TextView
-                android:id="@+id/setCounterTextView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="left|center"
-                android:gravity="center"
-                android:text="1/6"
-                android:textColor="@color/CornflowerBlue"
-                android:textSize="25sp" />
+    <View
+        android:id="@+id/lineView2"
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:layout_margin="5dp"
+        android:background="@android:color/white"
+        app:layout_constraintBottom_toTopOf="@+id/pauseButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1" />
+    <ImageButton
+        android:id="@+id/muteButton"
+        style="@style/WorkoutControlButtons"
+        android:onClick="toggleMute"
+        android:src="@drawable/unmuted"
+        app:layout_constraintBottom_toTopOf="@+id/lineView3"
+        app:layout_constraintEnd_toStartOf="@+id/pauseButton"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/lineView2"
+        android:contentDescription="@string/mute_unmute" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="fill_parent"
-                android:gravity="center"
-                android:text="REP: "
-                android:textAllCaps="true"
-                android:textColor="@color/CornflowerBlue"
-                android:textSize="15sp" />
+    <ImageButton
+        android:id="@+id/pauseButton"
+        style="@style/WorkoutControlButtons"
+        android:layout_marginBottom="5dp"
+        android:onClick="togglePause"
+        android:src="@drawable/pause"
+        app:layout_constraintBottom_toTopOf="@+id/lineView3"
+        app:layout_constraintEnd_toStartOf="@+id/skipButton"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/muteButton"
+        android:contentDescription="@string/pause_resume" />
 
-            <TextView
-                android:id="@+id/repsCounterTextView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="right|center"
-                android:layout_marginRight="15dp"
-                android:gravity="center"
-                android:text="1/6"
-                android:textColor="@color/CornflowerBlue"
-                android:textSize="25sp" />
+    <ImageButton
+        android:id="@+id/skipButton"
+        style="@style/WorkoutControlButtons"
+        android:onClick="skip"
+        android:src="@drawable/skip"
+        app:layout_constraintBottom_toTopOf="@+id/lineView3"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/pauseButton"
+        app:layout_constraintTop_toBottomOf="@+id/lineView2"
+        android:contentDescription="@string/skip_forward" />
 
-        </LinearLayout>
+    <View
+        android:id="@+id/lineView3"
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:layout_margin="5dp"
+        android:background="@android:color/white"
+        app:layout_constraintBottom_toTopOf="@+id/remainingTimeTV"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
-        <View
-            android:layout_width="fill_parent"
-            android:layout_height="2dp"
-            android:layout_below="@id/linearLayout"
-            android:background="@color/LightSlateGray" />
+    <TextView
+        android:id="@+id/textView6"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:gravity="center"
+        android:text="@string/remaining"
+        android:textAllCaps="true"
+        android:textSize="15sp"
+        app:layout_constraintBottom_toBottomOf="@+id/remainingTimeTV"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/remainingTimeTV" />
 
-        <TextView
-            android:id="@+id/titleTextView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_above="@+id/progressbar"
-            android:layout_centerHorizontal="true"
-            android:layout_marginBottom="40dp"
-            android:text="HANG"
-            android:textAllCaps="true"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:textSize="40sp" />
+    <TextView
+        android:id="@+id/remainingTimeTV"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:textSize="25sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/textView6" />
 
+    <TextView
+        android:id="@+id/textView11"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:gravity="center"
+        android:text="@string/total"
+        android:textSize="15sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/totalTimeTV"
+        app:layout_constraintTop_toTopOf="@+id/totalTimeTV" />
 
-        <TextView
-            android:id="@+id/timerTextView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:text="0"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:textColor="@color/WhiteSmoke"
-            android:textSize="25sp" />
+    <TextView
+        android:id="@+id/totalTimeTV"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:textSize="25sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
-        <ProgressBar
-            android:id="@+id/progressbar"
-            style="?android:attr/progressBarStyleHorizontal"
-            android:layout_width="100dip"
-            android:layout_height="100dip"
-            android:layout_centerInParent="true"
-            android:indeterminate="false"
-            android:max="48"
-            android:progress="45"
-            android:progressDrawable="@drawable/circular_progress_bar" />
-
-        <LinearLayout
-            android:id="@+id/linearLayout3"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_above="@+id/lineView3"
-            android:layout_centerHorizontal="true"
-            android:gravity="center"
-            android:orientation="horizontal">
-
-            <ImageButton
-                android:id="@+id/muteButton"
-                style="@style/SettingButtons"
-                android:onClick="setMute"
-                android:src="@drawable/unmuted" />
-
-            <ImageButton
-                android:id="@+id/pauseButton"
-                style="@style/SettingButtons"
-                android:onClick="setPause"
-                android:src="@drawable/pause" />
-
-            <ImageButton
-                android:id="@+id/skipButton"
-                style="@style/SettingButtons"
-                android:onClick="skip"
-                android:src="@drawable/skip" />
-
-
-        </LinearLayout>
-
-        <View
-            android:id="@+id/lineView2"
-            android:layout_width="match_parent"
-            android:layout_height="2dp"
-            android:layout_above="@id/linearLayout3"
-            android:layout_margin="5dp"
-            android:background="@color/LightSlateGray" />
-
-        <LinearLayout
-            android:id="@+id/linearLayout2"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="5dp"
-            android:orientation="horizontal">
-
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="fill_parent"
-                android:layout_marginLeft="15dp"
-                android:gravity="center"
-                android:text="REMAINING: "
-                android:textAllCaps="true"
-                android:textColor="@color/CornflowerBlue"
-                android:textSize="15sp" />
-
-            <TextView
-                android:id="@+id/remainingTimeTV"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="00:00"
-                android:textColor="@color/CornflowerBlue"
-                android:textSize="25sp" />
-
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1" />
-
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="fill_parent"
-                android:gravity="center"
-                android:text="TOTAL: "
-                android:textColor="@color/CornflowerBlue"
-                android:textSize="15sp" />
-
-            <TextView
-                android:id="@+id/totalTimeTV"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="15dp"
-                android:text="00:00"
-                android:textColor="@color/CornflowerBlue"
-                android:textSize="25sp" />
-
-        </LinearLayout>
-
-        <View
-            android:id="@+id/lineView3"
-            android:layout_width="match_parent"
-            android:layout_height="2dp"
-            android:layout_above="@id/linearLayout2"
-            android:layout_margin="5dp"
-            android:background="@color/LightSlateGray" />
-    </RelativeLayout>
-
-    <RelativeLayout
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:id="@+id/endWorkoutLayout"
-        android:visibility="gone">
-
-        <TextView
-
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Workout Complete!\n\nGood Job"
-            android:gravity="center_horizontal"
-            android:textSize="30sp"
-            android:layout_alignParentTop="true"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="126dp"
-            android:id="@+id/endWorkoutTV" />
-
-
-        <Button
-            android:padding="10dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="RETURN HOME"
-            android:id="@+id/homeButton"
-            android:layout_alignParentBottom="true"
-            android:layout_centerHorizontal="true"
-            android:layout_marginBottom="24dp"
-            android:background="@color/LightSlateGray"
-            android:textColor="@color/NavajoWhite"/>
-
-
-
-    </RelativeLayout>
-
-</RelativeLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
