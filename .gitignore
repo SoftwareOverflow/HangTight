@@ -1,6 +1,9 @@
 # Built application files
 /*/build/
 
+# Google services JSON
+app/google-services.json
+
 # Crashlytics configuations
 com_crashlytics_export_strings.xml
 
