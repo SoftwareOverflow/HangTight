@@ -21,7 +21,7 @@ public class ActivitySettings extends AppCompatActivity {
     private SeekBar countdownSeekBar;
     private TextView countdownTextView;
 
-    private int soundIndex; // This is required to prevent onItemSelected firing on initialization
+    private int soundIndex = 0; // This is required to prevent onItemSelected firing on initialization
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
