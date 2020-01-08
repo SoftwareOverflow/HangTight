@@ -19,7 +19,7 @@ public class SharedPreferenceHelper {
 
     private static final Map<String, Integer> soundMap = new LinkedHashMap<String, Integer>() {{
         put("beep", R.raw.beep); put("blooper", R.raw.blooper); put("censor", R.raw.censor);
-        put("ding", R.raw.ding); put("ring", R.raw.ding);
+        put("ding", R.raw.ding); put("ring", R.raw.ring);
     }};
 
     public static Integer getSoundId(String soundName){

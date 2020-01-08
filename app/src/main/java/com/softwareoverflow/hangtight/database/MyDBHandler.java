@@ -111,7 +111,7 @@ public class MyDBHandler extends SQLiteOpenHelper {
     private boolean completeAddingWorkout(SQLiteDatabase db, Workout workout, boolean overwriteExisting) {
 
         int hang = workout.getHangTime(), rest = workout.getRestTime(),
-                reps = workout.getNumReps(), sets = workout.getNumReps(),
+                reps = workout.getNumReps(), sets = workout.getNumSets(),
                 recover = workout.getRecoverTime();
 
         ContentValues values = new ContentValues();

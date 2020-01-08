@@ -199,6 +199,7 @@ public class ActivityWorkout extends AppCompatActivity implements IWorkoutTimerO
     public void onTimerComplete() {
         // There is not rest time on the final rep, so update to max on completion
         updateRep(workout.getNumReps());
+        playSounds();
 
         Intent intent = new Intent(ActivityWorkout.this, ActivityWorkoutComplete.class);
         intent.putExtra("workout", workout);
