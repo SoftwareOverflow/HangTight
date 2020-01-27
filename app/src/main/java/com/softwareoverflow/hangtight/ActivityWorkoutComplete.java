@@ -52,7 +52,7 @@ public class ActivityWorkoutComplete extends AppCompatActivity {
     }
 
     public void upgradeToPro(View v){
-        UpgradeManager.upgrade(this);
+        UpgradeManager.upgrade(this, v);
     }
 
     public void goHome(View v){

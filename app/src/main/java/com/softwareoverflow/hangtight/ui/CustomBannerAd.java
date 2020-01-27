@@ -46,7 +46,7 @@ public class CustomBannerAd extends FrameLayout {
         addView(view);
 
         closeButton = view.findViewById(R.id.admob_banner_close);
-        closeButton.setOnClickListener((v) -> UpgradeManager.upgrade(context));
+        closeButton.setOnClickListener((v) -> UpgradeManager.upgrade(context, v));
 
         bannerAd = view.findViewById(R.id.admob_banner);
         bannerAd.loadAd(new AdRequest.Builder().build());

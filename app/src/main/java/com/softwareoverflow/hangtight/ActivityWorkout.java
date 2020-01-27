@@ -57,16 +57,15 @@ public class ActivityWorkout extends AppCompatActivity implements IWorkoutTimerO
         // Try and load the Workout object first. If it doesn't exist we can't do the activity!
         Bundle data = getIntent().getExtras();
         if (data != null) {
-            workout =  data.getParcelable("workout");
-        }
-        else {
+            workout = data.getParcelable("workout");
+        } else {
             throw new IllegalArgumentException("Unable to load workout. No Workout object passed to activity.");
         }
 
         setupViews();
         loadSharedPrefs();
 
-        if(workout != null) {
+        if (workout != null) {
             String workoutDuration = StringHelper.minuteSecondTimeFormat(workout.getDuration());
             ((TextView) findViewById(R.id.totalTimeTV)).setText(workoutDuration);
             remainingTimeTV.setText(workoutDuration);
@@ -85,14 +84,14 @@ public class ActivityWorkout extends AppCompatActivity implements IWorkoutTimerO
         logToFirebase();
     }
 
-    private void logToFirebase(){
+    private void logToFirebase() {
         FirebaseAnalytics analytics = FirebaseAnalytics.getInstance(this);
         Bundle bundle = new Bundle();
         bundle.putString("workout_duration", StringHelper.minuteSecondTimeFormat(workout.getDuration()));
         analytics.logEvent("workout_started", bundle);
     }
 
-    private void setupViews(){
+    private void setupViews() {
         timeTextView = findViewById(R.id.timerTextView);
         title = findViewById(R.id.titleTextView);
         remainingTimeTV = findViewById(R.id.remainingTimeTV);
@@ -110,11 +109,11 @@ public class ActivityWorkout extends AppCompatActivity implements IWorkoutTimerO
         adView = findViewById(R.id.admob_layout);
     }
 
-    private void loadSharedPrefs(){
+    private void loadSharedPrefs() {
         SharedPreferences settings = this.getSharedPreferences("settings", MODE_PRIVATE);
 
         Integer soundId = SharedPreferenceHelper.getSavedSound(settings);
-        if(soundId != null){
+        if (soundId != null) {
             mediaPlayer = MediaPlayer.create(getApplicationContext(), soundId);
         } else {
             isMuted = true;
@@ -123,7 +122,7 @@ public class ActivityWorkout extends AppCompatActivity implements IWorkoutTimerO
         }
 
         isVibrateOn = settings.getBoolean("vibrate", true);
-        if(isVibrateOn)
+        if (isVibrateOn)
             vibrator = (Vibrator) this.getSystemService(Context.VIBRATOR_SERVICE);
 
         prepTime = settings.getInt("timer", 10);
@@ -132,13 +131,13 @@ public class ActivityWorkout extends AppCompatActivity implements IWorkoutTimerO
     @Override
     public void onTick(long millisUntilFinished, long millisLeftBeforeChange, int tickInterval) {
         WorkoutSection currentSection = timer.getCurrentSection();
-        if(currentSection == WorkoutSection.HANG){
+        if (currentSection == WorkoutSection.HANG) {
             progressBar.setProgress(progressBar.getMax() - (int) millisLeftBeforeChange);
-        } else if (currentSection == WorkoutSection.REST || currentSection == WorkoutSection.RECOVER){
+        } else if (currentSection == WorkoutSection.REST || currentSection == WorkoutSection.RECOVER) {
             progressBar.setProgress((int) millisLeftBeforeChange);
         }
 
-        if(currentSection != WorkoutSection.PREPARE){
+        if (currentSection != WorkoutSection.PREPARE) {
             int secondsRemaining = (int) Math.ceil(millisUntilFinished / 1000.0);
             remainingTimeTV.setText(StringHelper.minuteSecondTimeFormat(secondsRemaining));
         }
@@ -168,7 +167,7 @@ public class ActivityWorkout extends AppCompatActivity implements IWorkoutTimerO
                 workout.getRecoverTime(), false);
     }
 
-    private void updateWorkoutUI(int colorId, int workoutSectionResId, int sectionTime, boolean setProgressToZero){
+    private void updateWorkoutUI(int colorId, int workoutSectionResId, int sectionTime, boolean setProgressToZero) {
         title.setTextColor(getResources().getColor(colorId, getTheme()));
         title.setText(workoutSectionResId);
 
@@ -176,7 +175,7 @@ public class ActivityWorkout extends AppCompatActivity implements IWorkoutTimerO
         playSounds();
     }
 
-    private void setProgress(int numSeconds, boolean setToZero){
+    private void setProgress(int numSeconds, boolean setToZero) {
         progressBar.setMax(numSeconds * 1000);
         progressBar.setProgress(setToZero ? 0 : progressBar.getMax());
     }
@@ -205,11 +204,14 @@ public class ActivityWorkout extends AppCompatActivity implements IWorkoutTimerO
         intent.putExtra("workout", workout);
 
         InterstitialAd ad = MobileAdsHelper.getInterstitialAd();
-        if(!MobileAdsHelper.userHasUpgraded && ad != null && ad.isLoaded()){
-            ad.setAdListener(new AdListener(){
+        if (!MobileAdsHelper.userHasUpgraded && ad != null && ad.isLoaded()) {
+            ad.setAdListener(new AdListener() {
                 @Override
                 public void onAdClosed() {
                     startActivity(intent);
+
+                    // Load the next advert
+                    MobileAdsHelper.loadAd();
                 }
             });
             ad.show();
@@ -218,19 +220,19 @@ public class ActivityWorkout extends AppCompatActivity implements IWorkoutTimerO
         }
     }
 
-    private void updateRep(int repNum){
+    private void updateRep(int repNum) {
         currentRepTV.setText(String.format(Locale.getDefault(), "%d/%d", repNum, workout.getNumReps()));
     }
 
-    private void updateSet(int setNum){
+    private void updateSet(int setNum) {
         currentSetTV.setText(String.format(Locale.getDefault(), "%d/%d", setNum, workout.getNumSets()));
     }
 
-    public void skip(View v){
+    public void skip(View v) {
         timer.skip();
     }
 
-    public void togglePause(View v){
+    public void togglePause(View v) {
         isPaused = (!isPaused);
 
         if (isPaused) {
@@ -242,39 +244,40 @@ public class ActivityWorkout extends AppCompatActivity implements IWorkoutTimerO
         }
     }
 
-    public void toggleMute(View v){
+    public void toggleMute(View v) {
         isMuted = !isMuted;
 
-        if(isMuted){
+        if (isMuted) {
             soundButton.setImageResource(R.drawable.muted);
         } else {
             soundButton.setImageResource(R.drawable.unmuted);
         }
     }
 
-    private void playSounds(){
-        if(isPaused)
+    private void playSounds() {
+        if (isPaused)
             return;
 
-        if(!isMuted && mediaPlayer != null)
+        if (!isMuted && mediaPlayer != null)
             mediaPlayer.start();
 
-        if(isVibrateOn && vibrator != null)
+        if (isVibrateOn && vibrator != null)
             vibrator.vibrate(200);
     }
 
     private Snackbar snackbar;
     private long firstBackPress;
     private static final int TIME_INTERVAL = 2000;
+
     //press back twice within TIME_INTERVAL to avoid accidentally exiting workout
     @Override
     public void onBackPressed() {
-        if(snackbar == null){
+        if (snackbar == null) {
             View rootView = findViewById(R.id.activity_workout_root_view);
             snackbar = Snackbar.make(rootView, "Click BACK again to exit", Snackbar.LENGTH_SHORT);
         }
 
-        if (firstBackPress + TIME_INTERVAL > System.currentTimeMillis()){
+        if (firstBackPress + TIME_INTERVAL > System.currentTimeMillis()) {
             snackbar.dismiss();
             timer.cancel();
             Intent i = new Intent(this, ActivityHomeScreen.class);
@@ -283,8 +286,7 @@ public class ActivityWorkout extends AppCompatActivity implements IWorkoutTimerO
 
             finish();
             return;
-        }
-        else snackbar.show();
+        } else snackbar.show();
 
         firstBackPress = System.currentTimeMillis();
     }
@@ -293,7 +295,7 @@ public class ActivityWorkout extends AppCompatActivity implements IWorkoutTimerO
     protected void onResume() {
         super.onResume();
         UpgradeManager.checkUserPurchases(this);
-        if(MobileAdsHelper.userHasUpgraded && adView != null) {
+        if (MobileAdsHelper.userHasUpgraded && adView != null) {
             adView.hide();
         }
     }

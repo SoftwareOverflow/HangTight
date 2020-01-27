@@ -9,8 +9,8 @@ android {
         applicationId "com.newtonapps.hangtight"
         minSdkVersion 24
         targetSdkVersion 29
-        versionCode 14
-        versionName "2.0.1"
+        versionCode 18
+        versionName "2.0.2"
     }
     buildTypes {
         debug {
