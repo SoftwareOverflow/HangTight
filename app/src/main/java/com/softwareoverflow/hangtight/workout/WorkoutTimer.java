@@ -84,50 +84,6 @@ public class WorkoutTimer {
             public void onTick(long millisUntilFinished) {
                 millisecondsRemaining = millisUntilFinished;
                 notifyObservers();
-                /*if (observer == null)
-                    return;
-
-                millisecondsRemaining = millisUntilFinished;
-
-                Pair workoutSectionTimePair = WorkoutHelper.getCurrentSection(workout, millisUntilFinished);
-
-                if (skipFlag) {
-                    millisUntilFinished -= (long) workoutSectionTimePair.second;
-
-                    workoutSectionTimePair = WorkoutHelper.getCurrentSection(workout, millisUntilFinished);
-                }
-
-                WorkoutHelper.WorkoutSection workoutSection = (WorkoutHelper.WorkoutSection) workoutSectionTimePair.first;
-                if (workoutSection != currentSection) {
-                    if (workoutSection == WorkoutHelper.WorkoutSection.PREPARE) {
-                        observer.onPrepareStart();
-                    } else if (workoutSection == WorkoutHelper.WorkoutSection.HANG) {
-                        observer.onHangStart();
-
-                        if (currentSection == WorkoutHelper.WorkoutSection.REST) {
-                            observer.onRepComplete(++currentRep);
-                        } else if (currentSection == WorkoutHelper.WorkoutSection.RECOVER) {
-                            observer.onSetComplete(++currentSet);
-                            currentRep = 1;
-                        }
-                    } else if (workoutSection == WorkoutHelper.WorkoutSection.REST) {
-                        observer.onRestStart();
-                    } else if (workoutSection == WorkoutHelper.WorkoutSection.RECOVER) {
-                        observer.onRecoverStart();
-                    }
-                }
-
-                currentSection = workoutSection;
-
-                if (skipFlag) {
-                    // Cancel and recreate the timer to simulate skipping the section
-                    this.cancel();
-                    createTimer(millisUntilFinished);
-                    timer.start();
-                    skipFlag = false;
-                } else {
-                    observer.onTick(millisUntilFinished, (long) workoutSectionTimePair.second, TICK_INTERVAL);
-                }*/
             }
 
             @Override

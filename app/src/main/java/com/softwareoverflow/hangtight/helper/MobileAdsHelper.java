@@ -11,6 +11,7 @@ import com.softwareoverflow.hangtight.R;
 public class MobileAdsHelper {
 
     private static boolean isInitialized;
+
     public static boolean userHasUpgraded = false;
 
     private static InterstitialAd interstitialAd;
@@ -25,6 +26,10 @@ public class MobileAdsHelper {
 
         interstitialAd = new InterstitialAd(context);
         interstitialAd.setAdUnitId(context.getString(R.string.adUnitId_interstitial));
+        loadAd();
+    }
+
+    public static void loadAd(){
         interstitialAd.loadAd(new AdRequest.Builder().build());
     }
 
