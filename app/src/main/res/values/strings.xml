@@ -73,6 +73,7 @@
     <string name="mute_unmute">Mute / Unmute</string>
     <string name="pause_resume">pause / resume</string>
     <string name="skip_forward">skip forward</string>
+    <string name="rewind">rewind</string>
     <string name="remaining">REMAINING:</string>
     <string name="total">TOTAL:</string>
     <string name="set_label">SET:</string>

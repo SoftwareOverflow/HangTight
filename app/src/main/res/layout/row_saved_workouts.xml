@@ -74,31 +74,30 @@
             android:id="@+id/row_savedWorkout_delete"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="32dp"
             android:clickable="true"
             android:focusable="true"
             android:padding="8dp"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/row_savedWorkout_edit"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintHorizontal_chainStyle="spread_inside"
+            app:layout_constraintHorizontal_weight="1"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/row_savedWorkout_description">
+            app:layout_constraintTop_toBottomOf="@+id/row_savedWorkout_description"
+            app:layout_constraintVertical_bias="0.0">
 
             <ImageButton
                 android:id="@+id/row_savedWorkout_delete_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
                 android:background="@android:drawable/ic_menu_delete"
                 android:clickable="false"
+                android:contentDescription="@string/delete_workout"
                 android:duplicateParentState="true"
                 android:focusable="false"
                 android:padding="16dp"
                 app:layout_constraintBottom_toTopOf="@+id/row_savedWorkout_delete_label"
-                app:layout_constraintEnd_toEndOf="@+id/row_savedWorkout_delete_label"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toStartOf="@+id/row_savedWorkout_delete_label"
-                android:contentDescription="@string/delete_workout" />
+                app:layout_constraintStart_toStartOf="parent" />
 
             <TextView
                 android:id="@+id/row_savedWorkout_delete_label"
@@ -120,6 +119,7 @@
             android:clickable="true"
             android:focusable="true"
             android:padding="8dp"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/row_savedWorkout_start"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toEndOf="@+id/row_savedWorkout_delete"
@@ -129,17 +129,15 @@
                 android:id="@+id/row_savedWorkout_edit_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
                 android:background="@android:drawable/ic_menu_edit"
                 android:clickable="false"
+                android:contentDescription="@string/edit_workout"
                 android:duplicateParentState="true"
                 android:focusable="false"
                 android:padding="16dp"
                 app:layout_constraintBottom_toTopOf="@+id/row_savedWorkout_edit_label"
-                app:layout_constraintEnd_toEndOf="@+id/row_savedWorkout_edit_label"
-                app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toStartOf="@+id/row_savedWorkout_edit_label"
-                android:contentDescription="@string/edit_workout" />
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
 
             <TextView
                 android:id="@+id/row_savedWorkout_edit_label"
@@ -158,12 +156,11 @@
             android:id="@+id/row_savedWorkout_start"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="32dp"
             android:clickable="true"
             android:focusable="true"
             android:padding="8dp"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toEndOf="@+id/row_savedWorkout_edit"
             app:layout_constraintTop_toBottomOf="@+id/row_savedWorkout_description">
 
@@ -171,30 +168,28 @@
                 android:id="@+id/row_savedWorkout_start_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
                 android:background="@android:drawable/ic_media_play"
                 android:clickable="false"
+                android:contentDescription="@string/start_workout"
                 android:duplicateParentState="true"
                 android:focusable="false"
                 android:padding="16dp"
                 app:layout_constraintBottom_toTopOf="@+id/row_savedWorkout_start_label"
-                app:layout_constraintEnd_toEndOf="@+id/row_savedWorkout_start_label"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toStartOf="@+id/row_savedWorkout_start_label"
-                android:contentDescription="@string/start_workout" />
+                app:layout_constraintStart_toStartOf="parent" />
 
             <TextView
                 android:id="@+id/row_savedWorkout_start_label"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="8dp"
                 android:duplicateParentState="true"
                 android:text="@string/start"
                 android:textSize="14sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toEndOf="parent" />
+                app:layout_constraintStart_toStartOf="parent" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>

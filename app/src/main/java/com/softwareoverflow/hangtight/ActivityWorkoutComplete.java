@@ -9,7 +9,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.softwareoverflow.hangtight.helper.MobileAdsHelper;
 import com.softwareoverflow.hangtight.helper.StringHelper;
-import com.softwareoverflow.hangtight.helper.UpgradeManager;
 import com.softwareoverflow.hangtight.ui.dialog.SaveWorkoutDialog;
 import com.softwareoverflow.hangtight.workout.Workout;
 
@@ -52,7 +51,9 @@ public class ActivityWorkoutComplete extends AppCompatActivity {
     }
 
     public void upgradeToPro(View v){
-        UpgradeManager.upgrade(this, v);
+        ((HangTightApplication) this.getApplication()).getAppContainer()
+                .getBillingRepo().launchProUpgradeFlow(this);
+
     }
 
     public void goHome(View v){
