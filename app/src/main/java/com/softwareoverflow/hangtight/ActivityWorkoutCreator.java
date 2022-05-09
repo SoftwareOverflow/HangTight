@@ -9,7 +9,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.snackbar.Snackbar;
 import com.softwareoverflow.hangtight.helper.MobileAdsHelper;
-import com.softwareoverflow.hangtight.helper.UpgradeManager;
 import com.softwareoverflow.hangtight.ui.CustomBannerAd;
 import com.softwareoverflow.hangtight.ui.NumberPickerPlusMinus;
 import com.softwareoverflow.hangtight.ui.dialog.SaveWorkoutDialog;
@@ -19,7 +18,7 @@ import com.softwareoverflow.hangtight.workout.Workout;
 public class ActivityWorkoutCreator extends AppCompatActivity {
 
     private View rootView;
-    private CustomBannerAd adView;
+    private CustomBannerAd bannerAd;
     private NumberPickerPlusMinus hangTimePicker, restTimePicker, repsPicker, setsPicker, recoverPicker;
     private Workout workout = new Workout();
 
@@ -50,7 +49,7 @@ public class ActivityWorkoutCreator extends AppCompatActivity {
     public void initViews(){
         rootView = findViewById(R.id.root_new_basic_workout);
 
-        adView = findViewById(R.id.admob_layout);
+        bannerAd = findViewById(R.id.admob_layout);
         hangTimePicker = findViewById(R.id.hangTimeNumberPicker);
         restTimePicker = findViewById(R.id.restTimeNumberPicker);
         repsPicker = findViewById(R.id.repsNumberPicker);
@@ -103,9 +102,11 @@ public class ActivityWorkoutCreator extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        UpgradeManager.checkUserPurchases(this);
-        if(MobileAdsHelper.userHasUpgraded && adView != null) {
-            adView.hide();
+        ((HangTightApplication) this.getApplication()).getAppContainer()
+                .getBillingRepo().onResume();
+
+        if(MobileAdsHelper.userHasUpgraded && bannerAd != null) {
+            bannerAd.hide();
         }
     }
 }

@@ -7,12 +7,14 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.softwareoverflow.hangtight.database.MyDBHandler;
+import com.softwareoverflow.hangtight.room.WorkoutDBRepo;
 import com.softwareoverflow.hangtight.ui.SavedWorkoutsListAdapter;
 
 public class ActivityLoadSavedWorkouts extends Activity {
 
 
     private MyDBHandler dbHandler;
+    private WorkoutDBRepo db;
     private SavedWorkoutsListAdapter adapter;
 
     @Override

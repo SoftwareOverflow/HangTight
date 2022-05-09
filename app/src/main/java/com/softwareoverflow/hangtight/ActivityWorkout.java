@@ -3,7 +3,6 @@ package com.softwareoverflow.hangtight;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Vibrator;
 import android.view.View;
@@ -14,30 +13,37 @@ import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.google.android.gms.ads.AdListener;
-import com.google.android.gms.ads.InterstitialAd;
+import com.google.android.gms.ads.AdError;
+import com.google.android.gms.ads.FullScreenContentCallback;
+import com.google.android.gms.ads.interstitial.InterstitialAd;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.softwareoverflow.hangtight.helper.MobileAdsHelper;
 import com.softwareoverflow.hangtight.helper.SharedPreferenceHelper;
 import com.softwareoverflow.hangtight.helper.StringHelper;
-import com.softwareoverflow.hangtight.helper.UpgradeManager;
 import com.softwareoverflow.hangtight.helper.WorkoutHelper.WorkoutSection;
 import com.softwareoverflow.hangtight.ui.CustomBannerAd;
-import com.softwareoverflow.hangtight.workout.IWorkoutTimerObserver;
+import com.softwareoverflow.hangtight.workout.IWorkoutSoundManager;
+import com.softwareoverflow.hangtight.workout.IWorkoutTimerListener;
 import com.softwareoverflow.hangtight.workout.Workout;
+import com.softwareoverflow.hangtight.workout.WorkoutMediaManager;
+import com.softwareoverflow.hangtight.workout.WorkoutSectionWithTime;
 import com.softwareoverflow.hangtight.workout.WorkoutTimer;
 
 import java.util.Locale;
 
-public class ActivityWorkout extends AppCompatActivity implements IWorkoutTimerObserver {
+public class ActivityWorkout extends AppCompatActivity implements IWorkoutTimerListener {
 
     private Workout workout;
     private int prepTime = 0;
 
-    private CustomBannerAd adView;
+    private IWorkoutSoundManager soundManager;
+    private WorkoutSectionWithTime currentSection;
+
+    private CustomBannerAd bannerAd;
     private WorkoutTimer timer;
     private TextView timeTextView, title, remainingTimeTV, currentRepTV, currentSetTV;
     private ImageButton pauseButton, soundButton;
@@ -45,7 +51,6 @@ public class ActivityWorkout extends AppCompatActivity implements IWorkoutTimerO
     private boolean isPaused, isMuted, isVibrateOn;
 
     private Vibrator vibrator;
-    private MediaPlayer mediaPlayer;
     private ProgressBar progressBar;
 
     @Override
@@ -66,12 +71,12 @@ public class ActivityWorkout extends AppCompatActivity implements IWorkoutTimerO
         loadSharedPrefs();
 
         if (workout != null) {
-            String workoutDuration = StringHelper.minuteSecondTimeFormat(workout.getDuration());
+            String workoutDuration = StringHelper.minuteSecondTimeFormat(workout.getDuration() + prepTime);
             ((TextView) findViewById(R.id.totalTimeTV)).setText(workoutDuration);
             remainingTimeTV.setText(workoutDuration);
 
-            timer = new WorkoutTimer(workout, prepTime);
-            timer.setObserver(this);
+
+            timer = new WorkoutTimer(workout, this, prepTime);
             timer.start();
         } else {
             throw new IllegalArgumentException("Unable to load workout");
@@ -106,15 +111,17 @@ public class ActivityWorkout extends AppCompatActivity implements IWorkoutTimerO
         rot.setFillAfter(true);
         progressBar.startAnimation(rot);
 
-        adView = findViewById(R.id.admob_layout);
+        bannerAd = findViewById(R.id.admob_layout);
     }
 
     private void loadSharedPrefs() {
         SharedPreferences settings = this.getSharedPreferences("settings", MODE_PRIVATE);
 
         Integer soundId = SharedPreferenceHelper.getSavedSound(settings);
+
         if (soundId != null) {
-            mediaPlayer = MediaPlayer.create(getApplicationContext(), soundId);
+            soundManager = new WorkoutMediaManager(this, soundId);
+            //mediaPlayer = MediaPlayer.create(getApplicationContext(), soundId);
         } else {
             isMuted = true;
             ImageButton muteButton = findViewById(R.id.muteButton);
@@ -128,45 +135,6 @@ public class ActivityWorkout extends AppCompatActivity implements IWorkoutTimerO
         prepTime = settings.getInt("timer", 10);
     }
 
-    @Override
-    public void onTick(long millisUntilFinished, long millisLeftBeforeChange, int tickInterval) {
-        WorkoutSection currentSection = timer.getCurrentSection();
-        if (currentSection == WorkoutSection.HANG) {
-            progressBar.setProgress(progressBar.getMax() - (int) millisLeftBeforeChange);
-        } else if (currentSection == WorkoutSection.REST || currentSection == WorkoutSection.RECOVER) {
-            progressBar.setProgress((int) millisLeftBeforeChange);
-        }
-
-        if (currentSection != WorkoutSection.PREPARE) {
-            int secondsRemaining = (int) Math.ceil(millisUntilFinished / 1000.0);
-            remainingTimeTV.setText(StringHelper.minuteSecondTimeFormat(secondsRemaining));
-        }
-        timeTextView.setText(String.format(Locale.getDefault(), "%d", (int) Math.ceil(millisLeftBeforeChange / 1000.0)));
-    }
-
-    @Override
-    public void onPrepareStart() {
-        title.setText(WorkoutSection.PREPARE.getNameResourceId());
-    }
-
-    @Override
-    public void onHangStart() {
-        updateWorkoutUI(R.color.Green, WorkoutSection.HANG.getNameResourceId(),
-                workout.getHangTime(), true);
-    }
-
-    @Override
-    public void onRestStart() {
-        updateWorkoutUI(R.color.Orange, WorkoutSection.REST.getNameResourceId(),
-                workout.getRestTime(), false);
-    }
-
-    @Override
-    public void onRecoverStart() {
-        updateWorkoutUI(R.color.Orange, WorkoutSection.RECOVER.getNameResourceId(),
-                workout.getRecoverTime(), false);
-    }
-
     private void updateWorkoutUI(int colorId, int workoutSectionResId, int sectionTime, boolean setProgressToZero) {
         title.setTextColor(getResources().getColor(colorId, getTheme()));
         title.setText(workoutSectionResId);
@@ -176,48 +144,8 @@ public class ActivityWorkout extends AppCompatActivity implements IWorkoutTimerO
     }
 
     private void setProgress(int numSeconds, boolean setToZero) {
-        progressBar.setMax(numSeconds * 1000);
+        progressBar.setMax(numSeconds);
         progressBar.setProgress(setToZero ? 0 : progressBar.getMax());
-    }
-
-    @Override
-    public void onRepComplete(int nextRep) {
-        if (nextRep > workout.getNumReps())
-            nextRep = workout.getNumReps();
-
-        updateRep(nextRep);
-    }
-
-    @Override
-    public void onSetComplete(int nextSet) {
-        updateRep(1);
-        updateSet(nextSet);
-    }
-
-    @Override
-    public void onTimerComplete() {
-        // There is not rest time on the final rep, so update to max on completion
-        updateRep(workout.getNumReps());
-        playSounds();
-
-        Intent intent = new Intent(ActivityWorkout.this, ActivityWorkoutComplete.class);
-        intent.putExtra("workout", workout);
-
-        InterstitialAd ad = MobileAdsHelper.getInterstitialAd();
-        if (!MobileAdsHelper.userHasUpgraded && ad != null && ad.isLoaded()) {
-            ad.setAdListener(new AdListener() {
-                @Override
-                public void onAdClosed() {
-                    startActivity(intent);
-
-                    // Load the next advert
-                    MobileAdsHelper.loadAd();
-                }
-            });
-            ad.show();
-        } else {
-            startActivity(intent);
-        }
     }
 
     private void updateRep(int repNum) {
@@ -229,7 +157,19 @@ public class ActivityWorkout extends AppCompatActivity implements IWorkoutTimerO
     }
 
     public void skip(View v) {
-        timer.skip();
+        boolean currentSound = isMuted;
+
+        isMuted = true;
+        timer.skipSection();
+        isMuted = currentSound;
+    }
+
+    public void rewind(View v) {
+        boolean currentSound = isMuted;
+
+        isMuted = true;
+        timer.rewindSection();
+        isMuted = currentSound;
     }
 
     public void togglePause(View v) {
@@ -237,10 +177,10 @@ public class ActivityWorkout extends AppCompatActivity implements IWorkoutTimerO
 
         if (isPaused) {
             pauseButton.setImageResource(R.drawable.resume);
-            timer.pause();
+            timer.togglePause(true);
         } else {
             pauseButton.setImageResource(R.drawable.pause);
-            timer.resume();
+            timer.togglePause(false);
         }
     }
 
@@ -258,8 +198,8 @@ public class ActivityWorkout extends AppCompatActivity implements IWorkoutTimerO
         if (isPaused)
             return;
 
-        if (!isMuted && mediaPlayer != null)
-            mediaPlayer.start();
+        if (!isMuted && soundManager != null)
+            soundManager.playSound();
 
         if (isVibrateOn && vibrator != null)
             vibrator.vibrate(200);
@@ -294,9 +234,112 @@ public class ActivityWorkout extends AppCompatActivity implements IWorkoutTimerO
     @Override
     protected void onResume() {
         super.onResume();
-        UpgradeManager.checkUserPurchases(this);
-        if (MobileAdsHelper.userHasUpgraded && adView != null) {
-            adView.hide();
+
+        ((HangTightApplication) this.getApplication()).getAppContainer()
+                .getBillingRepo().onResume();
+
+
+        if (MobileAdsHelper.userHasUpgraded && bannerAd != null) {
+            bannerAd.hide();
         }
+    }
+
+    @Override
+    public void onTimeChange(int timeLeftInSection, int timeLeftInWorkout) {
+        if (currentSection.getSection() == WorkoutSection.HANG) {
+            progressBar.setProgress(progressBar.getMax() - timeLeftInSection);
+        } else if (currentSection.getSection() == WorkoutSection.REST || currentSection.getSection() == WorkoutSection.RECOVER) {
+            progressBar.setProgress(timeLeftInSection);
+        }
+
+        remainingTimeTV.setText(StringHelper.minuteSecondTimeFormat(timeLeftInWorkout));
+
+        timeTextView.setText(String.format(Locale.getDefault(), "%d", timeLeftInSection));
+    }
+
+    @Override
+    public void onSectionChange(@NonNull WorkoutSectionWithTime section) {
+        updateRep(section.getRep().getIndex() + 1);
+        updateSet(section.getSet().getIndex() + 1);
+
+        currentSection = section;
+
+        switch(section.getSection()){
+            case PREPARE:
+                updateWorkoutUI(R.color.NavajoWhite, WorkoutSection.PREPARE.getNameResourceId(),
+                        prepTime, true);
+                break;
+
+            case HANG:
+                updateWorkoutUI(R.color.Green, WorkoutSection.HANG.getNameResourceId(),
+                        workout.getHangTime(), true);
+                break;
+
+            case REST:
+                updateWorkoutUI(R.color.Orange, WorkoutSection.REST.getNameResourceId(),
+                        workout.getRestTime(), false);
+                break;
+
+            case RECOVER:
+                updateWorkoutUI(R.color.Orange, WorkoutSection.RECOVER.getNameResourceId(),
+                        workout.getRecoverTime(), false);
+                break;
+        }
+    }
+
+    @Override
+    public void onFinish() {
+        // There is not rest time on the final rep, so update to max on completion
+        updateRep(workout.getNumReps());
+        playSounds();
+
+        Intent intent = new Intent(ActivityWorkout.this, ActivityWorkoutComplete.class);
+        intent.putExtra("workout", workout);
+
+        if (!MobileAdsHelper.userHasUpgraded) {
+
+            final InterstitialAd[] ad = {MobileAdsHelper.getInterstitialAd()};
+            if(ad[0] != null) {
+                ad[0].setFullScreenContentCallback(new FullScreenContentCallback(){
+                    @Override
+                    public void onAdDismissedFullScreenContent() {
+                        // Called when fullscreen content is dismissed.
+                        startActivity(intent);
+                        finish();
+                    }
+
+                    @Override
+                    public void onAdFailedToShowFullScreenContent(@NonNull AdError adError) {
+                        // Called when fullscreen content failed to show.
+                        startActivity(intent);
+                        finish();
+                    }
+
+                    @Override
+                    public void onAdShowedFullScreenContent() {
+                        // Called when fullscreen content is shown.
+                        // Make sure to set your reference to null so you don't
+                        // show it a second time.
+                        MobileAdsHelper.onInterstitialShown(getApplicationContext());
+                        ad[0] = null;
+                    }
+                });
+
+                ad[0].show(ActivityWorkout.this);
+            } else {
+                MobileAdsHelper.loadAd(getApplicationContext());
+                startActivity(intent);
+                finish();
+            }
+        } else {
+            startActivity(intent);
+            finish();
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        timer.cancel();
+        super.onDestroy();
     }
 }

@@ -8,26 +8,37 @@ import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.softwareoverflow.hangtight.helper.BillingRepo;
 import com.softwareoverflow.hangtight.helper.MobileAdsHelper;
-import com.softwareoverflow.hangtight.helper.UpgradeManager;
 
 public class ActivityHomeScreen extends AppCompatActivity {
+
+    BillingRepo billingRepo;
+
+    //TempViewModel viewModel;
+
+    //Observer<Boolean> observer = value -> MobileAdsHelper.userHasUpgraded = value;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home_screen);
 
-        UpgradeManager.setup(this);
+        billingRepo = ((HangTightApplication) this.getApplication()).getAppContainer().getBillingRepo();
+
         MobileAdsHelper.initialize(this);
+
+        //viewModel = new TempViewModel(getApplicationContext());
     }
 
-    public void newBasicWorkout(View v){
+    public void newBasicWorkout(View v) {
+        //List<WorkoutEntity> es = viewModel.getWorkouts();
+
         Intent i = new Intent(this, ActivityWorkoutCreator.class);
         startActivity(i);
     }
 
-    public void loadWorkouts(View v){
+    public void loadWorkouts(View v) {
         Intent i = new Intent(this, ActivityLoadSavedWorkouts.class);
         startActivity(i);
     }
@@ -57,7 +68,13 @@ public class ActivityHomeScreen extends AppCompatActivity {
 
     @Override
     protected void onResume() {
+        billingRepo.onResume();
         super.onResume();
-        UpgradeManager.checkUserPurchases(this);
+    }
+
+    @Override
+    protected void onDestroy() {
+        //billingRepo.isProVersionPurchased().removeObserver(observer);
+        super.onDestroy();
     }
 }
