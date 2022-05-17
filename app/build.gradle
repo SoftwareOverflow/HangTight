@@ -1,7 +1,13 @@
-apply plugin: 'com.android.application'
-apply plugin: 'kotlin-android'
-apply plugin: 'kotlin-kapt'
-apply plugin: 'com.google.gms.google-services'
+plugins {
+    id 'com.android.application'
+    id 'org.jetbrains.kotlin.android'
+    id 'kotlin-parcelize'
+    id 'kotlin-kapt'
+    id 'dagger.hilt.android.plugin'
+    id 'com.google.devtools.ksp' version '1.6.10-1.0.4'
+    id 'com.google.gms.google-services'
+    id 'com.google.firebase.crashlytics'
+}
 
 def localProperties = new Properties()
 try {
@@ -11,14 +17,25 @@ try {
 }
 
 android {
-    compileSdkVersion 32
+    compileSdk 32
 
     defaultConfig {
         applicationId "com.newtonapps.hangtight"
-        minSdkVersion 24
-        targetSdkVersion 32
-        versionCode 22
-        versionName "2.1.2"
+        minSdk 27
+        targetSdk 32
+        versionCode 23
+        versionName "2.2.0"
+
+        kapt {
+            arguments {
+                arg("room.schemaLocation", "$projectDir/schemas")
+            }
+        }
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        vectorDrawables {
+            useSupportLibrary true
+        }
 
         if (!localProperties['base64EncodedPublicKey']) {
             logger.warn('base64EncodedPublicKey must be set for signature verification. ' +
@@ -28,6 +45,7 @@ android {
         buildConfigField("String", "BASE64_ENCODED_PUBLIC_KEY", "\"" + localProperties['base64EncodedPublicKey'] + "\"")
         buildConfigField("String[]", "DEV_DEVICES", localProperties['testDeviceIds'])
     }
+
     buildTypes {
         debug {
             resValue "string", "adUnitId_banner", "\"ca-app-pub-3940256099942544/6300978111\""
@@ -35,51 +53,95 @@ android {
         }
 
         release {
-            minifyEnabled true
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
 
             resValue "string", "adUnitId_banner", "\"ca-app-pub-5961771507160254/4534904901\""
             resValue "string", "adUnitId_interstitial", "\"ca-app-pub-5961771507160254/2482816006\""
         }
     }
     compileOptions {
-        sourceCompatibility = 1.8
-        targetCompatibility = 1.8
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
     }
     kotlinOptions {
         jvmTarget = '1.8'
     }
-    dataBinding {
-        enabled = true
+    buildFeatures {
+        compose true
+    }
+    composeOptions {
+        kotlinCompilerExtensionVersion compose_version
+    }
+    packagingOptions {
+        resources {
+            excludes += '/META-INF/{AL2.0,LGPL2.1}'
+        }
+    }
+    namespace 'com.softwareoverflow.hangtight'
+
+    applicationVariants.all { variant ->
+        kotlin.sourceSets {
+            getByName(variant.name) {
+                kotlin.srcDir("build/generated/ksp/${variant.name}/kotlin")
+            }
+        }
     }
 }
 
 dependencies {
+    def nav_version = "2.4.2"
     def roomVersion = "2.4.2"
     def coroutinesVersion = "1.6.1"
 
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation 'androidx.appcompat:appcompat:1.4.1'
-    implementation 'androidx.constraintlayout:constraintlayout:2.1.3'
-    implementation 'com.google.android.material:material:1.6.0'
-    implementation 'com.google.android.gms:play-services-ads:20.6.0'
-    implementation 'com.google.firebase:firebase-analytics:20.1.2'
-    implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
-    implementation 'com.android.billingclient:billing:4.1.0'
-    implementation 'com.android.billingclient:billing-ktx:4.1.0'
     implementation "androidx.core:core-ktx:1.7.0"
-    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.4.1"
-    implementation "androidx.lifecycle:lifecycle-livedata-ktx:2.4.1"
+    implementation "androidx.compose.ui:ui:$compose_version"
+    implementation "androidx.compose.material:material:$compose_version"
+    implementation "androidx.compose.material:material-icons-extended:$compose_version"
+    implementation "androidx.compose.ui:ui-tooling-preview:$compose_version"
+    implementation "androidx.lifecycle:lifecycle-runtime-ktx:2.4.1"
+    implementation "androidx.activity:activity-compose:1.4.0"
+    implementation "androidx.navigation:navigation-compose:$nav_version"
+    implementation 'androidx.preference:preference:1.2.0'
+    implementation "com.android.billingclient:billing-ktx:4.1.0"
+    implementation 'com.google.android.gms:play-services-ads:20.6.0'
+
+    // Testing
+    testImplementation "junit:junit:4.13.2"
+    testImplementation "org.mockito.kotlin:mockito-kotlin:4.0.0"
+    androidTestImplementation "androidx.test.ext:junit:1.1.3"
+    androidTestImplementation "androidx.test.espresso:espresso-core:3.4.0"
+    androidTestImplementation "androidx.compose.ui:ui-test-junit4:$compose_version"
+    debugImplementation "androidx.compose.ui:ui-tooling:$compose_version"
+
+
+    // Logging
+    implementation "com.jakewharton.timber:timber:5.0.1"
+
+    // Firebase (with BoM)
+    implementation platform('com.google.firebase:firebase-bom:30.0.1')
+    implementation 'com.google.firebase:firebase-crashlytics-ktx'
+    implementation 'com.google.firebase:firebase-analytics-ktx'
+
+    // In-app reviews
+    implementation("com.google.android.play:review:2.0.0")
+    implementation("com.google.android.play:review-ktx:2.0.0")
+
+    // Coroutines
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutinesVersion"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutinesVersion"
 
     // Room databases
     implementation "androidx.room:room-runtime:$roomVersion"
     kapt "androidx.room:room-compiler:$roomVersion"
     implementation "androidx.room:room-ktx:$roomVersion"
 
-    // Coroutines
-    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutinesVersion"
-    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutinesVersion"
-}
-repositories {
-    mavenCentral()
+    // ComposeDestinations library dependencies
+    implementation 'io.github.raamcosta.compose-destinations:core:1.5.5-beta'
+    ksp 'io.github.raamcosta.compose-destinations:ksp:1.5.5-beta'
+
+    // Hilt DI dependencies
+    implementation "com.google.dagger:hilt-android:$hilt_version"
+    kapt "com.google.dagger:hilt-android-compiler:$hilt_version"
+    implementation "androidx.hilt:hilt-navigation-compose:1.0.0"
 }

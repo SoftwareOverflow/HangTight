@@ -9,6 +9,7 @@
 /captures
 .externalNativeBuild
 .cxx
+*.bak
 
 # built application files
 *.apk

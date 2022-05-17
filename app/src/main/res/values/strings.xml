@@ -1,118 +1,99 @@
 <resources>
     <string name="app_name">HangTight</string>
 
-    <string name="action_settings">Settings</string>
-    <string name="title_activity_create_new_workout">CreateNewWorkout</string>
-    <string name="title_activity_new_basic_workout">NewBasicWorkout</string>
-    <string name="title_activity_workout">Workout</string>
-    <string name="title_activity_load_saved_workouts">LoadSavedWorkouts</string>
-    <string name="title_activity_edit_saved_workout">EditSavedWorkout</string>
-    <string name="title_activity_settings_page">settingsPage</string>
-    <string name="title_activity_help_page">helpPage</string>
+    <string name="section_prepare">Prepare</string>
+    <string name="section_hang">Hang</string>
+    <string name="section_rest">Rest</string>
+    <string name="section_recover">Recover</string>
 
-    <!-- ActivityWorkout -->
-    <string name="timer_prepare">Prepare</string>
-    <string name="timer_hang">Hang</string>
-    <string name="timer_rest">Rest</string>
-    <string name="timer_recover">Recover</string>
+    <string name="workout_complete">Workout Complete</string>
+    <string name="workout_saved">Workout Saved Successfully!</string>
 
+    <string name="user_consent_details">
+        This app is provided on a freemium basis whereby we include adverts unless you upgrade to the ad-free version.\n\n
 
-    <string name="intro_help_page">\nThis help page provides an overview of how to use the HangTight app.
-        The functionality of the app, including creating and saving workouts, is explained in this page.
-        \nHangboards are only recommended for advanced climbers and should never be used without thoroughly
-        warming up first.</string>
-    <string name="workout_structure_help_page">The workout is structured using hang, rest, reps, sets and recover values.
-        \n\n1)A rep consists of a hang followed by a rest.
-        \n\n2)This is repeated until the chosen number of reps is reached.
-        \n\n3)The recover timer will start - this is a complete set.
-        \n\n4)The sets are repeated until the chosen number of sets is reached.</string>
-    <string name="create_workout_help">To create a workout click on the \'create new workout\' button on the home page.
-        A page will load where you can input values for hang, rest, reps, sets and recover. Once you have selected the values
-        wanted either press \'start workout\' to begin the workout or \'Save Workout\' to save the workout.</string>
-    <string name="saveAndLoad_help_page">To load a workout click \'Load Saved Workout\' on the home screen.
-        A list of saved workouts will appear. Tap on a saved workout to start it. Press and hold on a saved workout
-        to edit or delete it.
-        \n\nTo save a workout for future use simply create the workout by pressing \'Create New Workout\' on the home screen
-        and then pressing the \'Save Workout\' button. At this point a title and description will need to be entered.
-        A message will appear at the bottom of the screen if the save was successful.
+        We use the following 3rd party services: \n
+        \u2022 Google AdMob to show personalized adverts\n
+        \u2022 Google Firebase Analytics for analytics\n
+        \u2022 Google Firebase Crashlytics for crash reports\n\n
+
+        These services make your app experience better and allow us to keep improving this app.\nFull details are available in the privacy policy.
+        \n\nWe care about your privacy and data security and you can manage your choices in the settings page at any time.
     </string>
-    <string name="change_settings_help_page">
-        The settings page can be accessed by clicking the settings icon at the top right of the home screen.\n
-        There are then options to change the default for sound and vibrate to be On/Off, change the default for showing the warning about
-        warming up properly before beginning any workout. Finally, there is a slider for the \'Pre-Workout Countdown\'.
-        This is set to 5 seconds by default but can be altered to allow more or less time to get ready after starting the workout.
-        </string>
 
-    <string name="invalid_numbers">Unable to create Workout. Please ensure you have entered valid values.</string>
-    <string name="yes">Yes</string>
-
-    <!-- AdMob values are generated from build.gradle -->
-
-    <!-- Dialog text -->
+    <string name="great_job">Great job!</string>
+    <string name="content_desc_trophy">Trophy Icon</string>
+    <string name="upgrade_ad_free">Upgrade to Ad-free</string>
+    <string name="save_workout_use_again">Save the workout to use it again!</string>
+    <string name="content_desc_save_workout">Save Workout</string>
+    <string name="content_desc_app_icon">App Icon</string>
+    <string name="version">Version</string>
+    <string name="settings">Settings</string>
+    <string name="feedback">Feedback</string>
+    <string name="upgrade_state_premium_thanks">Upgrade State: Premium - thanks for upgrading!</string>
+    <string name="upgrade_state_free">Upgrade State: Free</string>
+    <string name="for_">for</string>
+    <string name="are_you_sure">Are you sure?</string>
+    <string name="exit">Exit</string>
+    <string name="content_desc_rewind">Rewind</string>
+    <string name="content_desc_unmute">Un mute volume</string>
+    <string name="content_desc_mute">Mute volume</string>
+    <string name="content_desc_unpause">Unpause</string>
+    <string name="content_desc_pause">Pause</string>
+    <string name="content_desc_skip">Skip</string>
+    <string name="remaining">Remaining:</string>
+    <string name="total">Total:</string>
+    <string name="hang">Hang</string>
+    <string name="rest">Rest</string>
+    <string name="recover">Recover</string>
+    <string name="content_desc_start">Start Workout</string>
+    <string name="content_desc_save_settings">Save</string>
+    <string name="prep_time_name">Preparation Time (seconds)</string>
+    <string name="prep_time_desc">Delay when starting workout to get ready</string>
+    <string name="content_desc_expand_collapse">Expand/Collapse</string>
+    <string name="sounds_321_name">3..2..1.. Sounds</string>
+    <string name="sounds_321_desc"><![CDATA[Sound for 3s, 2s, & 1s left in section]]></string>
+    <string name="vibrate_name">Vibrate</string>
+    <string name="vibrate_desc">Vibrate when workout sections change</string>
+    <string name="analytics_name">Analytics</string>
+    <string name="analytics_desc"><![CDATA[This helps us understand user engagement & improve the app]]></string>
+    <string name="workout_name">Workout Name</string>
+    <string name="content_desc_error">error</string>
+    <string name="workout_desc">Workout Description</string>
+    <string name="save_new">Save New Workout</string>
+    <string name="save_overwrite">Overwrite Existing Workout</string>
+    <string name="save_overwrite_warning">Saving will replace the chosen workout with the new one. This cannot be undone!</string>
     <string name="cancel">Cancel</string>
+    <string name="upgrade">Upgrade</string>
+    <string name="free_version_save_limit">Free version only allows %d saved workouts!</string>
+    <string name="save_workout">Save Workout!</string>
+    <string name="no_saved_workouts">No saved workouts found! Save as a new workout!</string>
+    <string name="create_new_workout">Create New Workout</string>
+    <string name="load_saved_workout">Load Saved Workout</string>
+    <string name="are_you_sure_delete_workout">Are you sure you want to delete workout \'%s\'?</string>
     <string name="dialog_warm_up_title">Have You Warmed Up?</string>
     <string name="dialog_warm_up_message">Ensure you are thoroughly warmed up before beginning
         any workout. Failure to do so could result in injury.\n\n
         If you feel any pain during the workout, stop immediately.
     </string>
-    <string name="dialog_warm_up_start_workout">Start Workout</string>
-    <string name="save_workout">Save Workout</string>
-    <string name="start_workout">Start Workout</string>
-    <string name="workout_creator">Workout Creator</string>
-    <string name="settings">Settings</string>
-    <string name="sound">Sound</string>
-    <string name="vibrate">Vibrate</string>
-    <string name="warm_up_warning">Warm Up Warning</string>
-    <string name="countdown">Countdown</string>
-    <string name="save_settings">Save Settings</string>
-    <string name="workout_saved">Workout saved!</string>
-    <string name="good_job">Good job</string>
-    <string name="workout_complete">Workout Complete!</string>
-    <string name="upgrade_to_advert_free">Upgrade to advert free</string>
-    <string name="go_home">Go Home</string>
-    <string name="mute_unmute">Mute / Unmute</string>
-    <string name="pause_resume">pause / resume</string>
-    <string name="skip_forward">skip forward</string>
-    <string name="rewind">rewind</string>
-    <string name="remaining">REMAINING:</string>
-    <string name="total">TOTAL:</string>
-    <string name="set_label">SET:</string>
-    <string name="rep_label">REP:</string>
-    <string name="how_to_use_hangtight">How to Use HangTight</string>
-    <string name="workout_structure">\nWorkout Structure</string>
-    <string name="creating_a_workout">\nCreating a Workout</string>
-    <string name="saving_and_loading_workouts">\nSaving and Loading Workouts</string>
-    <string name="changing_settings">\nChanging Settings</string>
-    <string name="background_female_desc">Background showing female climber reaching for a hold</string>
-    <string name="background_male_desc">Background showing male climber reaching for a hold</string>
-    <string name="create_new_workout">Create New Workout</string>
-    <string name="load_saved_workout">Load Saved Workout</string>
-    <string name="saved_workouts">Saved Workouts</string>
-    <string name="do_not_show_this_warning_again">Do not show this warning again</string>
-    <string name="close_advert_and_upgrade_to_advert_free">Close Advert and upgrade to advert free</string>
-    <string name="negative">-</string>
-    <string name="positive">+</string>
-    <string name="expand_workout">Expand workout</string>
-    <string name="delete_workout">Delete workout</string>
+
+    <string name="screen_load">Load Workout</string>
+    <string name="screen_save">Save Workout</string>
+    <string name="screen_settings">Settings</string>
+    <string name="screen_workout_creator">Workout Creator</string>
+    <string name="screen_workout">Workout</string>
+
+
+    <string name="__empty" />
+    <string name="yes_delete">Yes - Delete</string>
+    <string name="action_unrecoverable">This action cannot be undone.</string>
     <string name="delete">Delete</string>
-    <string name="edit_workout">Edit workout</string>
     <string name="edit">Edit</string>
     <string name="start">Start</string>
-    <string name="help">Help</string>
-    <string name="save_new">Save New</string>
-    <string name="overwrite_existing">Overwrite Existing</string>
-    <string name="workout_save_failed">The workout failed to save, please try again</string>
-    <string name="description_label">Description:</string>
-    <string name="workout_name_label">Workout Name:</string>
-    <string name="billing_error">Error Code %1$d. Check your internet connection. If this continues, check you are logged into google play and \"Google Play Services\" is up to date</string>
-
-    <!-- Sound options -->
-    <string-array name="spinner_sound_options">
-        <item>None</item>
-        <item>Beep</item>
-        <item>Blooper</item>
-        <item>Censor</item>
-        <item>Ding</item>
-        <item>Ring</item>
-    </string-array>
+    <string name="content_desc_decrement">Decrement</string>
+    <string name="content_desc_increment">Increment</string>
+    <string name="dont_show_again">Don\'t show this again</string>
+    <string name="show_warm_up_warning">Show Warm Up Warning</string>
+    <string name="settings_warm_up_desc">Show disclaimer about warming up properly before starting workout</string>
+    <string name="settings_saved">Settings Saved!</string>
 </resources>
