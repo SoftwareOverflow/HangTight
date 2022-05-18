@@ -34,15 +34,14 @@ fun Workout.getDurationMillis(): Long {
 fun Workout.getTimedSections(prepTime: Int): List<WorkoutSectionWithTime> {
     val timedSections = emptyList<WorkoutSectionWithTime>().toMutableList()
 
-    if (prepTime > 0)
-        timedSections.add(
-            WorkoutSectionWithTime(
-                WorkoutSection.Prepare,
-                prepTime,
-                WorkoutSectionCounter(0, numSets),
-                WorkoutSectionCounter(0, numReps)
-            )
+    timedSections.add(
+        WorkoutSectionWithTime(
+            WorkoutSection.Prepare,
+            prepTime,
+            WorkoutSectionCounter(0, numSets),
+            WorkoutSectionCounter(0, numReps)
         )
+    )
 
     for (setIndex in 0 until numSets) {
         for (repIndex in 0 until numReps - 1) {
@@ -93,4 +92,5 @@ fun Workout.getTimedSections(prepTime: Int): List<WorkoutSectionWithTime> {
 /**
  * Gets the workout duration, formatted in minutes and seconds (mm:ss)
  */
-fun Workout.getFormattedDuration() = getDurationMillis().getFormattedDuration(DurationUnit.MILLISECONDS)
+fun Workout.getFormattedDuration() =
+    getDurationMillis().getFormattedDuration(DurationUnit.MILLISECONDS)

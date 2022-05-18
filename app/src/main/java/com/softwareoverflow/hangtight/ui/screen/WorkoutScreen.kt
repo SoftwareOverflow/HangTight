@@ -4,6 +4,7 @@ import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
+import androidx.compose.material.MaterialTheme.typography
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.runtime.Composable
@@ -12,6 +13,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -99,7 +101,7 @@ private fun WorkoutScreenContent(
                 .padding(bottom = 16.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            ProvideTextStyle(value = MaterialTheme.typography.subtitle1) {
+            ProvideTextStyle(value = typography.subtitle1) {
                 Text("Set:")
                 Text(
                     "%d/%d".format(
@@ -121,19 +123,23 @@ private fun WorkoutScreenContent(
 
         Spacer(Modifier.weight(1f))
 
-        Text(currentSection.section.name, style = MaterialTheme.typography.h2)
+        Text(currentSection.section.name, style = typography.h2)
 
         Box(
             Modifier
                 .padding(16.dp)
-                .weight(1.5f)
+                .height(200.dp)
                 .fillMaxWidth()
         ) {
+
+            val fontSize = with(LocalDensity.current) {
+                typography.h1.fontSize / fontScale
+            }
 
             Text(
                 uiState.timeLeftInSection.toString(),
                 Modifier.align(Alignment.Center),
-                style = MaterialTheme.typography.h1
+                style = typography.h1.copy(fontSize = fontSize)
             )
 
             CircularProgressIndicator(
@@ -199,7 +205,7 @@ private fun WorkoutScreenContent(
 
         Row(Modifier.padding(top = 16.dp), verticalAlignment = Alignment.CenterVertically) {
 
-            ProvideTextStyle(value = MaterialTheme.typography.subtitle1) {
+            ProvideTextStyle(value = typography.subtitle1) {
                 Text(stringResource(R.string.remaining))
                 Text(uiState.timeLeftInWorkout)
 

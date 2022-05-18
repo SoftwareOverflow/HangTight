@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.ClickableText
 import androidx.compose.material.Button
 import androidx.compose.material.Card
+import androidx.compose.material.MaterialTheme.colors
 import androidx.compose.material.MaterialTheme.typography
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
@@ -16,6 +17,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
@@ -85,7 +87,7 @@ private fun ConsentDialogContent(onAccept: () -> Unit) {
                         .firstOrNull()?.let{
                             annotation -> uriHandler.openUri(annotation.item)
                         }
-                }, modifier = Modifier.align(CenterHorizontally))
+                }, modifier = Modifier.align(CenterHorizontally), style = TextStyle.Default.copy(color = colors.onSurface))
 
                 Spacer(Modifier.height(32.dp))
 

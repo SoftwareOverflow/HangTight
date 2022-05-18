@@ -87,6 +87,7 @@ fun WorkoutCreatorScreen(
             label = "Num Reps",
             Modifier
                 .weight(1f)
+                .fillMaxHeight()
                 .padding(16.dp),
             onInputError = {
                 viewModel.setNumRepsError()

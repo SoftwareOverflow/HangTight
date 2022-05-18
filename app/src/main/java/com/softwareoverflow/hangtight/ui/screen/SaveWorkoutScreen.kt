@@ -58,7 +58,7 @@ fun SaveWorkoutScreen(
 
     val savedWorkout by saveViewModel.savedWorkout.collectAsState()
     savedWorkout?.let {
-        LaunchedEffect(it){ // LaunchedEffect to ensure we only trigger the navigateBack call once
+        LaunchedEffect(it) { // LaunchedEffect to ensure we only trigger the navigateBack call once
             resultNavigator.navigateBack(it)
         }
     }
@@ -79,7 +79,7 @@ private fun SaveWorkoutScreenContent(
 
     val initialSaveType = if (workout.id == null) SaveType.CreateNew else SaveType.OverwriteExisting
     var saveType by remember { mutableStateOf(initialSaveType) }
-    var selectedOverwriteId by remember { mutableStateOf(workout.id ?: 0) }
+    var selectedOverwriteId by remember { mutableStateOf(workout.id ?: -1) }
 
 
     val nameLengthLimit = 50
@@ -95,14 +95,19 @@ private fun SaveWorkoutScreenContent(
         Row(verticalAlignment = Alignment.CenterVertically) {
             val isWorkoutNameError = workoutName.isBlank() || workoutName.length > nameLengthLimit
 
-            OutlinedTextField(value = workoutName, onValueChange = { workoutName = it }, label = {
-                Text(stringResource(R.string.workout_name))
-            }, isError = isWorkoutNameError, trailingIcon = {
-                if (isWorkoutNameError)
-                    Icon(Icons.Filled.Error, stringResource(R.string.content_desc_error))
-            },
+
+            OutlinedTextField(
+                value = workoutName, onValueChange = { workoutName = it },
+                label = {
+                    Text(stringResource(R.string.workout_name))
+                },
+                isError = isWorkoutNameError,
+                trailingIcon = {
+                    if (isWorkoutNameError)
+                        Icon(Icons.Filled.Error, stringResource(R.string.content_desc_error))
+                },
                 singleLine = true,
-                modifier = Modifier.weight(8f)
+                modifier = Modifier.weight(8f),
             )
 
             Text(
@@ -110,19 +115,25 @@ private fun SaveWorkoutScreenContent(
                 Modifier.weight(2f),
                 style = typography.overline,
                 color = if (isWorkoutNameError) colors.error else colors.secondary,
-                textAlign = TextAlign.Center
+                textAlign = TextAlign.Center,
             )
         }
 
         Row(verticalAlignment = Alignment.CenterVertically) {
             val isDescriptionError = workoutDesc.length > descriptionLengthLimit
 
-            OutlinedTextField(value = workoutDesc, onValueChange = { workoutDesc = it }, label = {
-                Text(stringResource(R.string.workout_desc))
-            }, modifier = Modifier.weight(8f), isError = isDescriptionError, trailingIcon = {
-                if (isDescriptionError)
-                    Icon(Icons.Filled.Error, stringResource(R.string.content_desc_error))
-            })
+            OutlinedTextField(
+                value = workoutDesc, onValueChange = { workoutDesc = it },
+                label = {
+                    Text(stringResource(R.string.workout_desc))
+                },
+                modifier = Modifier.weight(8f), isError = isDescriptionError,
+                trailingIcon = {
+                    if (isDescriptionError)
+                        Icon(Icons.Filled.Error, stringResource(R.string.content_desc_error))
+                },
+                maxLines = 5
+            )
 
             Text(
                 "${workoutDesc.length}/$descriptionLengthLimit",
@@ -172,23 +183,24 @@ private fun SaveWorkoutScreenContent(
             Text(stringResource(R.string.save_overwrite))
         }
 
-
-        AnimatedVisibility(visible = saveType == SaveType.OverwriteExisting) {
+        AnimatedVisibility(
+            visible = saveType == SaveType.OverwriteExisting,
+            Modifier
+                .weight(1f)
+                .padding(start = 32.dp, bottom = 64.dp)
+        ) {
             if (allSavedWorkouts.isEmpty()) {
                 showNoSavedWorkoutsSnackbar(context)
                 saveType = SaveType.CreateNew
             }
 
-            Column(Modifier.padding(start = 32.dp)) {
+            Column {
                 ErrorIconWarning(
                     message = stringResource(R.string.save_overwrite_warning),
                     Modifier.padding(vertical = 4.dp)
                 )
 
-                LazyColumn(
-                    Modifier
-                        .wrapContentHeight()
-                ) {
+                LazyColumn {
                     items(allSavedWorkouts) { savedWorkout ->
                         Row(
                             Modifier
@@ -207,20 +219,17 @@ private fun SaveWorkoutScreenContent(
             }
         }
 
-        Spacer(Modifier.weight(1f))
-
-        Spacer(Modifier.height(50.dp))
-
         Row(
-            Modifier.padding(horizontal = 64.dp, vertical = 16.dp),
-            horizontalArrangement = Arrangement.SpaceEvenly
+            Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceAround
         ) {
 
             Button(onClick = { onCancel() }) {
                 Text(stringResource(R.string.cancel))
             }
 
-            Spacer(Modifier.weight(1f))
+            val canSave = workoutName.isNotBlank() &&
+                    !(saveType == SaveType.OverwriteExisting && selectedOverwriteId == -1)
 
             Button(onClick = {
                 if (
@@ -229,7 +238,10 @@ private fun SaveWorkoutScreenContent(
                     allSavedWorkouts.size >= UpgradeManager.numFreeWorkouts
                 ) {
                     SnackbarManager.showMessage(
-                        context.getString(R.string.free_version_save_limit, UpgradeManager.numFreeWorkouts),
+                        context.getString(
+                            R.string.free_version_save_limit,
+                            UpgradeManager.numFreeWorkouts
+                        ),
                         actionText = context.getString(R.string.upgrade),
                         onAction = { onUpgrade() })
                 } else {
@@ -250,7 +262,7 @@ private fun SaveWorkoutScreenContent(
                             )
                     }
                 }
-            }, enabled = workoutName.isNotBlank()) {
+            }, enabled = canSave) {
                 Text(stringResource(R.string.save_workout))
             }
         }

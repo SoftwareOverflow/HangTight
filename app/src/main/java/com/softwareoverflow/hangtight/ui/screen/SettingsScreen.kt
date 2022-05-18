@@ -2,6 +2,7 @@ package com.softwareoverflow.hangtight.ui.screen
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.*
 import androidx.compose.material.MaterialTheme.typography
 import androidx.compose.material.icons.Icons
@@ -10,7 +11,6 @@ import androidx.compose.material.icons.filled.ArrowDropUp
 import androidx.compose.material.icons.filled.Save
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.Alignment.Companion.End
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
@@ -50,32 +50,45 @@ private fun SettingsScreenContent(
     onAnalyticsChange: (Boolean) -> Unit,
     onSaveChanges: () -> Unit,
 ) {
-    Column(
+    Box(
         Modifier
             .fillMaxSize()
-            .padding(16.dp)
-    ) {
-        PrepTimeRow(uiState.prepTime) {
-            onPrepTimeChange(it)
+            .padding(16.dp)) {
+        LazyColumn(
+            Modifier
+                .fillMaxSize()
+                .padding(bottom = 64.dp)
+        ) {
+            item {
+                PrepTimeRow(uiState.prepTime) {
+                    onPrepTimeChange(it)
+                }
+            }
+
+            item {
+                Sound321Row(uiState.sound321) {
+                    onSound321Change(it)
+                }
+            }
+
+            item {
+                VibrateRow(value = uiState.vibrate) {
+                    onVibrateChange(it)
+                }
+            }
+
+            item {
+                WarmUpRow(value = uiState.warmUp, onValueChange = { onWarmUpChange(it) })
+            }
+
+            item {
+                AnalyticsRow(value = uiState.analyticsEnabled) {
+                    onAnalyticsChange(it)
+                }
+            }
         }
 
-        Sound321Row(uiState.sound321) {
-            onSound321Change(it)
-        }
-
-        VibrateRow(value = uiState.vibrate) {
-            onVibrateChange(it)
-        }
-
-        WarmUpRow(value = uiState.warmUp, onValueChange = { onWarmUpChange(it) })
-
-        AnalyticsRow(value = uiState.analyticsEnabled) {
-            onAnalyticsChange(it)
-        }
-
-        Spacer(Modifier.weight(1f))
-
-        FloatingActionButton(onClick = { onSaveChanges() }, Modifier.align(End)) {
+        FloatingActionButton(onClick = { onSaveChanges() }, Modifier.align(Alignment.BottomEnd)) {
             Icon(Icons.Filled.Save, stringResource(R.string.content_desc_save_settings))
         }
     }
@@ -94,12 +107,12 @@ private fun SettingsRow(
         verticalAlignment = Alignment.CenterVertically
     ) {
 
-        Column(Modifier.weight(3f)) {
+        Column(Modifier.weight(7f)) {
             Text(name, Modifier.padding(4.dp), style = typography.body1)
             Text(subtitle, Modifier.padding(4.dp), style = typography.caption)
         }
 
-        Box(Modifier.weight(1f), contentAlignment = Alignment.CenterEnd) {
+        Box(Modifier.weight(3f), contentAlignment = Alignment.CenterEnd) {
             content()
         }
     }

@@ -23,8 +23,8 @@ android {
         applicationId "com.newtonapps.hangtight"
         minSdk 27
         targetSdk 32
-        versionCode 23
-        versionName "2.2.0"
+        versionCode 25
+        versionName "2.2.2"
 
         kapt {
             arguments {
@@ -53,7 +53,7 @@ android {
         }
 
         release {
-            minifyEnabled false
+            minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
 
             resValue "string", "adUnitId_banner", "\"ca-app-pub-5961771507160254/4534904901\""

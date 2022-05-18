@@ -41,17 +41,17 @@ fun AppDrawer(
                 .aspectRatio(1f)
                 .background(MaterialTheme.colors.primary.copy(alpha = 0.5f))
         ) {
+            Image(
+                painterResource(id = R.mipmap.ic_launcher_foreground), null,
+                Modifier.fillMaxSize(),
+                alignment = Alignment.Center
+            )
+
             Text(
                 "Hang",
                 Modifier
                     .align(Alignment.TopStart)
                     .padding(16.dp), style = MaterialTheme.typography.h3
-            )
-
-            Image(
-                painterResource(id = R.mipmap.ic_launcher_foreground), null,
-                Modifier.fillMaxSize(),
-                alignment = Alignment.Center
             )
 
             Text(

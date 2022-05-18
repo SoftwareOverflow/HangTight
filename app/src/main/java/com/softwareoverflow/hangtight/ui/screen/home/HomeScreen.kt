@@ -14,6 +14,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.min
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.RootNavGraph
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
@@ -39,10 +40,13 @@ fun HomeScreen(navigator: DestinationsNavigator) {
 
         val viewWidth = with(LocalDensity.current) { size.width.dp / this.density }
         val viewHeight = with(LocalDensity.current) { size.height.dp / this.density }
+
+        val imgWidth = min(viewWidth, viewHeight * 0.55f)
+
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .offset(0.dp, (viewHeight - viewWidth - 45.dp)), Arrangement.End
+                .offset(0.dp, (viewHeight - imgWidth - 45.dp)), Arrangement.End
         ) {
 
             Button(
@@ -56,7 +60,7 @@ fun HomeScreen(navigator: DestinationsNavigator) {
 
         Button(
             modifier = Modifier
-                .offset(0.dp, viewWidth - 16.dp)
+                .offset(0.dp, imgWidth - 16.dp)
                 .padding(start = 16.dp),
             onClick = { navigator.navigate(LoadWorkoutScreenDestination()) }) {
             Text(stringResource(R.string.load_saved_workout))
@@ -65,14 +69,15 @@ fun HomeScreen(navigator: DestinationsNavigator) {
         Image(
             painter = painterResource(id = R.drawable.bg_male), contentDescription = null,
             Modifier
-                .width(IntrinsicSize.Max)
+                .width(imgWidth)
+                .align(Alignment.TopStart)
                 .aspectRatio(1f)
         )
 
         Image(
             painter = painterResource(id = R.drawable.bg_female), contentDescription = null,
             Modifier
-                .width(IntrinsicSize.Max)
+                .width(imgWidth)
                 .aspectRatio(1f)
                 .align(Alignment.BottomCenter)
         )

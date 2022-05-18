@@ -13,6 +13,7 @@
 
 # built application files
 *.apk
+*.aab
 *.ap_
 
 # Mac files

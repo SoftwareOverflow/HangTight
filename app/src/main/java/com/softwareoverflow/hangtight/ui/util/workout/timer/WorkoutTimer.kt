@@ -2,7 +2,6 @@ package com.softwareoverflow.hangtight.ui.util.workout.timer
 
 import com.softwareoverflow.hangtight.data.Workout
 import com.softwareoverflow.hangtight.ui.util.ListObjectIterator
-import com.softwareoverflow.hangtight.ui.util.workout.WorkoutSection
 import com.softwareoverflow.hangtight.ui.util.workout.getDurationMillis
 import com.softwareoverflow.hangtight.ui.util.workout.getTimedSections
 import com.softwareoverflow.hangtight.ui.util.workout.media.WorkoutMediaManager
@@ -21,7 +20,8 @@ class WorkoutTimer(
     private var isRunning = false
     private var isPaused: Boolean = false
 
-    private val workoutSets = ListObjectIterator(workout.getTimedSections(prepTime).listIterator())
+    private val timedSections = workout.getTimedSections(prepTime)
+    private val workoutSets = ListObjectIterator(timedSections.listIterator())
     private var currentSection = workoutSets.next()
 
     private var millisRemainingInSection = getCurrentSectionTime()
@@ -145,7 +145,7 @@ class WorkoutTimer(
     private fun startNextWorkoutSection() {
         var nextSection = workoutSets.tryGetNext()
 
-        if (nextSection?.section == WorkoutSection.Prepare) {
+        if (nextSection == timedSections.first()) {
             nextSection = workoutSets.tryGetNext()
         }
 
