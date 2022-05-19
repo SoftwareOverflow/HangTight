@@ -79,7 +79,7 @@ fun HomeScreen(navigator: DestinationsNavigator) {
             Modifier
                 .width(imgWidth)
                 .aspectRatio(1f)
-                .align(Alignment.BottomCenter)
+                .align(Alignment.BottomEnd)
         )
     }
 }

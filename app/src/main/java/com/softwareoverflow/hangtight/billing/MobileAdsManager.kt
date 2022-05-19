@@ -20,10 +20,7 @@ import timber.log.Timber
 
 class MobileAdsManager(val context: Context) : OnInitializationCompleteListener {
 
-
     init {
-        Timber.i("Init mobileAdsManager")
-
         val conf = RequestConfiguration.Builder()
             .setTestDeviceIds(BuildConfig.DEV_DEVICES.asList())
             .build()
@@ -40,18 +37,13 @@ class MobileAdsManager(val context: Context) : OnInitializationCompleteListener 
     }
 
     override fun onInitializationComplete(p0: InitializationStatus) {
-        Timber.i("onInitializationComplete: ${p0.adapterStatusMap.map { it.key }}")
+        Timber.i("onInitializationComplete: ${p0.adapterStatusMap.map { "${it.key} - ${it.value.initializationState}" }}")
 
-        if (p0.adapterStatusMap.any { adapter -> adapter.value.initializationState == AdapterStatus.State.READY }) {
+        if (p0.adapterStatusMap.any { adapter -> adapter.value.initializationState == AdapterStatus.State.READY })
             loadInterstitial(context.applicationContext)
-        } else {
-            MobileAds.initialize(context.applicationContext, this)
-        }
-
     }
 
     companion object {
-
 
         private const val retryDelay = 2000L
         private var adLoadAttempts = 0
