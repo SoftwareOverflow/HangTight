@@ -2,7 +2,12 @@ package com.softwareoverflow.hangtight.billing
 
 import android.app.Activity
 import android.content.Context
-import com.google.android.gms.ads.*
+import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.AdSize
+import com.google.android.gms.ads.FullScreenContentCallback
+import com.google.android.gms.ads.LoadAdError
+import com.google.android.gms.ads.MobileAds
+import com.google.android.gms.ads.RequestConfiguration
 import com.google.android.gms.ads.initialization.AdapterStatus
 import com.google.android.gms.ads.initialization.InitializationStatus
 import com.google.android.gms.ads.initialization.OnInitializationCompleteListener
@@ -20,7 +25,11 @@ import timber.log.Timber
 
 class MobileAdsManager(val context: Context) : OnInitializationCompleteListener {
 
-    init {
+    private var isInitialized = false
+
+    fun initialize() {
+        if(isInitialized) return
+
         val conf = RequestConfiguration.Builder()
             .setTestDeviceIds(BuildConfig.DEV_DEVICES.asList())
             .build()
@@ -34,6 +43,8 @@ class MobileAdsManager(val context: Context) : OnInitializationCompleteListener 
                 interstitialAd = null
             }
         }
+
+        isInitialized = true
     }
 
     override fun onInitializationComplete(p0: InitializationStatus) {

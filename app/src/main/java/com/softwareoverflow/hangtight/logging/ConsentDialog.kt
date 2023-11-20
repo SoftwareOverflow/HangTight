@@ -29,13 +29,13 @@ import com.softwareoverflow.hangtight.R
 import com.softwareoverflow.hangtight.ui.theme.AppTheme
 
 @Composable
-fun ConsentDialog(firebaseManager: FirebaseManager) {
+fun ConsentDialog(onAccept: () -> Unit) {
     var openDialog by remember { mutableStateOf(FirebaseManager.showConsentDialog) }
 
     if (openDialog)
         ConsentDialogContent {
             openDialog = false
-            firebaseManager.onConsentGiven()
+            onAccept()
         }
 }
 

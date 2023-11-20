@@ -10,7 +10,11 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Scaffold
-import androidx.compose.runtime.*
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -130,7 +134,13 @@ class MainActivity : ComponentActivity() {
                             modifier = mod
                         )
 
-                        ConsentDialog(firebaseManager) // Ensure we obtain the users consent for analytics etc
+                        if (FirebaseManager.showConsentDialog)
+                            ConsentDialog {
+                                firebaseManager.onConsentGiven()
+                                adsManager.initialize()
+                            } // Ensure we obtain the users consent for analytics etc
+                        else
+                            adsManager.initialize()
                     }
                 )
             }
