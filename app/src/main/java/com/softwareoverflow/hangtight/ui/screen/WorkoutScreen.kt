@@ -76,7 +76,6 @@ fun WorkoutScreen(
 
     val isFinished by viewModel.isWorkoutFinished.collectAsState()
     if (isFinished) {
-        viewModel.cancel()
         navigator.navigate(WorkoutCompleteScreenDestination(workout))
     }
 

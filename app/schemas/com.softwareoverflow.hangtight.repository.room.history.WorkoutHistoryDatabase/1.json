@@ -1,0 +1,52 @@
+{
+  "formatVersion": 1,
+  "database": {
+    "version": 1,
+    "identityHash": "b0149d5466680c3a6e0a91806e21c921",
+    "entities": [
+      {
+        "tableName": "workout_history",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`_hang_time` INTEGER NOT NULL, `_rest_time` INTEGER NOT NULL, `_recover_time` INTEGER NOT NULL, `_date_string` TEXT NOT NULL, PRIMARY KEY(`_date_string`))",
+        "fields": [
+          {
+            "fieldPath": "hangTime",
+            "columnName": "_hang_time",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "restTime",
+            "columnName": "_rest_time",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "recoverTime",
+            "columnName": "_recover_time",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "date",
+            "columnName": "_date_string",
+            "affinity": "TEXT",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "_date_string"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [],
+        "foreignKeys": []
+      }
+    ],
+    "views": [],
+    "setupQueries": [
+      "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'b0149d5466680c3a6e0a91806e21c921')"
+    ]
+  }
+}

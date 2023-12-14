@@ -1,17 +1,20 @@
 package com.softwareoverflow.hangtight.ui.util.workout.timer
 
 import com.softwareoverflow.hangtight.data.Workout
+import com.softwareoverflow.hangtight.ui.history.write.IHistorySaver
 import com.softwareoverflow.hangtight.ui.util.ListObjectIterator
 import com.softwareoverflow.hangtight.ui.util.workout.getDurationMillis
 import com.softwareoverflow.hangtight.ui.util.workout.getTimedSections
 import com.softwareoverflow.hangtight.ui.util.workout.media.WorkoutMediaManager
 import com.softwareoverflow.hangtight.ui.util.workout.media.WorkoutSound
+import timber.log.Timber
 
 class WorkoutTimer(
     workout: Workout,
     private val observer: IWorkoutTimerListener,
     prepTime: Int,
-    private val mediaManager: WorkoutMediaManager
+    private val mediaManager: WorkoutMediaManager,
+    private val historySaver: IHistorySaver,
 ) {
     private var millisecondsRemaining: Long = (workout.getDurationMillis() + prepTime * 1000L)
 
@@ -39,6 +42,9 @@ class WorkoutTimer(
                     (millisRemainingInSection / 1000).toInt(),
                     (millisecondsRemaining / 1000).toInt()
                 )
+
+                Timber.d("History WorkoutTimer OnTimerTick: $tickInterval")
+                historySaver.addHistory((tickInterval / 1000).toInt(), currentSection.section)
 
                 if (millisRemainingInSection in 1..3000L)
                     mediaManager.playSound(WorkoutSound.SOUND_321)
@@ -187,6 +193,7 @@ class WorkoutTimer(
     fun cancel() {
         getTimerProvider().cancelTimer()
         mediaManager.onDestroy()
+        historySaver.write()
     }
 
     private fun getCurrentSectionTime() = currentSection.durationSeconds * 1000L
