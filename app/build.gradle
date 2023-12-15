@@ -23,8 +23,8 @@ android {
         applicationId "com.newtonapps.hangtight"
         minSdk 27
         targetSdk 33
-        versionCode 31
-        versionName "2.4.1"
+        versionCode 33
+        versionName "2.5.0"
 
         ksp {
             arg("room.schemaLocation", "$projectDir/schemas")
