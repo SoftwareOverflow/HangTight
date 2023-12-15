@@ -2,6 +2,7 @@ package com.softwareoverflow.hangtight.ui.viewmodel
 
 import android.content.Context
 import android.content.SharedPreferences
+import androidx.lifecycle.ViewModel
 import com.google.android.play.core.review.ReviewInfo
 import com.google.android.play.core.review.ReviewManagerFactory
 import com.softwareoverflow.hangtight.data.Workout
@@ -20,7 +21,8 @@ class WorkoutCompleteViewModel @Inject constructor(
     @ApplicationContext context: Context,
     sharedPreferences: SharedPreferences,
     private val firebaseManager: FirebaseManager,
-) : BillingViewModel() {
+    private val billingViewModel: BillingViewModel
+) : ViewModel() {
 
     private var isInitialized = false
 
@@ -65,6 +67,12 @@ class WorkoutCompleteViewModel @Inject constructor(
             reviewInfo?.let { reviewInfo ->
                 reviewManager.launchReviewFlow(activity, reviewInfo)
             }
+        }
+    }
+
+    fun launchUpgrade(context: Context){
+        context.findActivity()?.let {
+            billingViewModel.purchasePro(it)
         }
     }
 

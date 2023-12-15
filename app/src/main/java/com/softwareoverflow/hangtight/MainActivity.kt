@@ -22,12 +22,12 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import com.ramcosta.composedestinations.DestinationsNavHost
 import com.ramcosta.composedestinations.navigation.navigate
 import com.softwareoverflow.hangtight.billing.AdvertView
-import com.softwareoverflow.hangtight.billing.BillingRepo
 import com.softwareoverflow.hangtight.billing.MobileAdsManager
 import com.softwareoverflow.hangtight.billing.UpgradeManager
 import com.softwareoverflow.hangtight.logging.ConsentDialog
 import com.softwareoverflow.hangtight.logging.EmailFeedback
 import com.softwareoverflow.hangtight.logging.FirebaseManager
+import com.softwareoverflow.hangtight.repository.billing.BillingRepository
 import com.softwareoverflow.hangtight.ui.nav.screenTitles
 import com.softwareoverflow.hangtight.ui.screen.NavGraphs
 import com.softwareoverflow.hangtight.ui.screen.destinations.HomeScreenDestination
@@ -37,6 +37,8 @@ import com.softwareoverflow.hangtight.ui.screen.home.HangTightTopAppBar
 import com.softwareoverflow.hangtight.ui.screen.home.HangTightTopScreenBar
 import com.softwareoverflow.hangtight.ui.theme.AppTheme
 import com.softwareoverflow.hangtight.ui.util.LockScreenOrientation
+import com.softwareoverflow.hangtight.ui.util.findActivity
+import com.softwareoverflow.hangtight.ui.viewmodel.BillingViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -45,7 +47,10 @@ import javax.inject.Inject
 class MainActivity : ComponentActivity() {
 
     @Inject
-    lateinit var billingRepo: BillingRepo
+    lateinit var billingClient: BillingRepository
+
+    @Inject
+    lateinit var billingViewModel: BillingViewModel
 
     @Inject
     lateinit var adsManager: MobileAdsManager
@@ -86,35 +91,32 @@ class MainActivity : ComponentActivity() {
 
                 val isUpgraded by UpgradeManager.userUpgradedFlow.collectAsState()
 
-                Scaffold(
-                    scaffoldState = appState.scaffoldState,
-                    topBar = {
-                        AnimatedVisibility(visible = showTopAppBar) {
-                            HangTightTopAppBar(toggleDrawer)
+                Scaffold(scaffoldState = appState.scaffoldState, topBar = {
+                    AnimatedVisibility(visible = showTopAppBar) {
+                        HangTightTopAppBar(toggleDrawer)
+                    }
+                    if (!showTopAppBar) {
+                        screenTitles.getOrDefault(currentScreen, R.string.__empty).let {
+                            if (it != R.string.__empty) HangTightTopScreenBar(
+                                currentScreen = stringResource(
+                                    it
+                                )
+                            )
                         }
-                        if (!showTopAppBar) {
-                            screenTitles.getOrDefault(currentScreen, R.string.__empty).let {
-                                if (it != R.string.__empty)
-                                    HangTightTopScreenBar(currentScreen = stringResource(it))
-                            }
+                    }
+                }, drawerContent = {
+                    AppDrawer(openSettings = {
+                        toggleDrawer()
+                        appState.navController.navigate(SettingsScreenDestination())
+                    }, sendFeedback = {
+                        toggleDrawer()
+                        EmailFeedback.launch(this@MainActivity)
+                    }, onUpgrade = {
+                        this@MainActivity.findActivity()?.let {
+                            billingViewModel.purchasePro(it)
                         }
-                    },
-                    drawerContent = {
-                        AppDrawer(
-                            openSettings = {
-                                toggleDrawer()
-                                appState.navController.navigate(SettingsScreenDestination())
-                            },
-                            sendFeedback = {
-                                toggleDrawer()
-                                EmailFeedback.launch(this@MainActivity)
-                            }, onUpgrade =
-                            {
-                                billingRepo.launchProUpgradeFlow(this@MainActivity)
-                            })
-                    },
-                    drawerGesturesEnabled = false,
-                    content = { paddingValues ->
+                    })
+                }, drawerGesturesEnabled = false, content = { paddingValues ->
 
                         var mod = Modifier
                             .fillMaxSize()
@@ -150,7 +152,6 @@ class MainActivity : ComponentActivity() {
     override fun onResume() {
         super.onResume()
 
-        if (this::billingRepo.isInitialized)
-            billingRepo.onResume()
+        if (this::billingClient.isInitialized) billingClient.queryOneTimeProductPurchases()
     }
 }
