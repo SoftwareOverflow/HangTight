@@ -7,7 +7,6 @@ import com.softwareoverflow.hangtight.ui.util.workout.getDurationMillis
 import com.softwareoverflow.hangtight.ui.util.workout.getTimedSections
 import com.softwareoverflow.hangtight.ui.util.workout.media.WorkoutMediaManager
 import com.softwareoverflow.hangtight.ui.util.workout.media.WorkoutSound
-import timber.log.Timber
 
 class WorkoutTimer(
     workout: Workout,
@@ -43,7 +42,6 @@ class WorkoutTimer(
                     (millisecondsRemaining / 1000).toInt()
                 )
 
-                Timber.d("History WorkoutTimer OnTimerTick: $tickInterval")
                 historySaver.addHistory((tickInterval / 1000).toInt(), currentSection.section)
 
                 if (millisRemainingInSection in 1..3000L)
