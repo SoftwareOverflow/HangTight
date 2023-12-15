@@ -1,6 +1,7 @@
 package com.softwareoverflow.hangtight.ui.util.workout.timer
 
 import android.os.CountDownTimer
+import timber.log.Timber
 
 class WorkoutTimerProvider(
     val onTimerFinish: () -> Unit,

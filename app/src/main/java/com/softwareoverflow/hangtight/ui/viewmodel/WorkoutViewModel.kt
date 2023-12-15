@@ -4,6 +4,7 @@ import android.content.SharedPreferences
 import androidx.lifecycle.ViewModel
 import com.softwareoverflow.hangtight.data.Workout
 import com.softwareoverflow.hangtight.ui.SharedPreferencesManager
+import com.softwareoverflow.hangtight.ui.history.write.IHistorySaver
 import com.softwareoverflow.hangtight.ui.util.getFormattedDuration
 import com.softwareoverflow.hangtight.ui.util.workout.WorkoutSection
 import com.softwareoverflow.hangtight.ui.util.workout.WorkoutSectionWithTime
@@ -15,13 +16,15 @@ import com.softwareoverflow.hangtight.ui.util.workout.timer.WorkoutTimer
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import timber.log.Timber
 import javax.inject.Inject
 import kotlin.time.DurationUnit
 
 @HiltViewModel
 class WorkoutViewModel @Inject constructor(
     private val sharedPrefs: SharedPreferences,
-    private val workoutMediaManager: WorkoutMediaManager
+    private val workoutMediaManager: WorkoutMediaManager,
+    private val historySaver: IHistorySaver
 ) : ViewModel(),
     IWorkoutTimerListener {
 
@@ -56,7 +59,7 @@ class WorkoutViewModel @Inject constructor(
                 )
             )
 
-            timer = WorkoutTimer(workout, this, prepTime, workoutMediaManager)
+            timer = WorkoutTimer(workout, this, prepTime, workoutMediaManager, historySaver)
 
             isInitialized = true
 
@@ -114,16 +117,12 @@ class WorkoutViewModel @Inject constructor(
     }
 
     override fun onFinish() {
-        timer.cancel()
         _isWorkoutFinished.value = true
     }
 
-    fun cancel() {
-        timer.cancel()
-    }
-
     override fun onCleared() {
-        cancel()
+        Timber.d("ViewModel onCleared (Cancel)")
+        timer.cancel()
         super.onCleared()
     }
 }
