@@ -50,6 +50,7 @@ import com.softwareoverflow.hangtight.ui.util.ErrorIconWarning
 import com.softwareoverflow.hangtight.ui.util.SnackbarManager
 import com.softwareoverflow.hangtight.ui.util.findActivity
 import com.softwareoverflow.hangtight.ui.viewmodel.WorkoutCompleteViewModel
+import timber.log.Timber
 
 @Composable
 @Destination
@@ -59,6 +60,7 @@ fun WorkoutCompleteScreen(
     workout: Workout,
     viewModel: WorkoutCompleteViewModel = hiltViewModel()
 ) {
+
     LaunchedEffect(workout) {
         viewModel.initialize(workout)
     }
@@ -79,6 +81,10 @@ fun WorkoutCompleteScreen(
         }
     }
 
+    WorkoutCompleteScreenContent(showSaveWarning = workout.id == null,
+        onUpgrade = { viewModel.launchUpgrade(context) },
+        onSave = { navigator.navigate(SaveWorkoutScreenDestination(workout)) })
+
     var showAd by rememberSaveable { mutableStateOf(!UpgradeManager.isUserUpgraded()) }
     val launchInAppReview by viewModel.launchReviewFlow.collectAsState()
 
@@ -89,10 +95,6 @@ fun WorkoutCompleteScreen(
         InterstitialAdContent {
             showAd = false
         }
-    } else {
-        WorkoutCompleteScreenContent(showSaveWarning = workout.id == null,
-            onUpgrade = { viewModel.launchUpgrade(context) },
-            onSave = { navigator.navigate(SaveWorkoutScreenDestination(workout)) })
     }
 }
 
@@ -106,6 +108,7 @@ private fun InterstitialAdContent(toggleShowAd: () -> Unit) {
         }
 
         override fun onAdFailedToShowFullScreenContent(adError: AdError) {
+            Timber.d("Ad failed to load: ${adError.message}")
             toggleShowAd()
         }
 

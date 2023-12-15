@@ -78,7 +78,7 @@ class MobileAdsManager(val context: Context) : OnInitializationCompleteListener 
                         interstitialAd = null
 
                         if (adLoadAttempts <= 5 && !UpgradeManager.isUserUpgraded()) {
-                            Timber.w("Failed to load interstitial advert on attempt $adLoadAttempts. Retrying in ${adLoadAttempts * retryDelay} milliseconds")
+                            Timber.w("Failed to load interstitial advert on attempt $adLoadAttempts. Retrying in ${adLoadAttempts * retryDelay} milliseconds. '${adError.message}'")
 
                             MainScope().launch {
                                 delay(adLoadAttempts * retryDelay)

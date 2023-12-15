@@ -23,8 +23,8 @@ android {
         applicationId "com.newtonapps.hangtight"
         minSdk 27
         targetSdk 33
-        versionCode 29
-        versionName "2.3.0"
+        versionCode 31
+        versionName "2.4.1"
 
         ksp {
             arg("room.schemaLocation", "$projectDir/schemas")
@@ -93,14 +93,13 @@ dependencies {
     implementation "androidx.compose.material:material"
     implementation "androidx.compose.material:material-icons-extended"
     implementation "androidx.compose.ui:ui-tooling-preview"
-    implementation "androidx.lifecycle:lifecycle-runtime-ktx:2.4.1"
+    implementation "androidx.lifecycle:lifecycle-runtime-ktx:2.6.2"
 
 
-    implementation "androidx.navigation:navigation-fragment-ktx:$nav_version"
-    implementation "androidx.navigation:navigation-ui-ktx:$nav_version"
-    implementation "androidx.navigation:navigation-compose:$nav_version"
-
-    implementation "androidx.activity:activity-compose:1.4.0"
+    implementation "androidx.navigation:navigation-fragment-ktx:2.5.3"
+    implementation "androidx.navigation:navigation-ui-ktx:2.5.3"
+    implementation "androidx.navigation:navigation-compose"
+    implementation "androidx.activity:activity-compose"
     //implementation "androidx.navigation:navigation-compose"
     //implementation "androidx.navigation:navigation-ui-ktx"
 
