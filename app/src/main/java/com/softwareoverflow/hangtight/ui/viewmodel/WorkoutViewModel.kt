@@ -16,7 +16,6 @@ import com.softwareoverflow.hangtight.ui.util.workout.timer.WorkoutTimer
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import timber.log.Timber
 import javax.inject.Inject
 import kotlin.time.DurationUnit
 
@@ -118,11 +117,15 @@ class WorkoutViewModel @Inject constructor(
 
     override fun onFinish() {
         _isWorkoutFinished.value = true
+        cancel()
+    }
+
+    private fun cancel() {
+        timer.cancel()
     }
 
     override fun onCleared() {
-        Timber.d("ViewModel onCleared (Cancel)")
-        timer.cancel()
+        cancel()
         super.onCleared()
     }
 }

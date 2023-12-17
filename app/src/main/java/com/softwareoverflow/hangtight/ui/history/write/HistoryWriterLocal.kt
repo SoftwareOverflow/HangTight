@@ -5,7 +5,6 @@ import com.softwareoverflow.hangtight.repository.room.history.WorkoutHistoryRoom
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import timber.log.Timber
 import javax.inject.Inject
 
 class HistoryWriterLocal @Inject constructor (private val db: WorkoutHistoryRoomDb) : IHistoryWriter {
@@ -14,7 +13,6 @@ class HistoryWriterLocal @Inject constructor (private val db: WorkoutHistoryRoom
 
     override fun writeHistory(obj: WorkoutHistory) {
         coroutineScope.launch {
-            Timber.d("Writing history: $obj")
             db.createOrUpdate(obj)
         }
     }
