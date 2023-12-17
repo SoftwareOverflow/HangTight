@@ -117,10 +117,15 @@ class WorkoutViewModel @Inject constructor(
 
     override fun onFinish() {
         _isWorkoutFinished.value = true
+        cancel()
+    }
+
+    private fun cancel() {
+        timer.cancel()
     }
 
     override fun onCleared() {
-        timer.cancel()
+        cancel()
         super.onCleared()
     }
 }
