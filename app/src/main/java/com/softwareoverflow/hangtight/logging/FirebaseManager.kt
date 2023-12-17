@@ -10,7 +10,7 @@ import com.softwareoverflow.hangtight.ui.util.workout.getDurationMillis
 
 class FirebaseManager constructor(
     context: Context,
-    val sharedPreferences: SharedPreferences
+    private val sharedPreferences: SharedPreferences
 ) {
 
     init {

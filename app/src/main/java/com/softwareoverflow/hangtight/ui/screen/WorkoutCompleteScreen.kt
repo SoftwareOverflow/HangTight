@@ -125,9 +125,7 @@ private fun InterstitialAdContent(toggleShowAd: () -> Unit) {
 
 @Composable
 private fun WorkoutCompleteScreenContent(
-    showSaveWarning: Boolean,
-    onUpgrade: () -> Unit,
-    onSave: () -> Unit
+    showSaveWarning: Boolean, onUpgrade: () -> Unit, onSave: () -> Unit
 ) {
 
     Column(
@@ -136,10 +134,12 @@ private fun WorkoutCompleteScreenContent(
             .padding(16.dp), horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Icon(
-            Icons.Filled.EmojiEvents, contentDescription = stringResource(R.string.content_desc_trophy),
+            Icons.Filled.EmojiEvents,
+            contentDescription = stringResource(R.string.content_desc_trophy),
             Modifier
                 .fillMaxWidth()
-                .aspectRatio(1f), tint = colors.primary
+                .aspectRatio(1f),
+            tint = colors.primary
         )
 
         Text(
@@ -148,7 +148,11 @@ private fun WorkoutCompleteScreenContent(
             textAlign = TextAlign.Center
         )
 
-        Text(stringResource(R.string.great_job), style = typography.body2, textAlign = TextAlign.Center)
+        Text(
+            stringResource(R.string.great_job),
+            style = typography.body2,
+            textAlign = TextAlign.Center
+        )
 
         Spacer(Modifier.weight(2f))
 
@@ -163,11 +167,10 @@ private fun WorkoutCompleteScreenContent(
         Spacer(Modifier.weight(1f))
 
         Row(Modifier.align(End), verticalAlignment = Alignment.CenterVertically) {
-            if (showSaveWarning)
-                ErrorIconWarning(
-                    message = stringResource(R.string.save_workout_use_again),
-                    Modifier.padding(end = 8.dp)
-                )
+            if (showSaveWarning) ErrorIconWarning(
+                message = stringResource(R.string.save_workout_use_again),
+                Modifier.padding(end = 8.dp)
+            )
 
             FloatingActionButton(onClick = { onSave() }) {
                 Icon(Icons.Filled.Save, stringResource(R.string.content_desc_save_workout))
@@ -180,10 +183,7 @@ private fun WorkoutCompleteScreenContent(
 @Composable
 private fun Preview_WorkoutCompleteScreen() {
     AppTheme(darkTheme = false) {
-        WorkoutCompleteScreenContent(
-            true,
-            {}, {}
-        )
+        WorkoutCompleteScreenContent(true, {}, {})
     }
 }
 
@@ -191,9 +191,6 @@ private fun Preview_WorkoutCompleteScreen() {
 @Composable
 private fun Preview_WorkoutCompleteScreen_Dark() {
     AppTheme(darkTheme = true) {
-        WorkoutCompleteScreenContent(
-            true,
-            {}, {}
-        )
+        WorkoutCompleteScreenContent(true, {}, {})
     }
 }
