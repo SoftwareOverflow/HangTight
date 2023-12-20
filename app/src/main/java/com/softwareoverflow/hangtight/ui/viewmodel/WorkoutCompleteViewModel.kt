@@ -13,14 +13,12 @@ import com.softwareoverflow.hangtight.ui.SharedPreferencesManager
 import com.softwareoverflow.hangtight.ui.util.findActivity
 import com.softwareoverflow.hangtight.ui.util.workout.media.WorkoutCompleteMediaManager
 import dagger.hilt.android.lifecycle.HiltViewModel
-import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class WorkoutCompleteViewModel @Inject constructor(
-    @ApplicationContext context: Context,
     sharedPreferences: SharedPreferences,
     private val firebaseManager: FirebaseManager,
     private val billingViewModel: BillingViewModel,
@@ -68,7 +66,7 @@ class WorkoutCompleteViewModel @Inject constructor(
         }
     }
 
-    fun showAdvert(context: Context, activity: Activity?) {
+    private fun showAdvert(context: Context, activity: Activity?) {
         if (InAppReviewManager.willAskForReview) {
             tryShowAdvert = false
             activity?.let {
