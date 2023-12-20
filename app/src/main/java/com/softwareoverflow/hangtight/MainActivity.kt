@@ -24,7 +24,7 @@ import com.ramcosta.composedestinations.navigation.navigate
 import com.softwareoverflow.hangtight.billing.AdvertView
 import com.softwareoverflow.hangtight.billing.MobileAdsManager
 import com.softwareoverflow.hangtight.billing.UpgradeManager
-import com.softwareoverflow.hangtight.logging.ConsentDialog
+import com.softwareoverflow.hangtight.consent.ConsentManagerGoogle
 import com.softwareoverflow.hangtight.logging.EmailFeedback
 import com.softwareoverflow.hangtight.logging.FirebaseManager
 import com.softwareoverflow.hangtight.repository.billing.BillingRepository
@@ -67,6 +67,15 @@ class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        // The Google SDK seems to load slowly, so start ASAP
+        val consentManager = ConsentManagerGoogle()
+        consentManager.handleConsent(this, this) {
+            // We have consent - initialize the required logging and ads
+            firebaseManager.onConsentGiven()
+            adsManager.initialize()
+        }
+
         setContent {
             LockScreenOrientation(orientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT)
             AppTheme {
@@ -125,32 +134,24 @@ class MainActivity : ComponentActivity() {
                     })
                 }, drawerGesturesEnabled = false, content = { paddingValues ->
 
-                        var mod = Modifier
-                            .fillMaxSize()
-                            .padding(paddingValues)
+                    var mod = Modifier
+                        .fillMaxSize()
+                        .padding(paddingValues)
 
-                        if (!isUpgraded && (currentScreen in MobileAdsManager.showAdsOnPages)) {
-                            Box {
-                                AdvertView()
-                            }
-
-                            mod = mod.padding(top = MobileAdsManager.bannerAdSize.height.dp)
+                    if (!isUpgraded && (currentScreen in MobileAdsManager.showAdsOnPages)) {
+                        Box {
+                            AdvertView()
                         }
 
-                        DestinationsNavHost(
-                            navGraph = NavGraphs.root,
-                            navController = appState.navController,
-                            modifier = mod
-                        )
-
-                        if (FirebaseManager.showConsentDialog)
-                            ConsentDialog {
-                                firebaseManager.onConsentGiven()
-                                adsManager.initialize()
-                            } // Ensure we obtain the users consent for analytics etc
-                        else
-                            adsManager.initialize()
+                        mod = mod.padding(top = MobileAdsManager.bannerAdSize.height.dp)
                     }
+
+                    DestinationsNavHost(
+                        navGraph = NavGraphs.root,
+                        navController = appState.navController,
+                        modifier = mod
+                    )
+                }
                 )
             }
         }
@@ -159,6 +160,12 @@ class MainActivity : ComponentActivity() {
         scopeDefault.launch {
             InAppReviewManager.createReviewManager(this@MainActivity)
         }
+
+        // !DEBUG ONLY! - RESET the consent status
+        // consentManager.resetConsent()
+
+        // !DEBUG ONLY! - RESET pro purchase status
+        // billingViewModel.debugConsumePremium()
     }
 
     override fun onResume() {
