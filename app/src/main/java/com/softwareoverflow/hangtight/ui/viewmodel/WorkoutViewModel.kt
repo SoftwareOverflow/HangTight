@@ -58,16 +58,23 @@ class WorkoutViewModel @Inject constructor(
                 )
             )
 
+            _uiState.value = _uiState.value.copy(
+                isMuted = !sharedPrefs.getBoolean(
+                    SharedPreferencesManager.playWorkoutSounds,
+                    true
+                )
+            )
+
             timer = WorkoutTimer(workout, this, prepTime, workoutMediaManager, historySaver)
 
             isInitialized = true
 
-            if(!showWarmUpWarning.value)
+            if (!showWarmUpWarning.value)
                 timer.start()
         }
     }
 
-    fun closeWarmUpDialog(neverShowAgain: Boolean){
+    fun closeWarmUpDialog(neverShowAgain: Boolean) {
         sharedPrefs.edit().apply {
             putBoolean(SharedPreferencesManager.showWarmUpWarning, !neverShowAgain)
             apply()

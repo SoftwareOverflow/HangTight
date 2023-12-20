@@ -10,6 +10,7 @@ object SharedPreferencesManager {
     const val prepTime = "timer"
     const val vibrate = "vibrate"
     const val sound321 = "sound321"
+    const val playWorkoutSounds = "workoutSounds"
 
     const val workoutsCompleted = "workoutsCompleted"
 }

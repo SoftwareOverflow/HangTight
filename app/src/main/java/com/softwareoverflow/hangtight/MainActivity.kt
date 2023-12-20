@@ -28,6 +28,7 @@ import com.softwareoverflow.hangtight.logging.ConsentDialog
 import com.softwareoverflow.hangtight.logging.EmailFeedback
 import com.softwareoverflow.hangtight.logging.FirebaseManager
 import com.softwareoverflow.hangtight.repository.billing.BillingRepository
+import com.softwareoverflow.hangtight.review.InAppReviewManager
 import com.softwareoverflow.hangtight.ui.nav.screenTitles
 import com.softwareoverflow.hangtight.ui.screen.NavGraphs
 import com.softwareoverflow.hangtight.ui.screen.destinations.HomeScreenDestination
@@ -40,6 +41,10 @@ import com.softwareoverflow.hangtight.ui.util.LockScreenOrientation
 import com.softwareoverflow.hangtight.ui.util.findActivity
 import com.softwareoverflow.hangtight.ui.viewmodel.BillingViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -57,6 +62,8 @@ class MainActivity : ComponentActivity() {
 
     @Inject
     lateinit var firebaseManager: FirebaseManager
+
+    private val scopeDefault = CoroutineScope(Job() + Dispatchers.Default)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -147,11 +154,21 @@ class MainActivity : ComponentActivity() {
                 )
             }
         }
+
+        // Create the InAppReviewManager
+        scopeDefault.launch {
+            InAppReviewManager.createReviewManager(this@MainActivity)
+        }
     }
 
     override fun onResume() {
         super.onResume()
 
         if (this::billingClient.isInitialized) billingClient.queryOneTimeProductPurchases()
+    }
+
+    override fun onDestroy() {
+        scopeDefault.cancel("Main Activity onDestroy() has been called")
+        super.onDestroy()
     }
 }

@@ -96,4 +96,5 @@
     <string name="show_warm_up_warning">Show Warm Up Warning</string>
     <string name="settings_warm_up_desc">Show disclaimer about warming up properly before starting workout</string>
     <string name="settings_saved">Settings Saved!</string>
+    <string name="pref_review_last_ask">pref_review_last_ask</string>
 </resources>

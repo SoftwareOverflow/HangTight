@@ -31,7 +31,6 @@ class WorkoutTimer(
     init {
         timerProvider = WorkoutTimerProvider(
             onTimerFinish = {
-                mediaManager.playSound(WorkoutSound.SOUND_WORKOUT_COMPLETE)
                 observer.onFinish()
 
                 cancel()
@@ -94,8 +93,6 @@ class WorkoutTimer(
             ((millisecondsRemaining + 999) / 1000) * 1000 // Round up to the nearest second (in millis) to prevent the frequent polling of the timer getting out of sync
 
         if (millisecondsRemaining <= 0) {
-            mediaManager.playSound(WorkoutSound.SOUND_WORKOUT_COMPLETE)
-
             getTimerProvider().cancelTimer() // Cancel the timer to prevent onFinish being called multiple times
             observer.onFinish()
             return
