@@ -17,7 +17,7 @@ import javax.inject.Inject
 @ViewModelScoped
 class WorkoutMediaManager @Inject constructor(
     @ApplicationContext context: Context,
-    sharedPreferences: SharedPreferences
+    private val sharedPreferences: SharedPreferences
 ) :
     IWorkoutSoundManager, IWorkoutVibrateManager {
 
@@ -25,7 +25,7 @@ class WorkoutMediaManager @Inject constructor(
 
     private val vibrator = context.getSystemService<Vibrator>()
 
-    private var playSound = true
+    private var playSound = sharedPreferences.getBoolean(SharedPreferencesManager.playWorkoutSounds, true)
     private val playSound321 = sharedPreferences.getBoolean(SharedPreferencesManager.sound321, true)
     private var vibrate = sharedPreferences.getBoolean(SharedPreferencesManager.vibrate, true)
 
@@ -33,7 +33,6 @@ class WorkoutMediaManager @Inject constructor(
 
     private val sound321: Int
     private val soundWorkStart: Int
-    private val soundWorkoutComplete: Int
     private val soundRestStart: Int
     private val soundRecoverStart: Int
 
@@ -54,7 +53,6 @@ class WorkoutMediaManager @Inject constructor(
                 }
             }
 
-        soundWorkoutComplete = soundPool.load(context, R.raw.fanfare_workout_complete, 1)
         soundWorkStart = soundPool.load(context, R.raw.ding_work, 1)
         sound321 = soundPool.load(context, R.raw.bong_321_work, 1)
         soundRestStart = soundPool.load(context, R.raw.ding_rest, 1)
@@ -66,6 +64,9 @@ class WorkoutMediaManager @Inject constructor(
 
     override fun toggleSound(soundOn: Boolean) {
         playSound = soundOn
+
+        //Write the sound preference to SharedPrefs
+        sharedPreferences.edit().putBoolean(SharedPreferencesManager.playWorkoutSounds, soundOn).apply()
     }
 
     /**
@@ -101,8 +102,6 @@ class WorkoutMediaManager @Inject constructor(
             }
             WorkoutSound.SOUND_WORK_START ->
                 soundPool.play(soundWorkStart, 1f, 1f, 10, 0, 1f)
-            WorkoutSound.SOUND_WORKOUT_COMPLETE ->
-                soundPool.play(soundWorkoutComplete, 1f, 1f, 10, 0, 1f)
         }
     }
 

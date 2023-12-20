@@ -2,6 +2,7 @@ package com.softwareoverflow.hangtight.billing
 
 import android.app.Activity
 import android.content.Context
+import com.google.android.gms.ads.AdError
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.AdSize
 import com.google.android.gms.ads.FullScreenContentCallback
@@ -111,14 +112,42 @@ class MobileAdsManager(val context: Context) : OnInitializationCompleteListener 
          * Show the interstitial advert.
          * Returns true if the advert is shown, false otherwise
          */
-        fun showInterstitial(activity: Activity): Boolean {
+        fun showAdAfterWorkout(activity: Activity?, onAdClosedCallback: () -> Unit) {
+            if (activity != null) {
+                if (!showAdvert(activity, onAdClosedCallback)) {
+                    onAdClosedCallback()
+                }
+            } else {
+                onAdClosedCallback()
+            }
+        }
+
+        /**
+         * Show the interstitial advert.
+         * Returns true if the advert is shown, false otherwise
+         */
+        private fun showAdvert(
+            activity: Activity,
+            onAdClosedCallback: () -> Unit
+        ): Boolean {
             if (UpgradeManager.isUserUpgraded())
                 return false
 
-            if (interstitialAd?.fullScreenContentCallback == null)
-                return false
-
             interstitialAd?.let {
+                it.fullScreenContentCallback = object : FullScreenContentCallback() {
+                    override fun onAdDismissedFullScreenContent() {
+                        onAdClosedCallback()
+                    }
+
+                    override fun onAdFailedToShowFullScreenContent(adError: AdError) {
+                        onAdClosedCallback()
+                    }
+
+                    override fun onAdShowedFullScreenContent() {
+                        setInterstitialShown(activity)
+                    }
+                }
+
                 it.show(activity)
                 return true
             }

@@ -19,11 +19,6 @@ import androidx.compose.material.icons.filled.EmojiEvents
 import androidx.compose.material.icons.filled.Save
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.End
 import androidx.compose.ui.Modifier
@@ -33,14 +28,11 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.google.android.gms.ads.AdError
-import com.google.android.gms.ads.FullScreenContentCallback
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.ramcosta.composedestinations.result.NavResult
 import com.ramcosta.composedestinations.result.ResultRecipient
 import com.softwareoverflow.hangtight.R
-import com.softwareoverflow.hangtight.billing.MobileAdsManager
 import com.softwareoverflow.hangtight.billing.UpgradeManager
 import com.softwareoverflow.hangtight.data.Workout
 import com.softwareoverflow.hangtight.ui.screen.destinations.HomeScreenDestination
@@ -50,7 +42,6 @@ import com.softwareoverflow.hangtight.ui.util.ErrorIconWarning
 import com.softwareoverflow.hangtight.ui.util.SnackbarManager
 import com.softwareoverflow.hangtight.ui.util.findActivity
 import com.softwareoverflow.hangtight.ui.viewmodel.WorkoutCompleteViewModel
-import timber.log.Timber
 
 @Composable
 @Destination
@@ -61,11 +52,11 @@ fun WorkoutCompleteScreen(
     viewModel: WorkoutCompleteViewModel = hiltViewModel()
 ) {
 
-    LaunchedEffect(workout) {
-        viewModel.initialize(workout)
-    }
-
     val context = LocalContext.current
+    val activity = context.findActivity()
+    LaunchedEffect(workout) {
+        viewModel.initialize(workout, context, activity)
+    }
 
     BackHandler(enabled = true) {
         navigator.popBackStack(HomeScreenDestination, inclusive = false)
@@ -84,43 +75,6 @@ fun WorkoutCompleteScreen(
     WorkoutCompleteScreenContent(showSaveWarning = workout.id == null,
         onUpgrade = { viewModel.launchUpgrade(context) },
         onSave = { navigator.navigate(SaveWorkoutScreenDestination(workout)) })
-
-    var showAd by rememberSaveable { mutableStateOf(!UpgradeManager.isUserUpgraded()) }
-    val launchInAppReview by viewModel.launchReviewFlow.collectAsState()
-
-    if (launchInAppReview && !showAd) // Don't ask for review over the top of interstitial advert
-        viewModel.launchReviewFlow(context)
-
-    if (showAd) {
-        InterstitialAdContent {
-            showAd = false
-        }
-    }
-}
-
-@Composable
-private fun InterstitialAdContent(toggleShowAd: () -> Unit) {
-    val context = LocalContext.current
-
-    MobileAdsManager.setFullScreenContentCallback(object : FullScreenContentCallback() {
-        override fun onAdDismissedFullScreenContent() {
-            toggleShowAd()
-        }
-
-        override fun onAdFailedToShowFullScreenContent(adError: AdError) {
-            Timber.d("Ad failed to load: ${adError.message}")
-            toggleShowAd()
-        }
-
-        override fun onAdShowedFullScreenContent() {
-            MobileAdsManager.setInterstitialShown(context)
-        }
-    })
-
-    val activity = context.findActivity()
-    if (activity == null || !MobileAdsManager.showInterstitial(activity)) {
-        toggleShowAd()
-    }
 }
 
 @Composable
