@@ -8,7 +8,7 @@ import com.softwareoverflow.hangtight.data.Workout
 import com.softwareoverflow.hangtight.ui.SharedPreferencesManager
 import com.softwareoverflow.hangtight.ui.util.workout.getDurationMillis
 
-class FirebaseManager constructor(
+class FirebaseManager(
     context: Context,
     private val sharedPreferences: SharedPreferences
 ) {
@@ -16,7 +16,6 @@ class FirebaseManager constructor(
     init {
         firebase = FirebaseAnalytics.getInstance(context)
 
-        showConsentDialog = sharedPreferences.getBoolean(SharedPreferencesManager.isFirstOpen, true)
         analyticsEnabled =
             sharedPreferences.getBoolean(SharedPreferencesManager.analyticsEnabled, false)
     }
@@ -72,8 +71,6 @@ class FirebaseManager constructor(
     companion object {
         private var firebase: FirebaseAnalytics? = null
 
-        var showConsentDialog = true
-            private set
         private var analyticsEnabled = false
     }
 }
