@@ -34,9 +34,13 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.google.android.ump.ConsentInformation
+import com.google.android.ump.UserMessagingPlatform
 import com.ramcosta.composedestinations.annotation.Destination
 import com.softwareoverflow.hangtight.R
 import com.softwareoverflow.hangtight.ui.theme.AppTheme
+import com.softwareoverflow.hangtight.ui.util.SnackbarManager
+import com.softwareoverflow.hangtight.ui.util.findActivity
 import com.softwareoverflow.hangtight.ui.viewmodel.SettingsViewModel
 
 @Composable
@@ -46,14 +50,18 @@ fun SettingsScreen(viewModel: SettingsViewModel = hiltViewModel()) {
 
     val context = LocalContext.current
 
-    SettingsScreenContent(
-        uiState,
+    val consentInformation = UserMessagingPlatform.getConsentInformation(context)
+    val showPrivacyOption =
+        consentInformation.privacyOptionsRequirementStatus == ConsentInformation.PrivacyOptionsRequirementStatus.REQUIRED
+
+    SettingsScreenContent(uiState,
         onPrepTimeChange = { viewModel.setPrepTime(it) },
         onSound321Change = { viewModel.setSound321(it) },
         onVibrateChange = { viewModel.setVibrate(it) },
         onWarmUpChange = { viewModel.setWarmUp(it) },
         onAnalyticsChange = { viewModel.setAnalyticsEnabled(it) },
-        onSaveChanges = { viewModel.saveSettings(context) }
+        onSaveChanges = { viewModel.saveSettings(context) },
+        showPrivacyOption = showPrivacyOption
     )
 }
 
@@ -66,11 +74,14 @@ private fun SettingsScreenContent(
     onWarmUpChange: (Boolean) -> Unit,
     onAnalyticsChange: (Boolean) -> Unit,
     onSaveChanges: () -> Unit,
+    showPrivacyOption: Boolean,
 ) {
+    val activity = LocalContext.current.findActivity()
     Box(
         Modifier
             .fillMaxSize()
-            .padding(16.dp)) {
+            .padding(16.dp)
+    ) {
         LazyColumn(
             Modifier
                 .fillMaxSize()
@@ -103,6 +114,29 @@ private fun SettingsScreenContent(
                     onAnalyticsChange(it)
                 }
             }
+
+            if (showPrivacyOption) {
+                activity?.let {
+                    item {
+
+                        val problemMessage = stringResource(R.string.unepected_problem_try_again)
+                        Text(
+                            stringResource(R.string.show_privacy_options),
+                            Modifier
+                                .padding(4.dp)
+                                .clickable {
+                                    UserMessagingPlatform.showPrivacyOptionsForm(activity) { formError ->
+                                        formError?.let {
+                                            SnackbarManager.showMessage(problemMessage)
+                                        }
+                                    }
+                                },
+                            style = typography.body1
+                        )
+                    }
+
+                }
+            }
         }
 
         FloatingActionButton(onClick = { onSaveChanges() }, Modifier.align(Alignment.BottomEnd)) {
@@ -113,9 +147,7 @@ private fun SettingsScreenContent(
 
 @Composable
 private fun SettingsRow(
-    name: String,
-    subtitle: String = "",
-    content: @Composable () -> Unit
+    name: String, subtitle: String = "", content: @Composable () -> Unit
 ) {
     Row(
         Modifier
@@ -143,22 +175,20 @@ private fun PrepTimeRow(value: Int, onValueChange: (Int) -> Unit) {
     ) {
         var expanded by remember { mutableStateOf(false) }
 
-        val icon = if (expanded)
-            Icons.Filled.ArrowDropUp //it requires androidx.compose.material:material-icons-extended
-        else
-            Icons.Filled.ArrowDropDown
+        val icon =
+            if (expanded) Icons.Filled.ArrowDropUp //it requires androidx.compose.material:material-icons-extended
+            else Icons.Filled.ArrowDropDown
 
 
         Column {
-            OutlinedTextField(
-                value = value.toString(),
+            OutlinedTextField(value = value.toString(),
                 onValueChange = {},
                 readOnly = true,
                 trailingIcon = {
-                    Icon(icon, stringResource(R.string.content_desc_expand_collapse),
+                    Icon(icon,
+                        stringResource(R.string.content_desc_expand_collapse),
                         Modifier.clickable { expanded = !expanded })
-                }
-            )
+                })
             DropdownMenu(
                 expanded = expanded,
                 onDismissRequest = { expanded = false },
@@ -221,20 +251,17 @@ private fun AnalyticsRow(value: Boolean, onValueChange: (Boolean) -> Unit) {
 @Preview
 private fun Preview_SettingsScreen() {
     AppTheme(darkTheme = false) {
-        SettingsScreenContent(
-            uiState = SettingsViewModel.UiState(
-                12,
-                sound321 = false,
-                vibrate = true,
-                warmUp = true,
-                analyticsEnabled = false
-            ),
+        SettingsScreenContent(uiState = SettingsViewModel.UiState(
+            12, sound321 = false, vibrate = true, warmUp = true, analyticsEnabled = false
+        ),
             onPrepTimeChange = {},
             onSound321Change = {},
             onWarmUpChange = {},
             onAnalyticsChange = {},
-            onVibrateChange = {}
-        ) { }
+            onVibrateChange = {},
+            onSaveChanges = {},
+            showPrivacyOption = true
+        )
     }
 }
 
@@ -242,19 +269,16 @@ private fun Preview_SettingsScreen() {
 @Preview
 private fun Preview_SettingsScreen_Dark() {
     AppTheme(darkTheme = true) {
-        SettingsScreenContent(
-            uiState = SettingsViewModel.UiState(
-                12,
-                sound321 = false,
-                vibrate = true,
-                warmUp = false,
-                analyticsEnabled = false
-            ),
+        SettingsScreenContent(uiState = SettingsViewModel.UiState(
+            12, sound321 = false, vibrate = true, warmUp = false, analyticsEnabled = false
+        ),
             onPrepTimeChange = {},
             onSound321Change = {},
             onWarmUpChange = {},
             onAnalyticsChange = {},
-            onVibrateChange = {}
-        ) { }
+            onVibrateChange = {},
+            onSaveChanges = {},
+            showPrivacyOption = true
+        )
     }
 }

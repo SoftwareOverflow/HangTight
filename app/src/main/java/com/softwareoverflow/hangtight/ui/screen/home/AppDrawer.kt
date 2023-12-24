@@ -14,7 +14,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -86,14 +85,6 @@ fun AppDrawer(
                 modifier = Modifier
                     .padding(vertical = 8.dp)
                     .clickable { openSettings() })
-
-            IconTextRow(message = stringResource(R.string.feedback),
-                icon = Icons.Filled.Email,
-                iconSize = 30.dp,
-                modifier = Modifier
-                    .padding(vertical = 8.dp)
-                    .clickable { sendFeedback() })
-
 
             if (UpgradeManager.isUserUpgraded()) {
                 Text(stringResource(R.string.upgrade_state_premium_thanks))

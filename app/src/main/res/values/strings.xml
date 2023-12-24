@@ -97,4 +97,6 @@
     <string name="settings_warm_up_desc">Show disclaimer about warming up properly before starting workout</string>
     <string name="settings_saved">Settings Saved!</string>
     <string name="pref_review_last_ask">pref_review_last_ask</string>
+    <string name="show_privacy_options">Show Privacy Options...</string>
+    <string name="unepected_problem_try_again">Unexpected problem occurred. Please try again later.</string>
 </resources>
