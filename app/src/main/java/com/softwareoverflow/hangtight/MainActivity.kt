@@ -69,8 +69,8 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         // The Google SDK seems to load slowly, so start ASAP
-        val consentManager = ConsentManagerGoogle()
-        consentManager.handleConsent(this, this) {
+        val consentManager = ConsentManagerGoogle.getInstance(applicationContext)
+        consentManager.handleConsent(this) {
             // We have consent - initialize the required logging and ads
             firebaseManager.onConsentGiven()
             adsManager.initialize()

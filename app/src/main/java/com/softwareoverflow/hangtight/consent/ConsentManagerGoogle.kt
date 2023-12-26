@@ -2,27 +2,35 @@ package com.softwareoverflow.hangtight.consent
 
 import android.app.Activity
 import android.content.Context
+import com.google.android.ump.ConsentDebugSettings
+import com.google.android.ump.ConsentForm
 import com.google.android.ump.ConsentInformation
 import com.google.android.ump.ConsentRequestParameters
 import com.google.android.ump.UserMessagingPlatform
 import com.softwareoverflow.hangtight.BuildConfig
 import timber.log.Timber
 
-class ConsentManagerGoogle {
+class ConsentManagerGoogle private constructor(context: Context) {
 
-    private lateinit var consentInformation: ConsentInformation
+    private val consentInformation = UserMessagingPlatform.getConsentInformation(context)
 
     /**
      * Opens & shows the GDPR message to relevant users when we do not have consent from them.
      * Utilizes the Admob recommended Google CMP / UMP
      */
     fun handleConsent(
-        context: Context, activity: Activity, onConsentReceived: () -> Unit
+        activity: Activity, onConsentReceived: () -> Unit
     ) {
-        // Create a ConsentRequestParameters object.
-        val params = ConsentRequestParameters.Builder().build()
+        val debugSettings = ConsentDebugSettings.Builder(activity)
+            .setDebugGeography(ConsentDebugSettings.DebugGeography.DEBUG_GEOGRAPHY_NOT_EEA)
+            .addTestDeviceHashedId("B3EEABB8EE11C2BE770B684D95219ECB")
+            .build()
 
-        consentInformation = UserMessagingPlatform.getConsentInformation(context)
+        // Create a ConsentRequestParameters object.
+        val params = ConsentRequestParameters.Builder()
+            .setConsentDebugSettings(debugSettings)
+            .build()
+
         consentInformation.requestConsentInfoUpdate(activity,
             params,
             { // OnConsentInfoUpdateSuccessListener
@@ -45,6 +53,20 @@ class ConsentManagerGoogle {
             })
     }
 
+    /** Indicates if the extra privacy option is required **/
+    val isPrivacyOptionsRequired: Boolean
+        get() =
+            consentInformation.privacyOptionsRequirementStatus ==
+                    ConsentInformation.PrivacyOptionsRequirementStatus.REQUIRED
+
+    /** Helper method to call the UMP SDK method to show the privacy options form. */
+    fun showPrivacyOptionsForm(
+        activity: Activity,
+        onConsentFormDismissedListener: ConsentForm.OnConsentFormDismissedListener
+    ) {
+        UserMessagingPlatform.showPrivacyOptionsForm(activity, onConsentFormDismissedListener)
+    }
+
     /**
      * Resets the consent information - ONLY TO BE USED IN DEBUG
      */
@@ -52,5 +74,15 @@ class ConsentManagerGoogle {
         if(BuildConfig.DEBUG){
             consentInformation.reset()
         }
+    }
+
+    companion object {
+        @Volatile private var instance: ConsentManagerGoogle? = null
+
+        fun getInstance(context: Context) =
+            instance
+                ?: synchronized(this) {
+                    instance ?: ConsentManagerGoogle(context).also { instance = it }
+                }
     }
 }
