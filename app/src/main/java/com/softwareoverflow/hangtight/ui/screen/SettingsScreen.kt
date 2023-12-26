@@ -34,10 +34,9 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.google.android.ump.ConsentInformation
-import com.google.android.ump.UserMessagingPlatform
 import com.ramcosta.composedestinations.annotation.Destination
 import com.softwareoverflow.hangtight.R
+import com.softwareoverflow.hangtight.consent.ConsentManagerGoogle
 import com.softwareoverflow.hangtight.ui.theme.AppTheme
 import com.softwareoverflow.hangtight.ui.util.SnackbarManager
 import com.softwareoverflow.hangtight.ui.util.findActivity
@@ -50,9 +49,7 @@ fun SettingsScreen(viewModel: SettingsViewModel = hiltViewModel()) {
 
     val context = LocalContext.current
 
-    val consentInformation = UserMessagingPlatform.getConsentInformation(context)
-    val showPrivacyOption =
-        consentInformation.privacyOptionsRequirementStatus == ConsentInformation.PrivacyOptionsRequirementStatus.REQUIRED
+    val consentManager = ConsentManagerGoogle.getInstance(LocalContext.current)
 
     SettingsScreenContent(uiState,
         onPrepTimeChange = { viewModel.setPrepTime(it) },
@@ -61,8 +58,22 @@ fun SettingsScreen(viewModel: SettingsViewModel = hiltViewModel()) {
         onWarmUpChange = { viewModel.setWarmUp(it) },
         onAnalyticsChange = { viewModel.setAnalyticsEnabled(it) },
         onSaveChanges = { viewModel.saveSettings(context) },
-        showPrivacyOption = showPrivacyOption
-    )
+        showPrivacyOption = consentManager.isPrivacyOptionsRequired,
+        openPrivacyOptions = {
+            val activity = context.findActivity()
+            var privacyOptionError = activity == null
+            activity?.let {
+                consentManager.showPrivacyOptionsForm(activity) {
+                    it?.let {
+                        privacyOptionError = true
+                    }
+                }
+            }
+
+            if (privacyOptionError) {
+                SnackbarManager.showMessage(context.getString(R.string.unepected_problem_try_again))
+            }
+        })
 }
 
 @Composable
@@ -75,6 +86,7 @@ private fun SettingsScreenContent(
     onAnalyticsChange: (Boolean) -> Unit,
     onSaveChanges: () -> Unit,
     showPrivacyOption: Boolean,
+    openPrivacyOptions: () -> Unit,
 ) {
     val activity = LocalContext.current.findActivity()
     Box(
@@ -119,17 +131,12 @@ private fun SettingsScreenContent(
                 activity?.let {
                     item {
 
-                        val problemMessage = stringResource(R.string.unepected_problem_try_again)
                         Text(
                             stringResource(R.string.show_privacy_options),
                             Modifier
                                 .padding(4.dp)
                                 .clickable {
-                                    UserMessagingPlatform.showPrivacyOptionsForm(activity) { formError ->
-                                        formError?.let {
-                                            SnackbarManager.showMessage(problemMessage)
-                                        }
-                                    }
+                                    openPrivacyOptions()
                                 },
                             style = typography.body1
                         )
@@ -260,8 +267,8 @@ private fun Preview_SettingsScreen() {
             onAnalyticsChange = {},
             onVibrateChange = {},
             onSaveChanges = {},
-            showPrivacyOption = true
-        )
+            showPrivacyOption = true,
+            openPrivacyOptions = {})
     }
 }
 
@@ -278,7 +285,7 @@ private fun Preview_SettingsScreen_Dark() {
             onAnalyticsChange = {},
             onVibrateChange = {},
             onSaveChanges = {},
-            showPrivacyOption = true
-        )
+            showPrivacyOption = true,
+            openPrivacyOptions = {})
     }
 }
