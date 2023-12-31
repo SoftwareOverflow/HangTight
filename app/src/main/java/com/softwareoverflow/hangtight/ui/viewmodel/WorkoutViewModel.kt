@@ -114,7 +114,7 @@ class WorkoutViewModel @Inject constructor(
         _uiState.value = _uiState.value.copy(
             timeLeftInSection = timeLeftInSection,
             timeLeftInWorkout = timeLeftInWorkout.getFormattedDuration(DurationUnit.SECONDS),
-            currentSectionProgress = progress
+            currentSectionProgress = if(progress.isNaN()) 0f else progress
         )
     }
 
