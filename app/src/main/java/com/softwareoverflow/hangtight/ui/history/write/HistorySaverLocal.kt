@@ -26,6 +26,7 @@ class HistorySaverLocal @Inject constructor(private val historyWriter: IHistoryW
                 }
             }
         } catch (e: Exception) {
+            // Blanket catch all - we don't want any problems here to interfere with the main app
             FirebaseCrashlytics.getInstance().recordException(e)
         }
     }
@@ -37,6 +38,7 @@ class HistorySaverLocal @Inject constructor(private val historyWriter: IHistoryW
             // Reset the history
             history = WorkoutHistory(0, 0, 0, LocalDate.now())
         } catch (e: Exception) {
+            // Blanket catch all - we don't want any problems here to interfere with the main app
             FirebaseCrashlytics.getInstance().recordException(e)
         }
     }
