@@ -9,14 +9,20 @@ import javax.inject.Inject
 class HistorySaverLocal @Inject constructor(private val historyWriter: IHistoryWriter) :
     IHistorySaver {
 
-    var history = WorkoutHistory(0, 0, 0, LocalDate.now())
+    private lateinit var history: WorkoutHistory
+
+    init {
+        createDto(LocalDate.now())
+    }
 
     override fun addHistory(seconds: Int, section: WorkoutSection) {
         try {
             val dateNow = LocalDate.now()
 
-            if (history.date != dateNow)
+            if (history.date != dateNow) {
                 write()
+                createDto(dateNow)
+            }
 
             when (section) {
                 WorkoutSection.Hang -> history.hangTime += seconds
@@ -29,6 +35,10 @@ class HistorySaverLocal @Inject constructor(private val historyWriter: IHistoryW
             // Blanket catch all - we don't want any problems here to interfere with the main app
             FirebaseCrashlytics.getInstance().recordException(e)
         }
+    }
+
+    private fun createDto(date: LocalDate) {
+        history = WorkoutHistory(0, 0, 0, date)
     }
 
     override fun write() {

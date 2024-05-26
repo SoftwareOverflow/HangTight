@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.SharedPreferences
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.analytics.ktx.logEvent
+import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.softwareoverflow.hangtight.data.Workout
 import com.softwareoverflow.hangtight.ui.SharedPreferencesManager
 import com.softwareoverflow.hangtight.ui.util.workout.getDurationMillis
@@ -18,6 +19,8 @@ class FirebaseManager(
 
         analyticsEnabled =
             sharedPreferences.getBoolean(SharedPreferencesManager.analyticsEnabled, false)
+
+        FirebaseCrashlytics.getInstance().setCrashlyticsCollectionEnabled(true)
     }
 
     /**

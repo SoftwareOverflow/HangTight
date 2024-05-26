@@ -7,6 +7,7 @@ import com.softwareoverflow.hangtight.ui.util.workout.getDurationMillis
 import com.softwareoverflow.hangtight.ui.util.workout.getTimedSections
 import com.softwareoverflow.hangtight.ui.util.workout.media.WorkoutMediaManager
 import com.softwareoverflow.hangtight.ui.util.workout.media.WorkoutSound
+import kotlin.math.abs
 
 class WorkoutTimer(
     workout: Workout,
@@ -26,31 +27,46 @@ class WorkoutTimer(
     private val workoutSets = ListObjectIterator(timedSections.listIterator())
     private var currentSection = workoutSets.next()
 
+
     private var millisRemainingInSection = getCurrentSectionTime()
 
+
     init {
-        timerProvider = WorkoutTimerProvider(
+        timerProvider = WorkoutTimerProvider(100L,
             onTimerFinish = {
                 observer.onFinish()
 
                 cancel()
             },
-            onTimerTick = { tickInterval, millisUntilFinished ->
-                observer.onTimeChange(
-                    (millisRemainingInSection / 1000).toInt(),
-                    (millisecondsRemaining / 1000).toInt()
-                )
+            onTimerTick = { millisUntilFinished ->
+                val thisTick = millisecondsRemaining - millisUntilFinished
 
-                historySaver.addHistory((tickInterval / 1000).toInt(), currentSection.section)
+                val didChangeSecond =
+                    millisUntilFinished / 1000 != (millisUntilFinished + thisTick) / 1000
 
-                if (millisRemainingInSection in 1..3000L)
-                    mediaManager.playSound(WorkoutSound.SOUND_321)
+                millisRemainingInSection -= thisTick
+                millisecondsRemaining -= thisTick
 
-                if (millisRemainingInSection <= 0 && millisUntilFinished > tickInterval)
+
+                if (didChangeSecond) {
+                    historySaver.addHistory(1, currentSection.section)
+
+                    if (millisRemainingInSection > 0) {
+                        when (millisRemainingInSection / 1000) {
+                            2L, 1L, 0L -> {
+                                mediaManager.playSound(WorkoutSound.SOUND_321)
+                            }
+                        }
+                    }
+
+                    observer.onTimeChange(
+                        ((millisRemainingInSection) / 1000).toInt() + 1,
+                        ((millisecondsRemaining) / 1000).toInt() + 1
+                    )
+                }
+
+                if (millisRemainingInSection <= 0 && millisUntilFinished > 0)
                     startNextWorkoutSection()
-
-                millisRemainingInSection -= tickInterval
-                millisecondsRemaining -= tickInterval
             }
         )
 
@@ -62,12 +78,6 @@ class WorkoutTimer(
     fun rewindSection() {
         isRunning = false
         getTimerProvider().cancelTimer()
-
-        val milliSecondsToReset =
-            getCurrentSectionTime() - millisRemainingInSection // Amount of time already completed in section being reset
-        millisecondsRemaining += milliSecondsToReset
-        millisecondsRemaining =
-            ((millisecondsRemaining + 999) / 1000) * 1000 // Round up to the nearest second (in millis) to prevent the frequent polling of the timer getting out of sync
 
         val currentSound = mediaManager.getCurrentSound()
         val currentVibrate = mediaManager.isVibrateOn()
@@ -89,8 +99,7 @@ class WorkoutTimer(
     /** Skips the current section of the workout **/
     fun skipSection() {
         millisecondsRemaining -= millisRemainingInSection
-        millisecondsRemaining =
-            ((millisecondsRemaining + 999) / 1000) * 1000 // Round up to the nearest second (in millis) to prevent the frequent polling of the timer getting out of sync
+        millisRemainingInSection = 0
 
         if (millisecondsRemaining <= 0) {
             getTimerProvider().cancelTimer() // Cancel the timer to prevent onFinish being called multiple times
@@ -127,11 +136,6 @@ class WorkoutTimer(
             isRunning = false
             getTimerProvider().cancelTimer()
         } else if (!isRunning) {
-            millisecondsRemaining =
-                ((millisecondsRemaining + 999) / 1000) * 1000 // Display lags behind by 1s - round up
-            millisRemainingInSection =
-                ((millisRemainingInSection + 999) / 1000) * 1000// Display lags behind by 1s - round up
-
             getTimerProvider().createTimer(millisecondsRemaining)
 
             isRunning = true
@@ -144,6 +148,9 @@ class WorkoutTimer(
     }
 
     private fun startNextWorkoutSection() {
+        // Add back any possible overshoot
+        millisecondsRemaining += abs(millisRemainingInSection)
+
         var nextSection = workoutSets.tryGetNext()
 
         if (nextSection == timedSections.first()) {
@@ -168,12 +175,19 @@ class WorkoutTimer(
     private fun startPreviousWorkoutSection() {
         val previousSection = workoutSets.tryGetPrevious()
         if (previousSection != null) {
+            // Add back the currently completed part of the section
+            val milliSecondsToReset = getCurrentSectionTime() - millisRemainingInSection
+            millisecondsRemaining += milliSecondsToReset
+
             currentSection = previousSection
-            millisecondsRemaining += getCurrentSectionTime()
+
+            millisRemainingInSection = getCurrentSectionTime()
+            // Now add back the section to be replayed
+            millisecondsRemaining += millisRemainingInSection
+
             observer.onSectionChange(currentSection)
         }
 
-        millisRemainingInSection = getCurrentSectionTime()
         observer.onTimeChange(
             millisRemainingInSection.toInt() / 1000,
             millisecondsRemaining.toInt() / 1000
