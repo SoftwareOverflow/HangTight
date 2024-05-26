@@ -43,11 +43,12 @@ class HistorySaverLocal @Inject constructor(private val historyWriter: IHistoryW
 
     override fun write() {
         try {
+            historyWriter.writeHistory(history)
 
-            historyWriter.writeHistory(history.copy())
-            createDto(LocalDate.now())
+            // Reset the history
+            history = WorkoutHistory(0, 0, 0, LocalDate.now())
         } catch (e: Exception) {
-            // Blanket catch all - we don't want any problems here to interfere with the main app.
+            // Blanket catch all - we don't want any problems here to interfere with the main app
             FirebaseCrashlytics.getInstance().recordException(e)
         }
     }
