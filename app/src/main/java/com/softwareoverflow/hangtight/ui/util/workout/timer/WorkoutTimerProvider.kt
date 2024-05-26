@@ -1,14 +1,14 @@
 package com.softwareoverflow.hangtight.ui.util.workout.timer
 
 import android.os.CountDownTimer
-import timber.log.Timber
 
 class WorkoutTimerProvider(
+    val tickInterval: Long,
     val onTimerFinish: () -> Unit,
-    val onTimerTick: (tickInterval: Long, millisUntilFinished: Long) -> Unit
+    val onTimerTick: (millisUntilFinished: Long) -> Unit
 ) : IWorkoutTimerProvider {
 
-    lateinit var timer: CountDownTimer
+    private lateinit var timer: CountDownTimer
 
     override fun startTimer(){
         try {
@@ -27,8 +27,6 @@ class WorkoutTimerProvider(
     }
 
     override fun createTimer(millis: Long) {
-        val tickInterval = 1000L
-
         // Prevent duplicate timers being created
         cancelTimer()
 
@@ -38,7 +36,7 @@ class WorkoutTimerProvider(
             }
 
             override fun onTick(millisUntilFinished: Long) {
-                onTimerTick(tickInterval, millisUntilFinished)
+                onTimerTick(millisUntilFinished)
             }
         }
     }
