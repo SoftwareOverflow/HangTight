@@ -13,6 +13,7 @@ import com.android.billingclient.api.BillingFlowParams
 import com.android.billingclient.api.BillingResult
 import com.android.billingclient.api.ConsumeParams
 import com.android.billingclient.api.ConsumeResult
+import com.android.billingclient.api.PendingPurchasesParams
 import com.android.billingclient.api.ProductDetails
 import com.android.billingclient.api.ProductDetailsResponseListener
 import com.android.billingclient.api.Purchase
@@ -56,7 +57,8 @@ class BillingRepository(
      * Instantiate a new BillingClient instance.
      */
     private var billingClient =
-        BillingClient.newBuilder(applicationContext).setListener(this).enablePendingPurchases()
+        BillingClient.newBuilder(applicationContext).setListener(this).enablePendingPurchases(
+            PendingPurchasesParams.newBuilder().enableOneTimeProducts().build())
             .build()
 
 
