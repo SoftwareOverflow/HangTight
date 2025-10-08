@@ -3,6 +3,8 @@ package com.softwareoverflow.hangtight.ui.theme
 import androidx.compose.ui.graphics.Color
 
 val md_theme_light_primary = Color(0xFFE8B057)
+
+val md_theme_light_primary_dark = Color(0xFFB77914)
 val md_theme_light_onPrimary = Color(0xFFffffff)
 val md_theme_light_secondary = Color(0xFF00658f)
 val md_theme_light_onSecondary = Color(0xFFffffff)
@@ -14,6 +16,8 @@ val md_theme_light_surface = Color(0xFFE0DFDF)
 val md_theme_light_onSurface = Color(0xFF000000)
 
 val md_theme_dark_primary = Color(0xFFE8B057)
+
+val md_theme_dark_primary_dark = Color(0xFFB77914)
 val md_theme_dark_onPrimary = Color(0xFFFFFFFF)
 val md_theme_dark_secondary = Color(0xFF007CAF)
 val md_theme_dark_onSecondary = Color(0xFFFFFFFF)

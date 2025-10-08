@@ -1,7 +1,9 @@
 package com.softwareoverflow.hangtight.ui.theme
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.darkColors
@@ -11,6 +13,7 @@ import androidx.compose.ui.Modifier
 
 private val DarkColorPalette = darkColors(
     primary = md_theme_dark_primary,
+    primaryVariant = md_theme_light_primary_dark,
     onPrimary = md_theme_dark_onPrimary,
     secondary = md_theme_dark_secondary,
     onSecondary = md_theme_dark_onSecondary,
@@ -24,6 +27,7 @@ private val DarkColorPalette = darkColors(
 
 private val LightColorPalette = lightColors(
     primary = md_theme_light_primary,
+    primaryVariant = md_theme_light_primary_dark,
     onPrimary = md_theme_light_onPrimary,
     secondary = md_theme_light_secondary,
     onSecondary = md_theme_light_onSecondary,
@@ -54,7 +58,7 @@ fun AppTheme(
         content = {
             // A surface container using the 'background' color from the theme
             Surface(
-                modifier = Modifier.fillMaxSize(),
+                modifier = Modifier.fillMaxSize().background(MaterialTheme.colors.primaryVariant).systemBarsPadding(),
                 color = MaterialTheme.colors.background
             ) {
                 content()
