@@ -20,7 +20,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.ramcosta.composedestinations.DestinationsNavHost
-import com.ramcosta.composedestinations.navigation.navigate
+import com.ramcosta.composedestinations.utils.toDestinationsNavigator
 import com.softwareoverflow.hangtight.billing.AdvertView
 import com.softwareoverflow.hangtight.billing.MobileAdsManager
 import com.softwareoverflow.hangtight.billing.UpgradeManager
@@ -66,6 +66,7 @@ class MainActivity : ComponentActivity() {
     private val scopeDefault = CoroutineScope(Job() + Dispatchers.Default)
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        window.decorView // POTENTIAL BUGFIX for https://issuetracker.google.com/issues/37095334 causing intermittent crashing on start.
         super.onCreate(savedInstanceState)
 
         // The Google SDK seems to load slowly, so start ASAP
@@ -123,7 +124,7 @@ class MainActivity : ComponentActivity() {
                 }, drawerContent = {
                     AppDrawer(openSettings = {
                         toggleDrawer()
-                        appState.navController.navigate(SettingsScreenDestination())
+                        appState.navController.toDestinationsNavigator().navigate(SettingsScreenDestination())
                     }, sendFeedback = {
                         toggleDrawer()
                         EmailFeedback.launch(this@MainActivity)

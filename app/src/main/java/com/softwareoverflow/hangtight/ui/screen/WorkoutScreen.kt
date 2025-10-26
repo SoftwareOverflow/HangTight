@@ -19,12 +19,12 @@ import androidx.compose.material.MaterialTheme.typography
 import androidx.compose.material.ProvideTextStyle
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.VolumeOff
+import androidx.compose.material.icons.automirrored.filled.VolumeUp
 import androidx.compose.material.icons.filled.Pause
 import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material.icons.filled.SkipNext
 import androidx.compose.material.icons.filled.SkipPrevious
-import androidx.compose.material.icons.filled.VolumeOff
-import androidx.compose.material.icons.filled.VolumeUp
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -35,8 +35,9 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import com.ramcosta.composedestinations.annotation.Destination
+import com.ramcosta.composedestinations.annotation.RootGraph
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.softwareoverflow.hangtight.R
 import com.softwareoverflow.hangtight.data.Workout
@@ -52,7 +53,7 @@ import com.softwareoverflow.hangtight.ui.viewmodel.WorkoutUiState
 import com.softwareoverflow.hangtight.ui.viewmodel.WorkoutViewModel
 
 @Composable
-@Destination
+@Destination<RootGraph>
 fun WorkoutScreen(
     navigator: DestinationsNavigator,
     workout: Workout,
@@ -189,13 +190,13 @@ private fun WorkoutScreenContent(
 
             if (uiState.isMuted) {
                 Icon(
-                    Icons.Filled.VolumeOff, stringResource(R.string.content_desc_unmute),
+                    Icons.AutoMirrored.Filled.VolumeOff, stringResource(R.string.content_desc_unmute),
                     Modifier.clickable {
                         onToggleMute()
                     })
             } else {
                 Icon(
-                    Icons.Filled.VolumeUp, stringResource(R.string.content_desc_mute),
+                    Icons.AutoMirrored.Filled.VolumeUp, stringResource(R.string.content_desc_mute),
                     Modifier.clickable {
                         onToggleMute()
                     })

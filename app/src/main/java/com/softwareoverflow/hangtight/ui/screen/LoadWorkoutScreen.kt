@@ -42,8 +42,9 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
-import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import com.ramcosta.composedestinations.annotation.Destination
+import com.ramcosta.composedestinations.annotation.RootGraph
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.softwareoverflow.hangtight.R
 import com.softwareoverflow.hangtight.data.Workout
@@ -55,7 +56,7 @@ import com.softwareoverflow.hangtight.ui.util.workout.getFormattedDuration
 import com.softwareoverflow.hangtight.ui.viewmodel.LoadWorkoutViewModel
 
 @Composable
-@Destination(route = "Load Saved Workout")
+@Destination<RootGraph>(route = "Load Saved Workout")
 fun LoadWorkoutScreen(
     navigator: DestinationsNavigator,
     viewModel: LoadWorkoutViewModel = hiltViewModel()

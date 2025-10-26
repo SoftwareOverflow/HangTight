@@ -3,7 +3,7 @@ package com.softwareoverflow.hangtight.logging
 import android.content.Context
 import android.content.SharedPreferences
 import com.google.firebase.analytics.FirebaseAnalytics
-import com.google.firebase.analytics.ktx.logEvent
+import com.google.firebase.analytics.logEvent
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.softwareoverflow.hangtight.data.Workout
 import com.softwareoverflow.hangtight.ui.SharedPreferencesManager
@@ -20,7 +20,7 @@ class FirebaseManager(
         analyticsEnabled =
             sharedPreferences.getBoolean(SharedPreferencesManager.analyticsEnabled, false)
 
-        FirebaseCrashlytics.getInstance().setCrashlyticsCollectionEnabled(true)
+        FirebaseCrashlytics.getInstance().isCrashlyticsCollectionEnabled = !com.softwareoverflow.hangtight.BuildConfig.DEBUG
     }
 
     /**
@@ -66,7 +66,7 @@ class FirebaseManager(
         }
     }
 
-    private fun logEvent(name: String, block: com.google.firebase.analytics.ktx.ParametersBuilder.() -> kotlin.Unit){
+    private fun logEvent(name: String, block: com.google.firebase.analytics.ParametersBuilder.() -> Unit){
         if(analyticsEnabled)
             firebase?.logEvent(name, block)
     }

@@ -84,7 +84,7 @@ fun Workout.getTimedSections(prepTime: Int): List<WorkoutSectionWithTime> {
     }
 
     // Don't do any recovery on the very final set as the workout is over
-    timedSections.removeLast()
+    timedSections.removeAt(timedSections.lastIndex)
 
     return timedSections
 }

@@ -1,10 +1,13 @@
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import java.io.FileInputStream
 import java.util.Properties
 
 plugins {
     id("com.android.application")
     kotlin("android")
+    kotlin("plugin.serialization")
     id("kotlin-parcelize")
+    id("org.jetbrains.kotlin.plugin.compose")
     id("com.google.devtools.ksp")
     id("com.google.dagger.hilt.android")
     id("com.google.gms.google-services")
@@ -26,11 +29,12 @@ android {
         applicationId = "com.newtonapps.hangtight"
         minSdk = 27
         targetSdk = 35
-        versionCode = 42
-        versionName = "2.7.1"
+        versionCode = 45
+        versionName = "2.7.4"
 
         ksp {
             arg("room.schemaLocation", "$projectDir/schemas")
+            arg("compose-destinations.codeGenPackageName", "com.softwareoverflow.hangtight.ui.screen")
         }
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
@@ -53,6 +57,8 @@ android {
 
         release {
             isMinifyEnabled =  true
+            isShrinkResources = true
+
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
 
             resValue("string", "adUnitId_banner", "\"ca-app-pub-5961771507160254/4534904901\"")
@@ -60,18 +66,19 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_21
+        targetCompatibility = JavaVersion.VERSION_21
     }
-    kotlinOptions {
-        jvmTarget = "1.8"
+    kotlin {
+        compilerOptions {
+            jvmTarget = JvmTarget.JVM_21
+        }
     }
     buildFeatures {
+        buildConfig = true
         compose = true
     }
-    composeOptions {
-        kotlinCompilerExtensionVersion = "1.5.1"
-    }
+
     packaging {
         resources {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
@@ -81,32 +88,35 @@ android {
 
 dependencies {
     val nav_version = "2.5.3"
-    val roomVersion = "2.4.2"
-    val coroutinesVersion = "1.6.1"
+    val roomVersion = "2.8.2"
+    val coroutinesVersion = "1.10.2"
     val composeVersion = "1.5.0"
-    val hiltVersion = "2.47"
+    val hiltVersion = "2.57.2"
 
-    implementation("androidx.core:core-ktx:1.10.1")
-    implementation(platform("org.jetbrains.kotlin:kotlin-bom:1.9.0"))
-    implementation(platform("androidx.compose:compose-bom:2022.10.00"))
+    implementation("androidx.core:core-ktx:1.16.0")
+    implementation(platform("org.jetbrains.kotlin:kotlin-bom:2.2.0"))
+    implementation(platform("androidx.compose:compose-bom:2025.09.01"))
+
+    //implementation("org.jetbrains.kotlin:kotlin-compose-compiler-plugin-embeddable:2.2.0")
+    implementation("org.jetbrains.kotlin:kotlin-compose-compiler-plugin:2.2.20")
 
     implementation("androidx.compose.ui:ui")
     implementation("androidx.compose.material:material")
     implementation("androidx.compose.material:material-icons-extended")
     implementation("androidx.compose.ui:ui-tooling-preview")
-    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.6.2")
+    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.9.4")
 
 
-    implementation("androidx.navigation:navigation-fragment-ktx:2.5.3")
-    implementation("androidx.navigation:navigation-ui-ktx:2.5.3")
+    implementation("androidx.navigation:navigation-fragment-ktx:2.9.5")
+    implementation("androidx.navigation:navigation-ui-ktx:2.9.5")
     implementation("androidx.navigation:navigation-compose")
     implementation("androidx.activity:activity-compose")
     //implementation("androidx.navigation:navigation-compose")
     //implementation("androidx.navigation:navigation-ui-ktx")
 
-    implementation("androidx.preference:preference:1.2.0")
+    implementation("androidx.preference:preference:1.2.1")
 
-    implementation("com.google.android.gms:play-services-ads:23.0.0")
+    implementation("com.google.android.gms:play-services-ads:24.7.0")
 
     // Monetization
     implementation("com.android.billingclient:billing-ktx:7.1.1")
@@ -127,13 +137,13 @@ dependencies {
     implementation("com.jakewharton.timber:timber:5.0.1")
 
     // Firebase (with BoM)
-    implementation(platform("com.google.firebase:firebase-bom:30.0.1"))
-    implementation("com.google.firebase:firebase-crashlytics-ktx")
-    implementation("com.google.firebase:firebase-analytics-ktx")
+    implementation(platform("com.google.firebase:firebase-bom:34.4.0"))
+    implementation("com.google.firebase:firebase-crashlytics")
+    implementation("com.google.firebase:firebase-analytics")
 
     // In-app reviews
-    implementation("com.google.android.play:review:2.0.0")
-    implementation("com.google.android.play:review-ktx:2.0.0")
+    implementation("com.google.android.play:review:2.0.2")
+    implementation("com.google.android.play:review-ktx:2.0.2")
 
     // Coroutines
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutinesVersion")
@@ -145,13 +155,13 @@ dependencies {
     implementation("androidx.room:room-ktx:$roomVersion")
 
     // ComposeDestinations library dependencies
-    implementation("io.github.raamcosta.compose-destinations:core:1.5.5-beta")
-    ksp("io.github.raamcosta.compose-destinations:ksp:1.5.5-beta")
+    implementation("io.github.raamcosta.compose-destinations:core:2.2.0")
+    ksp("io.github.raamcosta.compose-destinations:ksp:2.2.0")
 
     // Hilt DI dependencies
     implementation("com.google.dagger:hilt-android:$hiltVersion")
     ksp("com.google.dagger:hilt-android-compiler:$hiltVersion")
-    implementation("androidx.hilt:hilt-navigation-compose:1.0.0")
+    implementation("androidx.hilt:hilt-navigation-compose:1.3.0")
 
-    implementation("com.google.android.ump:user-messaging-platform:2.1.0")
+    implementation("com.google.android.ump:user-messaging-platform:3.2.0")
 }

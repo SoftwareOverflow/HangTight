@@ -16,7 +16,7 @@ import com.google.android.gms.ads.interstitial.InterstitialAd
 import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback
 import com.softwareoverflow.hangtight.BuildConfig
 import com.softwareoverflow.hangtight.R
-import com.softwareoverflow.hangtight.ui.screen.destinations.LoadWorkoutScreenDestination
+import com.softwareoverflow.hangtight.ui.screen.destinations.LoadSavedWorkoutDestination
 import com.softwareoverflow.hangtight.ui.screen.destinations.WorkoutCreatorScreenDestination
 import com.softwareoverflow.hangtight.ui.screen.destinations.WorkoutScreenDestination
 import kotlinx.coroutines.MainScope
@@ -158,7 +158,7 @@ class MobileAdsManager(val context: Context) : OnInitializationCompleteListener 
         val showAdsOnPages =
             listOf(
                 WorkoutCreatorScreenDestination.route,
-                LoadWorkoutScreenDestination.route,
+                LoadSavedWorkoutDestination.route,
                 WorkoutScreenDestination.route
             )
     }

@@ -38,7 +38,6 @@ open class BillingViewModel @Inject constructor(val repository: BillingRepositor
 
     init {
         viewModelScope.launch {
-
             repository.oneTimeProductPurchases.collect{ list ->
                 if(list.any { it.products.contains(PRO_UPGRADE) })
                     UpgradeManager.setUserUpgraded()
