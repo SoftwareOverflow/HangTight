@@ -116,7 +116,7 @@ dependencies {
 
     implementation("androidx.preference:preference:1.2.1")
 
-    implementation("com.google.android.gms:play-services-ads:24.7.0")
+    implementation("com.google.android.gms:play-services-ads:24.9.0")
 
     // Monetization
     implementation("com.android.billingclient:billing-ktx:7.1.1")

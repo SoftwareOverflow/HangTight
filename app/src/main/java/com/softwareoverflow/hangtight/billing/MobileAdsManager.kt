@@ -61,6 +61,9 @@ class MobileAdsManager(val context: Context) : OnInitializationCompleteListener 
         private var adLoadAttempts = 0
 
         val bannerAdSize: AdSize = AdSize.BANNER
+        fun getBannerAdSize(context: Context): AdSize {
+            return AdSize.getCurrentOrientationAnchoredAdaptiveBannerAdSize(context, 360)
+        }
 
         private var interstitialAd: InterstitialAd? = null
 

@@ -11,6 +11,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -37,11 +38,12 @@ fun AdvertView(modifier: Modifier = Modifier) {
                 text = "Advert Here",
             )
         } else {
+            val bannerAdSize = MobileAdsManager.getBannerAdSize(LocalContext.current)
             AndroidView(
                 modifier = modifier.fillMaxWidth(),
                 factory = { context ->
                     AdView(context).apply {
-                        setAdSize(MobileAdsManager.bannerAdSize)
+                        setAdSize(bannerAdSize)
                         adUnitId = context.getString(R.string.adUnitId_banner)
                         loadAd(AdRequest.Builder().build())
                     }

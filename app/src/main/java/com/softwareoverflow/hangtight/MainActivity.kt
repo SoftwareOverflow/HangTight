@@ -16,6 +16,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.compose.currentBackStackEntryAsState
@@ -144,7 +145,8 @@ class MainActivity : ComponentActivity() {
                             AdvertView()
                         }
 
-                        mod = mod.padding(top = MobileAdsManager.bannerAdSize.height.dp)
+                        val bannerAdSize = MobileAdsManager.getBannerAdSize(LocalContext.current)
+                        mod = mod.padding(top = bannerAdSize.height.dp)
                     }
 
                     DestinationsNavHost(
