@@ -33,8 +33,9 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import com.ramcosta.composedestinations.annotation.Destination
+import com.ramcosta.composedestinations.annotation.RootGraph
 import com.ramcosta.composedestinations.result.ResultBackNavigator
 import com.softwareoverflow.hangtight.R
 import com.softwareoverflow.hangtight.billing.UpgradeManager
@@ -46,7 +47,7 @@ import com.softwareoverflow.hangtight.ui.util.workout.SaveType
 import com.softwareoverflow.hangtight.ui.viewmodel.SaveWorkoutViewModel
 
 @Composable
-@Destination
+@Destination<RootGraph>
 fun SaveWorkoutScreen(
     resultNavigator: ResultBackNavigator<Workout>,
     workout: Workout,

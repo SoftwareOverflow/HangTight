@@ -18,8 +18,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import com.ramcosta.composedestinations.annotation.Destination
+import com.ramcosta.composedestinations.annotation.RootGraph
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.ramcosta.composedestinations.navigation.EmptyDestinationsNavigator
 import com.ramcosta.composedestinations.result.EmptyResultRecipient
@@ -36,7 +37,7 @@ import com.softwareoverflow.hangtight.ui.util.NumberFieldPlusMinus
 import com.softwareoverflow.hangtight.ui.viewmodel.WorkoutCreatorViewModel
 
 @Composable
-@Destination
+@Destination<RootGraph>
 fun WorkoutCreatorScreen(
     navigator: DestinationsNavigator,
     savedWorkoutResult: ResultRecipient<SaveWorkoutScreenDestination, Workout>,

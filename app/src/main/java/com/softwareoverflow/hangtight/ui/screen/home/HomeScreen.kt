@@ -1,10 +1,22 @@
 package com.softwareoverflow.hangtight.ui.screen.home
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.offset
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.material.Button
 import androidx.compose.material.Text
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.onGloballyPositioned
@@ -16,17 +28,16 @@ import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.min
 import com.ramcosta.composedestinations.annotation.Destination
-import com.ramcosta.composedestinations.annotation.RootNavGraph
+import com.ramcosta.composedestinations.annotation.RootGraph
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.ramcosta.composedestinations.navigation.EmptyDestinationsNavigator
 import com.softwareoverflow.hangtight.R
 import com.softwareoverflow.hangtight.data.Workout
-import com.softwareoverflow.hangtight.ui.screen.destinations.LoadWorkoutScreenDestination
+import com.softwareoverflow.hangtight.ui.screen.destinations.LoadSavedWorkoutDestination
 import com.softwareoverflow.hangtight.ui.screen.destinations.WorkoutCreatorScreenDestination
 import com.softwareoverflow.hangtight.ui.theme.AppTheme
 
-@Destination
-@RootNavGraph(start = true)
+@Destination<RootGraph>(start = true)
 @Composable
 fun HomeScreen(navigator: DestinationsNavigator) {
 
@@ -62,7 +73,7 @@ fun HomeScreen(navigator: DestinationsNavigator) {
             modifier = Modifier
                 .offset(0.dp, imgWidth - 16.dp)
                 .padding(start = 16.dp),
-            onClick = { navigator.navigate(LoadWorkoutScreenDestination()) }) {
+            onClick = { navigator.navigate(LoadSavedWorkoutDestination()) }) {
             Text(stringResource(R.string.load_saved_workout))
         }
 

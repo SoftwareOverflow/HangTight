@@ -27,8 +27,9 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import com.ramcosta.composedestinations.annotation.Destination
+import com.ramcosta.composedestinations.annotation.RootGraph
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.ramcosta.composedestinations.result.NavResult
 import com.ramcosta.composedestinations.result.ResultRecipient
@@ -44,7 +45,7 @@ import com.softwareoverflow.hangtight.ui.util.findActivity
 import com.softwareoverflow.hangtight.ui.viewmodel.WorkoutCompleteViewModel
 
 @Composable
-@Destination
+@Destination<RootGraph>
 fun WorkoutCompleteScreen(
     navigator: DestinationsNavigator,
     savedWorkoutResult: ResultRecipient<SaveWorkoutScreenDestination, Workout>,
